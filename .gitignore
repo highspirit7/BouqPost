@@ -1,27 +1,27 @@
 # Dependency directories
-../node_modules/
-../jspm_packages/
+*/node_modules/
+*/jspm_packages/
 
 # dotenv environment variables file
-../.env
+*/.env
 
 # Logs
-logs
-*.log
-npm-debug.log*
+*/logs
+*/*.log
+*/npm-debug.log*
 
 # Optional npm cache directory
-.npm
+*/.npm
 
 # Optional eslint cache
-.eslintcache
+*/.eslintcache
 
 # Output of 'npm pack'
-*.tgz
+*/*.tgz
 
 # Next.js directory
-../.next/
+*/.next/
 
 # Mac OS에서 폴더 메타데이터 저장하는 파일
-../.DS_Store
+*/.DS_Store
 .DS_Store
