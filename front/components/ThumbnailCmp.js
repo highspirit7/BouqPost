@@ -4,7 +4,7 @@ import styled from "styled-components";
 const StyledThumbnail = styled.div`
 	position: relative;
 	z-index: 111;
-	width: 23%;
+	// width: 23%;
 	height: 180px;
 	border: 1px solid rgb(147, 149, 153, 0.6);
 	border-radius: 4px;

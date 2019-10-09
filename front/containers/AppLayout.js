@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import PropTypes from "prop-types";
 import { Avatar, Icon, Button, Layout, Menu, Dropdown } from "antd";
@@ -6,17 +6,21 @@ import styled from "styled-components";
 
 const { Header, Footer, Content } = Layout;
 
+//더미 데이터
+const loggedIn = true;
+
+
 const Logo = styled.div`
 	font-size: 32px;
-	
+
 	font-weight: 800;
 	font-family: "Oleo Script Swash Caps", cursive;
 	margin: 0 24px 0 50px;
-  float: left;
-  
-  a {
-    color: #5cd12a;
-  }
+	float: left;
+
+	a {
+		color: #5cd12a;
+	}
 `;
 
 const StyledFooter = styled(Footer)`
@@ -47,24 +51,55 @@ const RightHeaderItems = styled.div`
 	}
 `;
 
-const collapsedMenu = (
-	<Menu>
-		<Menu.Item key="newPost">
-			<Link href="/newPost">
-				<a>새 포스트</a>
-			</Link>
-		</Menu.Item>
-		<Menu.Item key="myPage">
-			<Link href="/myPage">
-				<a>내 페이지</a>
-			</Link>
-		</Menu.Item>
-		<Menu.Divider />
-		<Menu.Item key="login">로그인</Menu.Item>
-	</Menu>
-);
-
 const AppLayout = ({ children }) => {
+	const collapsedMenu = (
+		<Menu>
+			<Menu.Item key="newPost">
+				<Link href="/newPost">
+					<a>새 포스트</a>
+				</Link>
+			</Menu.Item>
+			<Menu.Item key="myPage">
+				<Link href="/myPage">
+					<a>내 페이지</a>
+				</Link>
+			</Menu.Item>
+			<Menu.Divider />
+			{loggedIn ? (
+				<Menu.Item key="logout">
+					<Link href="/logout">
+						<a>로그아웃</a>
+					</Link>
+				</Menu.Item>
+			) : (
+				<Menu.Item key="login">
+					<Link href="/login">
+						<a>로그인</a>
+					</Link>
+				</Menu.Item>
+			)}
+		</Menu>
+	);
+
+	const myMenu = (
+		<Menu>
+			<Menu.Item key="user_name">GrownUprince</Menu.Item>
+			<Menu.Divider />
+			<Menu.Item key="myPage">
+				<Link href="/myPage">
+					<a>내 페이지</a>
+				</Link>
+			</Menu.Item>
+			{loggedIn && (
+				<Menu.Item key="logout">
+					<Link href="/logout">
+						<a>로그아웃</a>
+					</Link>
+				</Menu.Item>
+			)}
+		</Menu>
+	);
+
 	return (
 		<Layout className="layout">
 			<Header style={{ background: "white", borderBottom: "1px solid #d9d9d9" }}>
@@ -85,19 +120,22 @@ const AppLayout = ({ children }) => {
 							+ 새 포스트
 						</a>
 					</Link>
-					<Link href="/myPage">
-						<a>
-							<Avatar size="large" icon="user" className="collapsingMenu" />
-						</a>
-					</Link>
+					{loggedIn ? (
+						<Dropdown overlay={myMenu} trigger={["hover"]}>
+							<a className="ant-dropdown-link" href="#">
+								<Avatar size="large" icon="user" className="collapsingMenu" />
+							</a>
+						</Dropdown>
+					) : (
+						<Link href="/login">
+							<a className="collapsingMenu">
+								<Button size="large" style={{ fontSize: 18, color: "#2b2a28" }}>
+									로그인
+								</Button>
+							</a>
+						</Link>
+					)}
 
-					<Link href="/login">
-						<a className="collapsingMenu">
-							<Button size="large" style={{ fontSize: 18, color: "#2b2a28" }}>
-								로그인
-							</Button>
-						</a>
-					</Link>
 					<Dropdown overlay={collapsedMenu} trigger={["click"]}>
 						<a className="ant-dropdown-link" href="#" style={{ marginLeft: 10, color: "#2b2a28" }}>
 							<Icon type="menu" className="burger-menu" style={{ fontSize: 22 }} />
