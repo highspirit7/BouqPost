@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Tag, Icon, Row, Col, Divider } from "antd";
 import styled from "styled-components";
 import ThumbnailCmp from "../components/ThumbnailCmp";
@@ -10,7 +10,7 @@ const posts = [
 		{
 			title: "Nah2(나이)가 들면서 친구 사귀기가 어렵다고? Nah!",
 			description: "오래된 친구에게 연락. 까짓 거 한번 시도해보세요!",
-			like: 3,
+			like: 0,
 			author: "졸꾸러기",
 			poster: "GrownUprince",
 			tags: ["서평", "자기계발"],
@@ -89,8 +89,8 @@ const StyledPostbox = styled.div`
 
 	img {
 		width: 200px;
-    height: 128px;
-    margin-right: 12px;
+		height: 128px;
+		margin-right: 12px;
 	}
 
 	.contents {
@@ -101,14 +101,16 @@ const StyledPostbox = styled.div`
 		border: 1px solid rgb(147, 149, 153, 0.6);
 		border-radius: 20px;
 		margin-right: 14px;
-  }
-  
-  h1 {
-    font-size: 24px;
-  }
+	}
+
+	h1 {
+		font-size: 24px;
+	}
 `;
 
 const Main = () => {
+	const [liked, setLike] = useState(false);
+
 	return (
 		<div>
 			<ThumbnailWrapper>
@@ -135,8 +137,8 @@ const Main = () => {
 								<StyledPostbox key={postsByDate[0].date}>
 									<h1>{postsByDate[0].date}</h1>
 									{postsByDate.map((post, i) => (
-										<>
-											<div key={i} style={{ display: "flex", alignItems: "center" }}>
+										<div key={i}>
+											<div style={{ display: "flex", alignItems: "center" }}>
 												<img src={post.img} alt="post_thumbnail" />
 												<div className="contents">
 													<div>
@@ -151,8 +153,13 @@ const Main = () => {
 													<div>
 														<button className="likeBtn">
 															{" "}
-															<Icon type="heart" theme="filled" />
-															<span style={{ marginLeft: 6 }}>{post.like}</span>
+															<Icon
+																type="heart"
+																theme={liked ? "twoTone" : "outlined"}
+																twoToneColor="#eb2f96"
+																onClick={() => setLike(!liked)}
+															/>
+															{post.like !== 0 && <span style={{ marginLeft: 6 }}>{post.like}</span>}
 														</button>
 
 														<span style={{ marginRight: 14 }}>작성자 : {post.author}</span>
@@ -161,7 +168,7 @@ const Main = () => {
 												</div>
 											</div>
 											{postsByDate.length - 1 !== i && <Divider />}
-										</>
+										</div>
 									))}
 								</StyledPostbox>
 							);
