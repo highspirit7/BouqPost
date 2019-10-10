@@ -30,6 +30,7 @@
 		"randomcolor": "^0.5.4",
 		"react": "^16.10.2",
 		"react-dom": "^16.10.2",
+		"react-helmet": "^5.2.1",
 		"redux": "^4.0.4",
 		"redux-actions": "^2.6.5",
 		"redux-saga": "^1.1.1",
