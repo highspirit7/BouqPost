@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Tag, Icon, Row, Col, Divider } from "antd";
 import styled from "styled-components";
 import ThumbnailCmp from "../components/ThumbnailCmp";
@@ -110,6 +111,12 @@ const StyledPostbox = styled.div`
 
 const Main = () => {
 	const [liked, setLike] = useState(false);
+	const { mainPosts } = useSelector(state => state.post);
+	const { myInfo } = useSelector(state => state.user);
+
+	// console.log(mainPosts[0][0].date)
+
+	// if(myInfo) console.log(myInfo.nickname)
 
 	return (
 		<div>
@@ -132,10 +139,10 @@ const Main = () => {
 			<ContentsWrapper>
 				<Row gutter={20}>
 					<Col className="gutter-row" span={18}>
-						{posts.map((postsByDate, index) => {
+						{mainPosts.map((postsByDate, index) => {
 							return (
-								<StyledPostbox key={postsByDate[0].date}>
-									<h1>{postsByDate[0].date}</h1>
+								<StyledPostbox key={index}>
+									<h1>{postsByDate[0] && postsByDate[0].date}</h1>
 									{postsByDate.map((post, i) => (
 										<div key={i}>
 											<div style={{ display: "flex", alignItems: "center" }}>
@@ -163,7 +170,7 @@ const Main = () => {
 														</button>
 
 														<span style={{ marginRight: 14 }}>작성자 : {post.author}</span>
-														<span>posted by {post.poster}</span>
+														<span>posted by {post.user.nickname}</span>
 													</div>
 												</div>
 											</div>

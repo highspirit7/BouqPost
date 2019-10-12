@@ -16,13 +16,13 @@ const NewPostFormWrapper = styled(Card)`
 
 	input {
 		margin-bottom: 10px;
-  }
+	}
 
-  .label {
-    color: #747575;
-    font-size: 15px;
-    font-weight: 500;
-  }
+	.label {
+		color: #747575;
+		font-size: 15px;
+		font-weight: 500;
+	}
 `;
 
 const SubmitBtn = styled(Button)`
@@ -57,6 +57,14 @@ for (let i = 0; i < categories.length; i++) {
 }
 
 const NewPost = () => {
+	const dispatch = useDispatch();
+
+	const addPost = useCallback(() => {
+		return dispatch({
+			type: ADD_POST_REQUEST
+		});
+	}, []);
+
 	return (
 		<NewPostFormWrapper>
 			<Row gutter={24}>
@@ -64,16 +72,16 @@ const NewPost = () => {
 					<h1>새 포스트 작성</h1>
 					<Form>
 						<div className="label">링크</div>
-						<Input placeholder="http://" required></Input>
+						<Input placeholder="http://"></Input>
 						<div className="label">제목(필수)</div>
-						<Input placeholder="링크를 입력하시면 자동으로 입력됩니다" required></Input>
+						<Input placeholder="링크를 입력하시면 자동으로 입력됩니다"></Input>
 						<div className="label">부가 설명(선택)</div>
 						<Input></Input>
 						<div className="label">카테코리(필수)</div>
 						<Select mode="multiple" style={{ width: "100%" }} placeholder="카테고리를 선택해주세요">
 							{children}
 						</Select>
-						<SubmitBtn size="large" htmlType="submit">
+						<SubmitBtn size="large" onClick={addPost}>
 							등록하기
 						</SubmitBtn>
 					</Form>
