@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React, { useCallback } from "react";
 import Link from "next/link";
 import PropTypes from "prop-types";
+import { useSelector, useDispatch } from "react-redux";
 import { Avatar, Icon, Button, Layout, Menu, Dropdown } from "antd";
 import styled from "styled-components";
+import { LOG_OUT_REQUEST } from "../redux/modules/user";
 
 const { Header, Footer, Content } = Layout;
-
-//더미 데이터
-const loggedIn = true;
-
 
 const Logo = styled.div`
 	font-size: 32px;
@@ -49,9 +47,22 @@ const RightHeaderItems = styled.div`
 			display: none;
 		}
 	}
+
+	.ant-avatar {
+		vertical-align: -0.65rem;
+	}
 `;
 
 const AppLayout = ({ children }) => {
+	const { isLoggedIn } = useSelector(state => state.user);
+  const dispatch  = useDispatch();
+
+  const onLogout = useCallback(() => {
+		dispatch({
+      type: LOG_OUT_REQUEST,
+		});
+  }, []);
+  
 	const collapsedMenu = (
 		<Menu>
 			<Menu.Item key="newPost">
@@ -65,7 +76,7 @@ const AppLayout = ({ children }) => {
 				</Link>
 			</Menu.Item>
 			<Menu.Divider />
-			{loggedIn ? (
+			{isLoggedIn ? (
 				<Menu.Item key="logout">
 					<Link href="/logout">
 						<a>로그아웃</a>
@@ -90,7 +101,7 @@ const AppLayout = ({ children }) => {
 					<a>내 페이지</a>
 				</Link>
 			</Menu.Item>
-			{loggedIn && (
+			{isLoggedIn && (
 				<Menu.Item key="logout">
 					<Link href="/logout">
 						<a>로그아웃</a>
@@ -120,10 +131,10 @@ const AppLayout = ({ children }) => {
 							+ 새 포스트
 						</a>
 					</Link>
-					{loggedIn ? (
+					{isLoggedIn ? (
 						<Dropdown overlay={myMenu} trigger={["hover"]}>
 							<a className="ant-dropdown-link" href="#">
-								<Avatar size="large" icon="user" className="collapsingMenu" />
+								<Avatar src="/little_prince.png" className="collapsingMenu" />
 							</a>
 						</Dropdown>
 					) : (

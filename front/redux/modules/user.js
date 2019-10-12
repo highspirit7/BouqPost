@@ -2,23 +2,28 @@ import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 
 const dummyUser = {
-  nickname: 'GrownUprince',
-  Posts: [],
-  likes: 0,
-  id: 1,
+	nickname: "GrownUprince",
+	Posts: [],
+	likes: 0,
+	id: 1,
+	profileImg: "/little prince.png"
 };
 
 // 액션 타입 정의
-const LOG_IN_REQUEST = "user/LOG_IN_REQUEST";
-const LOG_IN_SUCCESS = "user/LOG_IN_SUCCESS";
-const LOG_IN_FAILURE = "user/LOG_IN_FAILURE";
-const LOG_OUT = "user/LOG_OUT";
+export const LOG_IN_REQUEST = "user/LOG_IN_REQUEST";
+export const LOG_IN_SUCCESS = "user/LOG_IN_SUCCESS";
+export const LOG_IN_FAILURE = "user/LOG_IN_FAILURE";
+export const LOG_OUT_REQUEST = "user/LOG_OUT_REQUEST";
+export const LOG_OUT_SUCCESS = "user/LOG_OUT_SUCCESS";
+export const LOG_OUT_FAILURE = "user/LOG_OUT_FAILURE";
 
 // 액션 생성 함수
 export const loginRequest = createAction(LOG_IN_REQUEST);
 export const loginSuccess = createAction(LOG_IN_SUCCESS);
 export const loginFailure = createAction(LOG_IN_FAILURE);
-export const logout = createAction(LOG_OUT);
+export const logoutRequest = createAction(LOG_OUT_REQUEST);
+export const logoutSuccess = createAction(LOG_OUT_SUCCESS);
+export const logoutFailure = createAction(LOG_OUT_FAILURE);
 
 export const initialState = {
 	isLoggedIn: false, // 로그인 여부
@@ -31,29 +36,37 @@ export const initialState = {
 // immer 를 사용하여 값을 수정하는 리듀서
 export default handleActions(
 	{
-		[LOG_IN_REQUEST]: (state, action) =>
+		[LOG_IN_REQUEST]: state =>
 			produce(state, draft => {
-        draft.isLoggingIn = true;
-        draft.logInErrorMsg = action.error.message
+				draft.isLoggingIn = true;
+				// draft.logInErrorMsg = payload.error.message
 			}),
-		// :: { } 를 따로 열지 않고 바로 리턴하면 이런 형식입니다.
 		[LOG_IN_SUCCESS]: state =>
 			produce(state, draft => {
 				draft.isLoggingIn = false;
-        draft.isLoggedIn = true;
-        draft.myInfo = dummyUser;
+				draft.isLoggedIn = true;
+				draft.myInfo = dummyUser;
 			}),
-		[LOG_IN_FAILURE]: state =>
+		[LOG_IN_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
 				draft.isLoggingIn = false;
-        draft.isLoggedIn = false;
-        draft.myInfo = null;
-			}),
-		[LOG_OUT]: state =>
-			produce(state, draft => {
 				draft.isLoggedIn = false;
+				draft.logInErrorMsg = payload;
+				draft.myInfo = null;
+			}),
+		[LOG_OUT_REQUEST]: state =>
+			produce(state, draft => {
+				draft.isLoggingOut = true;
+			}),
+		[LOG_OUT_SUCCESS]: state =>
+			produce(state, draft => {
+        draft.isLoggingOut = false;
         draft.myInfo = null;
 			}),
+		[LOG_OUT_FAILURE]: state =>
+			produce(state, draft => {
+				draft.isLoggingOut = true;
+			})
 	},
 	initialState
 );
