@@ -1,47 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Tag, Icon, Row, Col, Divider } from "antd";
 import styled from "styled-components";
 import ThumbnailCmp from "../components/ThumbnailCmp";
-import randomcolor from "randomcolor";
-
-//더미 데이터
-const posts = [
-	[
-		{
-			title: "Nah2(나이)가 들면서 친구 사귀기가 어렵다고? Nah!",
-			description: "오래된 친구에게 연락. 까짓 거 한번 시도해보세요!",
-			like: 0,
-			author: "졸꾸러기",
-			poster: "GrownUprince",
-			tags: ["서평", "자기계발"],
-			img: "https://res.cloudinary.com/dgggcrkxq/image/upload/v1570279036/noticon/jl36nfr73kf3siyjcp56.jpg",
-			date: "10월 10일"
-		},
-		{
-			title: "Nah2(나이)가 들면서 친구 사귀기가 어렵다고? Nah!",
-			description: "오래된 친구에게 연락. 까짓 거 한번 시도해보세요!",
-			like: 3,
-			author: "졸꾸러기",
-			poster: "GrownUprince",
-			tags: ["서평", "자기계발"],
-			img: "https://res.cloudinary.com/dgggcrkxq/image/upload/v1569898129/noticon/x8e3entin2axlgquvx8k.png",
-			date: "10월 10일"
-		}
-	],
-	[
-		{
-			title: "BTS 유엔연설문 안부러운 'BesTSelf 쓰기'",
-			description: "오래된 친구에게 연락. 까짓 거 한번 시도해보세요!",
-			like: 3,
-			author: "마음챙김",
-			poster: "GrownUprince",
-			tags: ["서평", "자기계발"],
-			img: "https://res.cloudinary.com/dgggcrkxq/image/upload/v1566913092/noticon/gci2ok6bmv35foix59iw.png",
-			date: "10월 9일"
-		}
-	]
-];
+import { LOAD_CATEGORIES } from "../redux/modules/categories";
 
 const ThumbnailWrapper = styled.div`
 	width: 94%;
@@ -73,10 +35,6 @@ const ContentsWrapper = styled.div`
 	// justify-content: space-between;
 	margin: 0 auto;
 `;
-
-const randomColors = randomcolor({
-	count: 10
-});
 
 const StyledPostbox = styled.div`
 	border: 1px solid rgb(147, 149, 153, 0.6);
@@ -110,13 +68,17 @@ const StyledPostbox = styled.div`
 `;
 
 const Main = () => {
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch({
+			type: LOAD_CATEGORIES
+		});
+	}, []);
+
 	const [liked, setLike] = useState(false);
 	const { mainPosts } = useSelector(state => state.post);
-	const { myInfo } = useSelector(state => state.user);
-
-	// console.log(mainPosts[0][0].date)
-
-	// if(myInfo) console.log(myInfo.nickname)
+	const { categories, colors } = useSelector(state => state.categories);
 
 	return (
 		<div>
@@ -149,11 +111,14 @@ const Main = () => {
 												<img src={post.img} alt="post_thumbnail" />
 												<div className="contents">
 													<div>
-														{post.tags.map((tag, i) => (
-															<Tag color={randomColors[i]} key={tag}>
-																{tag}
-															</Tag>
-														))}
+														{post.categories.map(tag => {
+															const indexInCategories = categories.indexOf(tag);
+															return (
+																<Tag color={colors[indexInCategories]} key={tag}>
+																	{tag}
+																</Tag>
+															);
+														})}
 													</div>
 													<h2>{post.title}</h2>
 													<p>{post.description}</p>
@@ -184,16 +149,13 @@ const Main = () => {
 					<Col className="gutter-row" span={6}>
 						<Categories>
 							<h2>카테고리 별로 보기</h2>
-							<Tag color={randomColors[0]}>졸꾸</Tag>
-							<Tag color={randomColors[1]}>서평</Tag>
-							<Tag color={randomColors[2]}>역사</Tag>
-							<Tag color={randomColors[3]}>경제 / 경영</Tag>
-							<Tag color={randomColors[4]}>문화</Tag>
-							<Tag color={randomColors[5]}>IT</Tag>
-							<Tag color={randomColors[6]}>철학</Tag>
-							<Tag color={randomColors[7]}>에세이</Tag>
-							<Tag color={randomColors[8]}>과학</Tag>
-							<Tag color={randomColors[9]}>예술</Tag>
+							{categories.map((category, i) => {
+								return (
+									<Tag color={colors[i]} key={category}>
+										{category}
+									</Tag>
+								);
+							})}
 						</Categories>
 					</Col>
 				</Row>

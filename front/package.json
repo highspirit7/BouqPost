@@ -27,7 +27,6 @@
 		"next-redux-saga": "^4.0.2",
 		"next-redux-wrapper": "^4.0.1",
 		"prop-types": "^15.7.2",
-		"randomcolor": "^0.5.4",
 		"react": "^16.10.2",
 		"react-dom": "^16.10.2",
 		"react-helmet": "^5.2.1",

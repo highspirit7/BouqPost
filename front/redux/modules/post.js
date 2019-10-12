@@ -14,7 +14,7 @@ export const initialState = {
 					id: 1,
 					nickname: "GrownUprince"
 				},
-				tags: ["서평", "자기계발"],
+				categories: ["서평", "자기계발"],
 				img: "https://res.cloudinary.com/dgggcrkxq/image/upload/v1570279036/noticon/jl36nfr73kf3siyjcp56.jpg",
 				date: "10월 10일"
 			},
@@ -28,7 +28,7 @@ export const initialState = {
 					id: 1,
 					nickname: "GrownUprince"
 				},
-				tags: ["서평", "자기계발"],
+				categories: ["서평", "자기계발"],
 				img: "https://res.cloudinary.com/dgggcrkxq/image/upload/v1569898129/noticon/x8e3entin2axlgquvx8k.png",
 				date: "10월 10일"
 			}
@@ -36,7 +36,7 @@ export const initialState = {
 		[]
 	],
 	isAddingPost: false,
-	addPostError: "" // 포스트 업로드 실패 사유
+  addPostError: "" // 포스트 업로드 실패 사유
 };
 
 //더미 데이터
@@ -52,7 +52,7 @@ const dummyPost = {
 	title: "Don't feel sleepy, sleep more and be happier",
 	description:
 		"서평이라기 보다는 개인적으로 다시 또 보면서 수면에 관해 우리가 보통 잘 모르는 부분을 계속 상기시키기 위해 쓰는 글",
-	tags: ["서평", "자기계발"],
+	categories: ["서평", "자기계발"],
 	img: "https://res.cloudinary.com/dgggcrkxq/image/upload/v1569280061/noticon/pzqutc2e2p09otxqhk2h.png",
 	date: "10월 12일"
 };
