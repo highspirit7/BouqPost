@@ -10,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			nickname: {
 				type: DataTypes.STRING(20),
-				allowNull: false
+        allowNull: false
 			},
 			thumbnail_img: {
 				type: DataTypes.STRING,
-				allowNull: false
+        allowNull: false
 			}
 		},
 		{
