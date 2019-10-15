@@ -102,7 +102,7 @@ const AppLayout = ({ children }) => {
 
 	const myMenu = (
 		<Menu>
-			<Menu.Item key="user_name">GrownUprince</Menu.Item>
+			<Menu.Item key="user_name">{myInfo && myInfo.nickname}</Menu.Item>
 			<Menu.Divider />
 			<Menu.Item key="myPage">
 				<Link href="/myPage">
@@ -142,7 +142,7 @@ const AppLayout = ({ children }) => {
 					{myInfo ? (
 						<Dropdown overlay={myMenu} trigger={["hover"]}>
 							<a className="ant-dropdown-link" href="#">
-								<Avatar src="/little_prince.png" className="collapsingMenu" />
+								<Avatar src={myInfo && myInfo.thumbnail_img} className="collapsingMenu" />
 							</a>
 						</Dropdown>
 					) : (

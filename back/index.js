@@ -33,7 +33,8 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
 	expressSession({
 		resave: false,
-		saveUninitialized: true,
+    saveUninitialized: true,
+    maxAge: 604800000, //일주일
 		secret: process.env.COOKIE_SECRET,
 		cookie: {
 			httpOnly: true,
