@@ -86,9 +86,7 @@ const AppLayout = ({ children }) => {
 			<Menu.Divider />
 			{myInfo ? (
 				<Menu.Item key="logout">
-					<Link href="/logout">
-						<a>로그아웃</a>
-					</Link>
+					<a onClick={onLogout}>로그아웃</a>
 				</Menu.Item>
 			) : (
 				<Menu.Item key="login">
@@ -111,9 +109,7 @@ const AppLayout = ({ children }) => {
 			</Menu.Item>
 			{myInfo && (
 				<Menu.Item key="logout">
-					<Link href="/logout">
-						<a>로그아웃</a>
-					</Link>
+					<a onClick={onLogout}>로그아웃</a>
 				</Menu.Item>
 			)}
 		</Menu>

@@ -6,15 +6,17 @@ const router = express.Router();
 
 router.get("/", isLoggedIn, (req, res) => {
 	// /api/user/
-
-	//아래와 같이 db에서 시퀄라이즈로 가져올 때 비밀번호를 삭제한다든지와 같은 이유로 수정이 필요하거나 할 때는 toJSON 해주어야 한다.
-	// console.log(req.session);
-
-	//이 부분이 필요없다...
-	const user = Object.assign({}, req.user);
-
+  
+  //시퀄라이즈도 DB에서 가져온 경우에는 res.json으로만 동작했다. 하지만 여기서는 req.user를 그대로 사용
 	//res.send로 해도 똑같이 동작하는데 res.json도 내부적으로 send를 사용한다고 한다.
 	return res.json(req.user);
+});
+
+router.post("/logout", (req, res) => {
+	// /api/user/logout
+	req.logout();
+	req.session.destroy();
+	res.send("로그아웃 처리되었습니다");
 });
 
 module.exports = router;

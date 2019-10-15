@@ -47,23 +47,21 @@ export default handleActions(
 		// 		draft.isLoggedIn = true;
 		// 		// draft.myInfo = dummyUser;
 		// 	}),
-		// [LOAD_USER_FAILURE]: (state, { payload }) =>
-		// 	produce(state, draft => {
-		// 		draft.isLoggingIn = false;
-		// 		draft.isLoggedIn = false;
-		// 		draft.logInErrorMsg = payload;
-		// 		draft.myInfo = null;
-		// 	}),
+		[LOAD_USER_FAILURE]: (state, { payload }) =>
+			produce(state, draft => {
+				draft.loadUserError = payload.error;
+				draft.myInfo = null;
+			}),
 		[LOAD_USER_SUCCESS]: (state, payload) =>
 			produce(state, draft => {
 				if (payload.me) {
 					draft.myInfo = payload.data;
 				}
 			}),
-		[LOG_OUT_REQUEST]: state =>
-			produce(state, draft => {
-				draft.isLoggingOut = true;
-			}),
+		// [LOG_OUT_REQUEST]: state =>
+		// 	produce(state, draft => {
+		// 		draft.isLoggingOut = true;
+		// 	}),
 		[LOG_OUT_SUCCESS]: state =>
 			produce(state, draft => {
 				draft.isLoggingOut = false;
@@ -71,7 +69,7 @@ export default handleActions(
 			}),
 		[LOG_OUT_FAILURE]: state =>
 			produce(state, draft => {
-				draft.isLoggingOut = true;
+        draft.myInfo = null;
 			})
 	},
 	initialState
