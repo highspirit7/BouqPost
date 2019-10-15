@@ -7,7 +7,7 @@ const dotenv = require("dotenv");
 const passport = require("passport");
 const passportConfig = require("./passport");
 const db = require("./models"); //index.js파일은 명시 안해줘도 된다.
-// const userAPIRouter = require("./routes/user");
+const userAPIRouter = require("./routes/user");
 // const postAPIRouter = require("./routes/post");
 const oauthAPIRouter = require("./routes/oauth");
 
@@ -20,13 +20,7 @@ dotenv.config();
 
 passportConfig();
 
-app.use(
-	cors({
-		//Cross Domain Cookie값 읽어오기 위함
-		origin: true,
-		credentials: true
-	})
-);
+
 
 //로그 기록 남기는 용도.
 app.use(morgan("dev"));
@@ -39,7 +33,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
 	expressSession({
 		resave: false,
-		saveUninitialized: false,
+		saveUninitialized: true,
 		secret: process.env.COOKIE_SECRET,
 		cookie: {
 			httpOnly: true,
@@ -58,9 +52,16 @@ app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(
+	cors({
+		//Cross Domain Cookie값 읽어오기 위함
+		origin: true,
+		credentials: true
+	})
+);
 
 // API는 다른 서비스가 내 서비스의 기능을 실행할 수 있게 열어둔 창구
-// app.use("/api/user", userAPIRouter);
+app.use("/api/user", userAPIRouter);
 // app.use("/api/post", postAPIRouter);
 app.use("/api/oauth", oauthAPIRouter);
 

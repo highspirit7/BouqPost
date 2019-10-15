@@ -8,7 +8,7 @@ router.get("/kakao", passport.authenticate("kakao"));
 router.get(
 	"/kakao/callback",
 	passport.authenticate("kakao", {
-		failureRedirect: "http://localhost:3000"
+    failureRedirect: "http://localhost:3000/login"
 	}),
 	(req, res) => {
 		res.redirect("http://localhost:3000");

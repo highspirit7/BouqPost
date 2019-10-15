@@ -11,9 +11,6 @@ module.exports = () => {
 			},
 			async (accessToken, refreshToken, profile, done) => {
 				try {
-					console.log("썸네일" + profile._json.properties.thumbnail_image);
-					console.log("닉네임" + profile.username);
-
 					const exUser = await db.User.findOne({ where: { user_id: profile.id } });
 					if (exUser) {
 						done(null, exUser);
