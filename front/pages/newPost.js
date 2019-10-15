@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Card, Input, Row, Col, Form, Select, Button } from "antd";
@@ -36,32 +36,51 @@ const SubmitBtn = styled(Button)`
 `;
 const { Option } = Select;
 
-const categories = [
-	"서평",
-	"자기계발",
-	"독서",
-	"인문",
-	"서평 Tip",
-	"역사",
-	"문화",
-	"과학",
-	"예술",
-	"IT",
-	"에세이",
-	"경제/경영"
-];
-
-const children = [];
-for (let i = 0; i < categories.length; i++) {
-	children.push(<Option key={categories[i]}>{categories[i]}</Option>);
-}
-
 const NewPost = () => {
+	const [link, setLink] = useState("");
+	const [title, setTitle] = useState("");
+	const [description, setDesc] = useState("");
+
 	const dispatch = useDispatch();
 
-	const addPost = useCallback(() => {
-		return dispatch({
-			type: ADD_POST_REQUEST
+	const { categories } = useSelector(state => state.categories);
+	const children = [];
+	for (let i = 0; i < categories.length; i++) {
+		children.push(
+			<Option key={categories[i]} value={categories[i]}>
+				{categories[i]}
+			</Option>
+		);
+	}
+
+	// const addPost = useCallback(() => {
+	// 	return dispatch({
+	// 		type: ADD_POST_REQUEST
+	// 	});
+	// }, []);
+	const onChangeLink = useCallback(e => {
+		setLink(e.target.value);
+	}, []);
+
+	const onChangeTitle = useCallback(e => {
+		setTitle(e.target.value);
+	}, []);
+
+	const onChangeDesc = useCallback(e => {
+		setDesc(e.target.value);
+	}, []);
+
+	const submitForm = useCallback(e => {
+		e.preventDefault();
+
+		const formData = new FormData();
+
+		// append로 추가하지않고 직접 태그에 name 속성을 사용했다.
+		// formData.append("content", text);
+
+		dispatch({
+			type: ADD_POST_REQUEST,
+			data: formData
 		});
 	}, []);
 
@@ -70,20 +89,29 @@ const NewPost = () => {
 			<Row gutter={24}>
 				<Col className="gutter-row" span={12}>
 					<h1>새 포스트 작성</h1>
-					<Form>
+					<Form onSubmit={submitForm}>
 						<div className="label">링크</div>
-						<Input placeholder="http://"></Input>
+						<Input placeholder="http://" name="link" value={link} onChange={onChangeLink}></Input>
 						<div className="label">제목(필수)</div>
-						<Input placeholder="링크를 입력하시면 자동으로 입력됩니다"></Input>
-						<div className="label">부가 설명(선택)</div>
-						<Input></Input>
+						<Input
+							placeholder="링크를 입력하시면 자동으로 입력됩니다"
+							name="title"
+							value={title}
+							onChange={onChangeTitle}></Input>
+						<div className="label" value={description} onChange={onChangeDesc}>
+							부가 설명(선택)
+						</div>
+						<Input name="description" value={description} onChange={onChangeDesc}></Input>
 						<div className="label">카테코리(필수)</div>
-						<Select mode="multiple" style={{ width: "100%" }} placeholder="카테고리를 선택해주세요">
+						<Select
+							mode="multiple"
+							style={{ width: "100%" }}
+							placeholder="카테고리를 선택해주세요"
+							name="category"
+							required>
 							{children}
 						</Select>
-						<SubmitBtn size="large" onClick={addPost}>
-							등록하기
-						</SubmitBtn>
+						<SubmitBtn size="large" htmlType="submit">등록하기</SubmitBtn>
 					</Form>
 				</Col>
 				<Col className="gutter-row" span={12} style={{ marginTop: 80 }}>

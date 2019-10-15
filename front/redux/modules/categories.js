@@ -38,7 +38,7 @@ export default handleActions(
 		[LOAD_CATEGORIES]: state =>
 			produce(state, draft => {
 				draft.categories = [
-					"졸꾸",
+					"기타",
 					"서평",
 					"경제/경영",
 					"역사",
