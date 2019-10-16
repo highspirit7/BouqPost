@@ -1,10 +1,10 @@
-import React, { useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useDispatch } from "react-redux";
 // import Link from "next/link";
 import { Card } from "antd";
 import styled from "styled-components";
-import Router from "next/router";
-import { LOG_IN_REQUEST } from "../redux/modules/user";
+
+
 
 const LoginFormWrapper = styled(Card)`
 	width: 90%;
@@ -25,8 +25,8 @@ const KakaoLoginBtn = styled.img`
 `;
 
 const Login = () => {
-	const dispatch = useDispatch();
-	const { myInfo } = useSelector(state => state.user);
+	// const dispatch = useDispatch();
+	
 
 	// useEffect(() => {
 	// 	if (myInfo) {
@@ -44,7 +44,7 @@ const Login = () => {
 	return (
 		<LoginFormWrapper>
 			<h1>로그인</h1>
-			<p style={{ fontSize: 17 }}>좋아요 및 포스트 작성을 위해서는 로그인이 필요합니다.</p>
+			<p style={{ fontSize: 18 }}>좋아요 및 포스트 작성을 위해서는 로그인이 필요합니다.</p>
 
 			<a href="http://localhost:2019/api/oauth/kakao">
 				<KakaoLoginBtn />

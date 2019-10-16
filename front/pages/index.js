@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Tag, Icon, Row, Col, Divider } from "antd";
 import styled from "styled-components";
 import ThumbnailCmp from "../components/ThumbnailCmp";
-import { LOAD_CATEGORIES } from "../redux/modules/categories";
+
 
 const ThumbnailWrapper = styled.div`
 	width: 94%;
@@ -68,17 +68,9 @@ const StyledPostbox = styled.div`
 `;
 
 const Main = () => {
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		dispatch({
-			type: LOAD_CATEGORIES
-		});
-	}, []);
-
 	const [liked, setLike] = useState(false);
 	const { mainPosts } = useSelector(state => state.post);
-	const { categories, colors } = useSelector(state => state.categories);
+	const { providedCategories, colors } = useSelector(state => state.categories);
 
 	return (
 		<div>
@@ -104,7 +96,7 @@ const Main = () => {
 						{mainPosts.map((postsByDate, index) => {
 							return (
 								<StyledPostbox key={index}>
-									<h1>{postsByDate[0] && postsByDate[0].date}</h1>
+									<h1>{postsByDate[0] && postsByDate[0].createdAt}</h1>
 									{postsByDate.map((post, i) => (
 										<div key={i}>
 											<div style={{ display: "flex", alignItems: "center" }}>
@@ -112,7 +104,7 @@ const Main = () => {
 												<div className="contents">
 													<div>
 														{post.categories.map(tag => {
-															const indexInCategories = categories.indexOf(tag);
+															const indexInCategories = providedCategories.indexOf(tag);
 															return (
 																<Tag color={colors[indexInCategories]} key={tag}>
 																	{tag}
@@ -149,7 +141,7 @@ const Main = () => {
 					<Col className="gutter-row" span={6}>
 						<Categories>
 							<h2>카테고리 별로 보기</h2>
-							{categories.map((category, i) => {
+							{providedCategories.map((category, i) => {
 								return (
 									<Tag color={colors[i]} key={category}>
 										{category}

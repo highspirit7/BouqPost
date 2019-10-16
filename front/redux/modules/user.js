@@ -49,7 +49,7 @@ export default handleActions(
 		// 	}),
 		[LOAD_USER_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
-				draft.loadUserError = payload.error;
+				if (payload.error) draft.loadUserError = payload.error;
 				draft.myInfo = null;
 			}),
 		[LOAD_USER_SUCCESS]: (state, payload) =>
@@ -69,7 +69,7 @@ export default handleActions(
 			}),
 		[LOG_OUT_FAILURE]: state =>
 			produce(state, draft => {
-        draft.myInfo = null;
+				draft.myInfo = null;
 			})
 	},
 	initialState

@@ -1,7 +1,8 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Card, Input, Row, Col, Form, Select, Button } from "antd";
+import Router from "next/router";
 
 import { ADD_POST_REQUEST } from "../redux/modules/post";
 
@@ -40,24 +41,29 @@ const NewPost = () => {
 	const [link, setLink] = useState("");
 	const [title, setTitle] = useState("");
 	const [description, setDesc] = useState("");
+	const [category, setCategory] = useState([]);
 
 	const dispatch = useDispatch();
 
-	const { categories } = useSelector(state => state.categories);
+	const { myInfo } = useSelector(state => state.user);
+	const { providedCategories } = useSelector(state => state.categories);
+
 	const children = [];
-	for (let i = 0; i < categories.length; i++) {
+	for (let i = 0; i < providedCategories.length; i++) {
 		children.push(
-			<Option key={categories[i]} value={categories[i]}>
-				{categories[i]}
+			<Option key={providedCategories[i]} value={providedCategories[i]}>
+				{providedCategories[i]}
 			</Option>
 		);
 	}
 
-	// const addPost = useCallback(() => {
-	// 	return dispatch({
-	// 		type: ADD_POST_REQUEST
-	// 	});
-	// }, []);
+	useEffect(() => {
+		if (!myInfo) {
+			alert("새 포스트를 작성하시려면 로그인이 필요합니다");
+			Router.push("/login");
+		}
+	}, [myInfo]);
+
 	const onChangeLink = useCallback(e => {
 		setLink(e.target.value);
 	}, []);
@@ -70,19 +76,41 @@ const NewPost = () => {
 		setDesc(e.target.value);
 	}, []);
 
-	const submitForm = useCallback(e => {
-		e.preventDefault();
-
-		const formData = new FormData();
-
-		// append로 추가하지않고 직접 태그에 name 속성을 사용했다.
-		// formData.append("content", text);
-
-		dispatch({
-			type: ADD_POST_REQUEST,
-			data: formData
-		});
+	const onChangeCategory = useCallback(value => {
+		setCategory(value);
 	}, []);
+
+	const submitForm = useCallback(
+		e => {
+			e.preventDefault();
+
+			const formData = new FormData();
+
+			// append로 추가하지않고 직접 태그에 name 속성을 사용했다.
+			//FormData 브라우저 정책상 콘솔로그로 확인 불가하지만 아래와 같은 방식으로 확인 가능.
+			formData.append("link", link);
+			formData.append("title", title);
+			formData.append("description", description);
+
+			category.forEach(category => {
+				formData.append("category", category);
+			});
+
+			for (var key of formData.keys()) {
+				console.log(key);
+			}
+
+			for (var value of formData.values()) {
+				console.log(value);
+			}
+
+			dispatch({
+				type: ADD_POST_REQUEST,
+				data: formData
+			});
+		},
+		[link, title, description, category]
+	);
 
 	return (
 		<NewPostFormWrapper>
@@ -91,27 +119,25 @@ const NewPost = () => {
 					<h1>새 포스트 작성</h1>
 					<Form onSubmit={submitForm}>
 						<div className="label">링크</div>
-						<Input placeholder="http://" name="link" value={link} onChange={onChangeLink}></Input>
+						<Input placeholder="http://" value={link} onChange={onChangeLink}></Input>
 						<div className="label">제목(필수)</div>
-						<Input
-							placeholder="링크를 입력하시면 자동으로 입력됩니다"
-							name="title"
-							value={title}
-							onChange={onChangeTitle}></Input>
+						<Input placeholder="링크를 입력하시면 자동으로 입력됩니다" value={title} onChange={onChangeTitle}></Input>
 						<div className="label" value={description} onChange={onChangeDesc}>
 							부가 설명(선택)
 						</div>
-						<Input name="description" value={description} onChange={onChangeDesc}></Input>
+						<Input value={description} onChange={onChangeDesc}></Input>
 						<div className="label">카테코리(필수)</div>
 						<Select
 							mode="multiple"
 							style={{ width: "100%" }}
 							placeholder="카테고리를 선택해주세요"
-							name="category"
+							onChange={onChangeCategory}
 							required>
 							{children}
 						</Select>
-						<SubmitBtn size="large" htmlType="submit">등록하기</SubmitBtn>
+						<SubmitBtn size="large" htmlType="submit">
+							등록하기
+						</SubmitBtn>
 					</Form>
 				</Col>
 				<Col className="gutter-row" span={12} style={{ marginTop: 80 }}>

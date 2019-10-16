@@ -40,8 +40,8 @@ module.exports = () => {
 					}
 				]
 			});
-			console.log("deserializeUser - " + id);
-			console.log("deserializeUser - " + user);
+			// console.log("deserializeUser - " + id);
+			// console.log("deserializeUser - " + user);
 			//return 사용 안해도 무방하지만 해당 코드 뒤에 더 실행되는 부분이 없다는 것을 확실히 하기 위해 return 웬만하면 사용 추천(by ZeroCho)
 			// 그러나 async 함수는 return은 사용 안해도 되는건지 확실하지 않다.(by ZeroCho)
 			return done(null, user.dataValues); // req.user에 저장된다

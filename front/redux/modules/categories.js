@@ -2,7 +2,7 @@ import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 
 export const initialState = {
-	categories: [],
+	providedCategories: [],
 	colors: [
 		"#d69da9",
 		"#f39c12",
@@ -37,7 +37,7 @@ export default handleActions(
 	{
 		[LOAD_CATEGORIES]: state =>
 			produce(state, draft => {
-				draft.categories = [
+				draft.providedCategories = [
 					"기타",
 					"서평",
 					"경제/경영",

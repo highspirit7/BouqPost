@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Avatar, Icon, Button, Layout, Menu, Dropdown } from "antd";
 import styled from "styled-components";
 import { LOG_OUT_REQUEST, LOAD_USER_REQUEST } from "../redux/modules/user";
+import { LOAD_CATEGORIES } from "../redux/modules/categories";
 
 const { Header, Footer, Content } = Layout;
 
@@ -62,9 +63,15 @@ const AppLayout = ({ children }) => {
 			dispatch({
 				type: LOAD_USER_REQUEST
 			});
-		}
+    }
 	}, []);
 
+  useEffect(() => {
+		dispatch({
+			type: LOAD_CATEGORIES
+		});
+  }, []);
+  
 	const onLogout = useCallback(() => {
 		dispatch({
 			type: LOG_OUT_REQUEST

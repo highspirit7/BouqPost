@@ -1,5 +1,8 @@
 import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
+import moment from "moment";
+
+moment.locale("ko");
 
 export const initialState = {
 	mainPosts: [
@@ -16,7 +19,7 @@ export const initialState = {
 				},
 				categories: ["서평", "자기계발"],
 				img: "https://res.cloudinary.com/dgggcrkxq/image/upload/v1570279036/noticon/jl36nfr73kf3siyjcp56.jpg",
-				date: "10월 10일"
+				createdAt: "10월 10일"
 			},
 			{
 				id: 2,
@@ -30,37 +33,37 @@ export const initialState = {
 				},
 				categories: ["서평", "자기계발"],
 				img: "https://res.cloudinary.com/dgggcrkxq/image/upload/v1569898129/noticon/x8e3entin2axlgquvx8k.png",
-				date: "10월 10일"
+				createdAt: "10월 10일"
 			}
 		],
 		[]
 	],
 	isAddingPost: false,
-  addPostError: "" // 포스트 업로드 실패 사유
+	addPostError: "" // 포스트 업로드 실패 사유
 };
 
 //더미 데이터
-let postIndex = 3;
-const dummyPost = {
-	id: ++postIndex,
-	user: {
-		id: 1,
-		nickname: "GrownUprince"
-	},
-	like: 0,
-	author: "졸꾸러기",
-	title: "Don't feel sleepy, sleep more and be happier",
-	description:
-		"서평이라기 보다는 개인적으로 다시 또 보면서 수면에 관해 우리가 보통 잘 모르는 부분을 계속 상기시키기 위해 쓰는 글",
-	categories: ["서평", "자기계발"],
-	img: "https://res.cloudinary.com/dgggcrkxq/image/upload/v1569280061/noticon/pzqutc2e2p09otxqhk2h.png",
-	date: "10월 12일"
-};
+// let postIndex = 3;
+// const dummyPost = {
+// 	id: ++postIndex,
+// 	user: {
+// 		id: 1,
+// 		nickname: "GrownUprince"
+// 	},
+// 	like: 0,
+// 	author: "졸꾸러기",
+// 	title: "Don't feel sleepy, sleep more and be happier",
+// 	description:
+// 		"서평이라기 보다는 개인적으로 다시 또 보면서 수면에 관해 우리가 보통 잘 모르는 부분을 계속 상기시키기 위해 쓰는 글",
+// 	categories: ["서평", "자기계발"],
+// 	img: "https://res.cloudinary.com/dgggcrkxq/image/upload/v1569280061/noticon/pzqutc2e2p09otxqhk2h.png",
+// 	date: "10월 12일"
+// };
 
 // 액션 타입 정의
-export const ADD_POST_REQUEST = "post/LOAD_POSTS_REQUEST";
-export const ADD_POST_SUCCESS = "post/LOAD_POSTS_SUCCESS";
-export const ADD_POST_FAILURE = "post/LOAD_POSTS_FAILURE";
+export const ADD_POST_REQUEST = "post/ADD_POSTS_REQUEST";
+export const ADD_POST_SUCCESS = "post/ADD_POSTS_SUCCESS";
+export const ADD_POST_FAILURE = "post/ADD_POSTS_FAILURE";
 
 // 액션 생성 함수
 export const loadPostsRequest = createAction(ADD_POST_REQUEST);
@@ -68,17 +71,33 @@ export const loadPostsSuccess = createAction(ADD_POST_SUCCESS);
 export const loadPostsFailure = createAction(ADD_POST_FAILURE);
 
 // immer 를 사용하여 값을 수정하는 리듀서
+// var output = m.format("YYYY년MM월DD일 HH:mm:ss dddd");
+
 export default handleActions(
 	{
 		[ADD_POST_REQUEST]: state =>
 			produce(state, draft => {
 				draft.isAddingPost = true;
 			}),
-		[ADD_POST_SUCCESS]: state =>
+		[ADD_POST_SUCCESS]: (state, { payload }) => {
 			produce(state, draft => {
-				draft.mainPosts[1].push(dummyPost);
+				// const newPost = payload.data;
+
+				// //날짜가 그 이전 배열과 다르면 새로운 배열 만들어서 추가해주도록 하는 로직 필요
+				// newPost.createdAt = moment(newPost.createdAt).format("MM월 DD일 dddd");
+
+				// //애초에 첫 게시물 작성하는 경우 + 새 게시물 생성 날짜가 제일 최신 게시물의 날짜와 다를 때
+				// if (draft.mainPosts[0][0].createdAt && draft.mainPosts[0][0].createdAt !== newPost.createdAt) {
+				// 	draft.mainPosts.unshift([]);
+				// 	draft.mainPosts[0].unshift(newPost);
+				// } else {
+				// 	//새 게시물 생성 날짜가 제일 최신 게시물의 날짜와 같을 때
+				// 	draft.mainPosts[0].unshift(newPost);
+				// }
 				draft.isAddingPost = false;
-			}),
+			});
+		},
+
 		[ADD_POST_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
 				draft.isAddingPost = false;

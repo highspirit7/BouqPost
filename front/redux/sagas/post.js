@@ -16,9 +16,10 @@ function* addPost(action) {
 		yield put({
 			type: ADD_POST_SUCCESS,
 			data: result.data
-		});
-		alert("새 포스트를 추가하였습니다");
-		Router.push("/");
+    });
+    console.dir(result.data);
+		// alert("새 포스트를 추가하였습니다");
+		// Router.push("/");
 	} catch (e) {
 		console.error(e);
 		yield put({

@@ -11,6 +11,7 @@ import reducer from "../redux/modules";
 import rootSaga from "../redux/sagas";
 
 const BouqPost = ({ Component, store }) => {
+  
 	return (
 		<Provider store={store}>
 			<Head>
