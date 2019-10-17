@@ -1,15 +1,16 @@
 const express = require("express");
-
+const client = require("cheerio-httpcli");
 const db = require("../models");
 const { isLoggedIn } = require("./middleware");
+
 
 const router = express.Router();
 
 //multer가 formData의 파일은 req.file(s)로 그 외의 일반 데이터는 req.body로 분리시켜 보낸다.
 router.post("/", isLoggedIn, async (req, res, next) => {
-  // POST /api/post
-  // console.log("request body");
-  // console.dir(req.body);
+	// POST /api/post
+	// console.log("request body");
+	// console.dir(req.body);
 	try {
 		//액션에 들어가는 data객체를 그대로 req.body로 받을 수 있는 것으로 보인다.
 		const categories = req.body.category;
@@ -43,10 +44,39 @@ router.post("/", isLoggedIn, async (req, res, next) => {
 				}
 			]
 		});
-    res.json(fullPost);
+		res.json(fullPost);
 	} catch (e) {
 		console.error(e);
 		next(e);
+	}
+});
+
+router.post("/scraping", async (req, response, next) => {
+	try {
+		var scrapedData = {};
+
+		client.fetch(req.body.url, (err, $, res, body) => {
+			const title1 = $("meta[property='og:title']").attr("content");
+			const title2 = $("title").text();
+
+			const image_og = $("meta[property='og:image']").attr("content");
+
+			if (!title1) {
+				scrapedData.title = title2;
+			} else {
+				scrapedData.title = title1;
+			}
+		
+			if (image_og) {
+				scrapedData.image = image_og;
+			} else {
+			}
+
+			return response.json(scrapedData);
+		});
+	} catch (error) {
+		console.error(error);
+		return next(error);
 	}
 });
 

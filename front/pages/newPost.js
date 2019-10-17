@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Card, Input, Row, Col, Form, Select, Button } from "antd";
 import Router from "next/router";
+// import client from "cheerio-httpcli";
 
-import { ADD_POST_REQUEST } from "../redux/modules/post";
+import { ADD_POST_REQUEST, SCRAPING_REQUEST } from "../redux/modules/post";
 
 const NewPostFormWrapper = styled(Card)`
 	width: 88%;
@@ -47,7 +48,9 @@ const NewPost = () => {
 
 	const { myInfo } = useSelector(state => state.user);
 	const { providedCategories } = useSelector(state => state.categories);
+	const { isScraping, scrapedData } = useSelector(state => state.post);
 
+	//리덕스 사용해서 기본적으로 넣어둔 카테고리 가져오는 코드
 	const children = [];
 	for (let i = 0; i < providedCategories.length; i++) {
 		children.push(
@@ -62,7 +65,11 @@ const NewPost = () => {
 			alert("새 포스트를 작성하시려면 로그인이 필요합니다");
 			Router.push("/login");
 		}
-	}, [myInfo]);
+
+		if (scrapedData.title) {
+			setTitle(scrapedData.title);
+		}
+	}, [myInfo, scrapedData]);
 
 	const onChangeLink = useCallback(e => {
 		setLink(e.target.value);
@@ -79,6 +86,15 @@ const NewPost = () => {
 	const onChangeCategory = useCallback(value => {
 		setCategory(value);
 	}, []);
+
+	const handleBlur = () => {
+		if (link) {
+			dispatch({
+				type: SCRAPING_REQUEST,
+				url: link
+			});
+		}
+	};
 
 	const submitForm = useCallback(
 		e => {
@@ -119,9 +135,12 @@ const NewPost = () => {
 					<h1>새 포스트 작성</h1>
 					<Form onSubmit={submitForm}>
 						<div className="label">링크</div>
-						<Input placeholder="http://" value={link} onChange={onChangeLink}></Input>
+						<Input placeholder="http://" value={link} onChange={onChangeLink} onBlur={handleBlur}></Input>
 						<div className="label">제목(필수)</div>
-						<Input placeholder="링크를 입력하시면 자동으로 입력됩니다" value={title} onChange={onChangeTitle}></Input>
+						<Input
+							placeholder={isScraping ? "링크 콘텐츠 제목을 추출 중입니다" : "링크를 입력하시면 자동으로 입력됩니다"}
+							value={title}
+							onChange={onChangeTitle}></Input>
 						<div className="label" value={description} onChange={onChangeDesc}>
 							부가 설명(선택)
 						</div>
@@ -142,9 +161,13 @@ const NewPost = () => {
 				</Col>
 				<Col className="gutter-row" span={12} style={{ marginTop: 80 }}>
 					<p style={{ fontSize: 16, color: "#939599" }}>
-						링크를 입력하면 자동으로 해당 링크 콘텐츠의 제목이 입력됩니다. 제목이 입력되지 않을 시 직접 입력하셔야
-						합니다. 물론 자동으로 제목이 입력되어도 자유롭게 수정 가능합니다. 서평의 경우 도서명으로 검색 가능하도록{" "}
-						<strong>[인간관계론]</strong> 이런 방식으로 도서명을 제목에 추가해 붙여주셔도 좋습니다.
+						네이버와 다음 블로그를 제외하고 링크를 입력하면 대부분의 경우 자동으로 해당 링크 콘텐츠의 제목이 입력될
+						것입니다.<br></br>자동 입력되지 않는다면 직접 해당 링크 콘텐츠의 제목을 입력해주십시오. 물론 자동으로 제목이
+						입력되어도 자유롭게 수정 가능합니다.
+					</p>
+					<p style={{ fontSize: 16, color: "#939599" }}>
+						서평의 경우 도서명으로 검색 가능하도록 <strong>[인간관계론]</strong> 이런 방식으로 도서명을 제목에 추가해
+						붙여주셔도 좋습니다.
 					</p>
 				</Col>
 			</Row>

@@ -39,6 +39,9 @@ export const initialState = {
 		[]
 	],
 	isAddingPost: false,
+	isScraping: false,
+	scrapedData: {},
+	scrapingError: "",
 	addPostError: "" // 포스트 업로드 실패 사유
 };
 
@@ -64,11 +67,17 @@ export const initialState = {
 export const ADD_POST_REQUEST = "post/ADD_POSTS_REQUEST";
 export const ADD_POST_SUCCESS = "post/ADD_POSTS_SUCCESS";
 export const ADD_POST_FAILURE = "post/ADD_POSTS_FAILURE";
+export const SCRAPING_REQUEST = "post/SCRAPING_REQUEST";
+export const SCRAPING_SUCCESS = "post/SCRAPING_SUCCESS";
+export const SCRAPING_FAILURE = "post/SCRAPING_FAILURE";
 
 // 액션 생성 함수
-export const loadPostsRequest = createAction(ADD_POST_REQUEST);
-export const loadPostsSuccess = createAction(ADD_POST_SUCCESS);
-export const loadPostsFailure = createAction(ADD_POST_FAILURE);
+export const addPostsRequest = createAction(ADD_POST_REQUEST);
+export const addPostsSuccess = createAction(ADD_POST_SUCCESS);
+export const addPostsFailure = createAction(ADD_POST_FAILURE);
+export const scrapingRequest = createAction(SCRAPING_REQUEST);
+export const scrapingSuccess = createAction(SCRAPING_SUCCESS);
+export const scrapingFailure = createAction(SCRAPING_FAILURE);
 
 // immer 를 사용하여 값을 수정하는 리듀서
 // var output = m.format("YYYY년MM월DD일 HH:mm:ss dddd");
@@ -102,6 +111,20 @@ export default handleActions(
 			produce(state, draft => {
 				draft.isAddingPost = false;
 				draft.addPostError = payload;
+			}),
+		[SCRAPING_REQUEST]: state =>
+			produce(state, draft => {
+				draft.isScraping = true;
+			}),
+		[SCRAPING_SUCCESS]: (state, payload) =>
+			produce(state, draft => {
+				draft.isScraping = false;
+				draft.scrapedData = payload.data;
+			}),
+		[SCRAPING_FAILURE]: (state, { payload }) =>
+			produce(state, draft => {
+				draft.isScraping = false;
+				draft.scrapingError = payload;
 			})
 	},
 	initialState
