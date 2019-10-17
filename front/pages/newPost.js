@@ -48,7 +48,7 @@ const NewPost = () => {
 
 	const { myInfo } = useSelector(state => state.user);
 	const { providedCategories } = useSelector(state => state.categories);
-	const { isScraping, scrapedData } = useSelector(state => state.post);
+	const { isScraping, scrapedTitle, scrapedImg } = useSelector(state => state.post);
 
 	//리덕스 사용해서 기본적으로 넣어둔 카테고리 가져오는 코드
 	const children = [];
@@ -66,10 +66,8 @@ const NewPost = () => {
 			Router.push("/login");
 		}
 
-		if (scrapedData.title) {
-			setTitle(scrapedData.title);
-		}
-	}, [myInfo, scrapedData]);
+		setTitle(scrapedTitle);
+	}, [scrapedTitle]);
 
 	const onChangeLink = useCallback(e => {
 		setLink(e.target.value);
@@ -100,29 +98,36 @@ const NewPost = () => {
 		e => {
 			e.preventDefault();
 
-			const formData = new FormData();
+			// const formData = new FormData();
 
-			// append로 추가하지않고 직접 태그에 name 속성을 사용했다.
-			//FormData 브라우저 정책상 콘솔로그로 확인 불가하지만 아래와 같은 방식으로 확인 가능.
-			formData.append("link", link);
-			formData.append("title", title);
-			formData.append("description", description);
+			// formData.append("link", link);
+			// formData.append("title", title);
+			// formData.append("description", description);
 
-			category.forEach(category => {
-				formData.append("category", category);
-			});
+			// category.forEach(category => {
+			// 	formData.append("category", category);
+			// });
 
-			for (var key of formData.keys()) {
-				console.log(key);
-			}
+			// for (var key of formData.keys()) {
+			// 	console.log(key);
+			// }
 
-			for (var value of formData.values()) {
-				console.log(value);
+			// for (var value of formData.values()) {
+			// 	console.log(value);
+			// }
+			const postData = {};
+			postData.link = link;
+			postData.title = title;
+			postData.description = description;
+			postData.category = category;
+
+			if (scrapedImg) {
+				postData.image = scrapedImg;
 			}
 
 			dispatch({
 				type: ADD_POST_REQUEST,
-				data: formData
+				data: postData
 			});
 		},
 		[link, title, description, category]
@@ -133,7 +138,7 @@ const NewPost = () => {
 			<Row gutter={24}>
 				<Col className="gutter-row" span={12}>
 					<h1>새 포스트 작성</h1>
-					<Form onSubmit={submitForm}>
+					<Form>
 						<div className="label">링크</div>
 						<Input placeholder="http://" value={link} onChange={onChangeLink} onBlur={handleBlur}></Input>
 						<div className="label">제목(필수)</div>
@@ -154,7 +159,7 @@ const NewPost = () => {
 							required>
 							{children}
 						</Select>
-						<SubmitBtn size="large" htmlType="submit">
+						<SubmitBtn size="large" onClick={submitForm}>
 							등록하기
 						</SubmitBtn>
 					</Form>

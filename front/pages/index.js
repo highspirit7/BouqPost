@@ -4,7 +4,6 @@ import { Tag, Icon, Row, Col, Divider } from "antd";
 import styled from "styled-components";
 import ThumbnailCmp from "../components/ThumbnailCmp";
 
-
 const ThumbnailWrapper = styled.div`
 	width: 94%;
 	// display: flex;
@@ -100,7 +99,7 @@ const Main = () => {
 									{postsByDate.map((post, i) => (
 										<div key={i}>
 											<div style={{ display: "flex", alignItems: "center" }}>
-												<img src={post.img} alt="post_thumbnail" />
+												<img src={post.img || "/bbakdok.png"} alt="post_thumbnail" />
 												<div className="contents">
 													<div>
 														{post.categories.map(tag => {
@@ -126,7 +125,6 @@ const Main = () => {
 															{post.like !== 0 && <span style={{ marginLeft: 6 }}>{post.like}</span>}
 														</button>
 
-														<span style={{ marginRight: 14 }}>작성자 : {post.author}</span>
 														<span>posted by {post.user.nickname}</span>
 													</div>
 												</div>

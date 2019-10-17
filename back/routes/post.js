@@ -3,25 +3,29 @@ const client = require("cheerio-httpcli");
 const db = require("../models");
 const { isLoggedIn } = require("./middleware");
 
-
 const router = express.Router();
 
 //multer가 formData의 파일은 req.file(s)로 그 외의 일반 데이터는 req.body로 분리시켜 보낸다.
 router.post("/", isLoggedIn, async (req, res, next) => {
 	// POST /api/post
 	// console.log("request body");
-	// console.dir(req.body);
+	console.dir(req.body);
 	try {
 		//액션에 들어가는 data객체를 그대로 req.body로 받을 수 있는 것으로 보인다.
-		const categories = req.body.category;
+
 		const newPost = await db.Post.create({
 			title: req.body.title,
 			description: req.body.description,
+			thumbnail: req.body.image,
 			UserId: req.user.id
 		});
 
-		//카테고리 있으면 add
-		if (categories) {
+		if (req.body.category) {
+			const categories = await Promise.all(
+				req.body.category.map(category => {
+					return db.Category.create({ name: category });
+				})
+			);
 			await newPost.addCategories(categories);
 		}
 
@@ -38,6 +42,9 @@ router.post("/", isLoggedIn, async (req, res, next) => {
 					attributes: ["id", "nickname"]
 				},
 				{
+					model: db.Category
+				},
+				{
 					model: db.User,
 					as: "Likers",
 					attributes: ["id"]
@@ -51,6 +58,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
 	}
 });
 
+//링크 입력 시 크롤링으로 제목 및 썸네일 이미지 추출
 router.post("/scraping", async (req, response, next) => {
 	try {
 		var scrapedData = {};
@@ -66,7 +74,7 @@ router.post("/scraping", async (req, response, next) => {
 			} else {
 				scrapedData.title = title1;
 			}
-		
+
 			if (image_og) {
 				scrapedData.image = image_og;
 			} else {

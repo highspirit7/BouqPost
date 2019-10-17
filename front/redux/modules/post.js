@@ -12,7 +12,6 @@ export const initialState = {
 				title: "Nah2(나이)가 들면서 친구 사귀기가 어렵다고? Nah!",
 				description: "오래된 친구에게 연락. 까짓 거 한번 시도해보세요!",
 				like: 3,
-				author: "졸꾸러기",
 				user: {
 					id: 1,
 					nickname: "GrownUprince"
@@ -26,13 +25,12 @@ export const initialState = {
 				title: "Nah2(나이)가 들면서 친구 사귀기가 어렵다고? Nah!",
 				description: "오래된 친구에게 연락. 까짓 거 한번 시도해보세요!",
 				like: 3,
-				author: "졸꾸러기",
 				user: {
 					id: 1,
 					nickname: "GrownUprince"
 				},
 				categories: ["서평", "자기계발"],
-				img: "https://res.cloudinary.com/dgggcrkxq/image/upload/v1569898129/noticon/x8e3entin2axlgquvx8k.png",
+				img: "",
 				createdAt: "10월 10일"
 			}
 		],
@@ -40,7 +38,8 @@ export const initialState = {
 	],
 	isAddingPost: false,
 	isScraping: false,
-	scrapedData: {},
+	scrapedTitle: "",
+	scrapedImg: "",
 	scrapingError: "",
 	addPostError: "" // 포스트 업로드 실패 사유
 };
@@ -90,15 +89,15 @@ export default handleActions(
 			}),
 		[ADD_POST_SUCCESS]: (state, { payload }) => {
 			produce(state, draft => {
-				// const newPost = payload.data;
-
+				const newPost = payload;
+				console.log(newPost);
 				// //날짜가 그 이전 배열과 다르면 새로운 배열 만들어서 추가해주도록 하는 로직 필요
 				// newPost.createdAt = moment(newPost.createdAt).format("MM월 DD일 dddd");
 
 				// //애초에 첫 게시물 작성하는 경우 + 새 게시물 생성 날짜가 제일 최신 게시물의 날짜와 다를 때
 				// if (draft.mainPosts[0][0].createdAt && draft.mainPosts[0][0].createdAt !== newPost.createdAt) {
 				// 	draft.mainPosts.unshift([]);
-				// 	draft.mainPosts[0].unshift(newPost);
+				// 	draft.mainPosts[0].push(newPost);
 				// } else {
 				// 	//새 게시물 생성 날짜가 제일 최신 게시물의 날짜와 같을 때
 				// 	draft.mainPosts[0].unshift(newPost);
@@ -116,10 +115,11 @@ export default handleActions(
 			produce(state, draft => {
 				draft.isScraping = true;
 			}),
-		[SCRAPING_SUCCESS]: (state, payload) =>
+		[SCRAPING_SUCCESS]: (state, { payload }) =>
 			produce(state, draft => {
 				draft.isScraping = false;
-				draft.scrapedData = payload.data;
+				draft.scrapedTitle = payload.title;
+				draft.scrapedImg = payload.image;
 			}),
 		[SCRAPING_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {

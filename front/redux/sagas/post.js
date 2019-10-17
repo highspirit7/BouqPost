@@ -1,4 +1,4 @@
-import { all, fork, put, takeLatest, call, delay } from "redux-saga/effects";
+import { all, fork, put, takeLatest, call } from "redux-saga/effects";
 import axios from "axios";
 import Router from "next/router";
 import {
@@ -52,12 +52,12 @@ function scrapingForPostAPI(url) {
 
 function* scrapingForPost(action) {
 	try {
-    const result = yield call(scrapingForPostAPI, action.url);
-    
-    // yield delay(2000);
+		const result = yield call(scrapingForPostAPI, action.url);
+
+		// yield delay(2000);
 		yield put({
 			type: SCRAPING_SUCCESS,
-			data: result.data
+			payload: result.data
 		});
 
 		// alert("새 포스트를 추가하였습니다");
