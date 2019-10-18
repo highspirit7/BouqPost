@@ -7,7 +7,8 @@ import {
 	ADD_POST_FAILURE,
 	SCRAPING_REQUEST,
 	SCRAPING_SUCCESS,
-	SCRAPING_FAILURE
+	SCRAPING_FAILURE,
+	LOAD_POSTS_BYDATE_REQUEST
 } from "../modules/post";
 
 function addPostAPI(postData) {
@@ -38,6 +39,31 @@ function* addPost(action) {
 
 function* watchAddPost() {
 	yield takeLatest(ADD_POST_REQUEST, addPost);
+}
+
+function loadPostsAPI(date) {
+	return axios.get(`/posts?date=${date}`);
+}
+
+function* loadPosts(action) {
+	try {
+		const result = yield call(loadPostsAPI, action.date);
+
+		yield put({
+			type: ADD_POST_SUCCESS,
+			data: result.data
+		});
+	} catch (e) {
+		console.error(e);
+		yield put({
+			type: ADD_POST_FAILURE,
+			payload: e.message
+		});
+	}
+}
+
+function* watchLoadPosts() {
+	yield takeLatest(LOAD_POSTS_BYDATE_REQUEST, loadPosts);
 }
 
 function scrapingForPostAPI(url) {
@@ -76,5 +102,5 @@ function* watchScrapingForPost() {
 }
 
 export default function* postSaga() {
-	yield all([fork(watchAddPost), fork(watchScrapingForPost)]);
+	yield all([fork(watchAddPost), fork(watchScrapingForPost), fork(watchLoadPosts)]);
 }

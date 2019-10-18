@@ -5,43 +5,14 @@ import moment from "moment";
 moment.locale("ko");
 
 export const initialState = {
-	mainPosts: [
-		[
-			{
-				id: 1,
-				title: "Nah2(나이)가 들면서 친구 사귀기가 어렵다고? Nah!",
-				description: "오래된 친구에게 연락. 까짓 거 한번 시도해보세요!",
-				like: 3,
-				user: {
-					id: 1,
-					nickname: "GrownUprince"
-				},
-				categories: ["서평", "자기계발"],
-				img: "https://res.cloudinary.com/dgggcrkxq/image/upload/v1570279036/noticon/jl36nfr73kf3siyjcp56.jpg",
-				createdAt: "10월 10일"
-			},
-			{
-				id: 2,
-				title: "Nah2(나이)가 들면서 친구 사귀기가 어렵다고? Nah!",
-				description: "오래된 친구에게 연락. 까짓 거 한번 시도해보세요!",
-				like: 3,
-				user: {
-					id: 1,
-					nickname: "GrownUprince"
-				},
-				categories: ["서평", "자기계발"],
-				img: "",
-				createdAt: "10월 10일"
-			}
-		],
-		[]
-	],
+	displayedPosts: {},
 	isAddingPost: false,
 	isScraping: false,
 	scrapedTitle: "",
 	scrapedImg: "",
 	scrapingError: "",
-	addPostError: "" // 포스트 업로드 실패 사유
+	addPostError: "",
+	loadPostsError: ""
 };
 
 //더미 데이터
@@ -69,6 +40,9 @@ export const ADD_POST_FAILURE = "post/ADD_POSTS_FAILURE";
 export const SCRAPING_REQUEST = "post/SCRAPING_REQUEST";
 export const SCRAPING_SUCCESS = "post/SCRAPING_SUCCESS";
 export const SCRAPING_FAILURE = "post/SCRAPING_FAILURE";
+export const LOAD_POSTS_BYDATE_REQUEST = "post/LOAD_POSTS_BYDATE_REQUEST";
+export const LOAD_POSTS_BYDATE_SUCCESS = "post/LOAD_POSTS_BYDATE_SUCCESS";
+export const LOAD_POSTS_BYDATE_FAILURE = "post/LOAD_POSTS_BYDATE_FAILURE";
 
 // 액션 생성 함수
 export const addPostsRequest = createAction(ADD_POST_REQUEST);
@@ -77,10 +51,11 @@ export const addPostsFailure = createAction(ADD_POST_FAILURE);
 export const scrapingRequest = createAction(SCRAPING_REQUEST);
 export const scrapingSuccess = createAction(SCRAPING_SUCCESS);
 export const scrapingFailure = createAction(SCRAPING_FAILURE);
+export const loadPostsByDateRequest = createAction(LOAD_POSTS_BYDATE_REQUEST);
+export const loadPostsByDateSuccess = createAction(LOAD_POSTS_BYDATE_SUCCESS);
+export const loadPostsByDateFailure = createAction(LOAD_POSTS_BYDATE_FAILURE);
 
 // immer 를 사용하여 값을 수정하는 리듀서
-// var output = m.format("YYYY년MM월DD일 HH:mm:ss dddd");
-
 export default handleActions(
 	{
 		[ADD_POST_REQUEST]: state =>
@@ -125,6 +100,14 @@ export default handleActions(
 			produce(state, draft => {
 				draft.isScraping = false;
 				draft.scrapingError = payload;
+			}),
+		[LOAD_POSTS_BYDATE_SUCCESS]: (state, { payload }) =>
+			produce(state, draft => {
+				// draft.displayedPosts =
+			}),
+		[LOAD_POSTS_BYDATE_FAILURE]: (state, { payload }) =>
+			produce(state, draft => {
+				draft.loadPostsError = payload;
 			})
 	},
 	initialState
