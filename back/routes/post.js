@@ -16,7 +16,8 @@ router.post("/", isLoggedIn, async (req, res, next) => {
 		const newPost = await db.Post.create({
 			title: req.body.title,
 			description: req.body.description,
-			thumbnail: req.body.image,
+      thumbnail: req.body.image,
+      link: req.body.link,
 			UserId: req.user.id
 		});
 
@@ -51,7 +52,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
 				}
 			]
 		});
-		res.json(fullPost);
+    res.json(fullPost);
 	} catch (e) {
 		console.error(e);
 		next(e);

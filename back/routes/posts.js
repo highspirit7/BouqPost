@@ -1,5 +1,6 @@
 const express = require("express");
 const db = require("../models");
+const Op = db.Sequelize.Op;
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ router.get("/", async (req, res, next) => {
 		if (parseInt(req.query.lastId, 10)) {
 			where = {
 				id: {
-					[db.Sequelize.Op.lt]: parseInt(req.query.lastId, 10) // less than
+					[Op.lt]: parseInt(req.query.lastId, 10) // less than
 				}
 			};
     }
@@ -24,29 +25,15 @@ router.get("/", async (req, res, next) => {
 					attributes: ["id", "nickname"]
 				},
 				{
-					model: db.Image
+					model: db.Category
 				},
 				{
 					model: db.User,
-					through: "Like",
 					as: "Likers",
 					attributes: ["id"]
-				},
-				{
-					model: db.Post,
-					as: "Retweet",
-					include: [
-						{
-							model: db.User,
-							attributes: ["id", "nickname"]
-						},
-						{
-							model: db.Image
-						}
-					]
 				}
 			],
-			order: [["createdAt", "DESC"]], // DESC는 내림차순, ASC는 오름차순
+			order: [["created_At", "DESC"]], // DESC는 내림차순, ASC는 오름차순
 			limit: parseInt(req.query.limit, 10)
 		});
 		res.json(posts);

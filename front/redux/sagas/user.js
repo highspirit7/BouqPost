@@ -97,7 +97,7 @@ function* loadUser(action) {
 		console.error(e);
 		yield put({
 			type: LOAD_USER_FAILURE,
-			error: e.message
+			payload: e.message
 		});
 	}
 }

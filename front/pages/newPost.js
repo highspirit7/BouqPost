@@ -98,23 +98,6 @@ const NewPost = () => {
 		e => {
 			e.preventDefault();
 
-			// const formData = new FormData();
-
-			// formData.append("link", link);
-			// formData.append("title", title);
-			// formData.append("description", description);
-
-			// category.forEach(category => {
-			// 	formData.append("category", category);
-			// });
-
-			// for (var key of formData.keys()) {
-			// 	console.log(key);
-			// }
-
-			// for (var value of formData.values()) {
-			// 	console.log(value);
-			// }
 			const postData = {};
 			postData.link = link;
 			postData.title = title;
