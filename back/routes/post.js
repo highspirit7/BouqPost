@@ -5,7 +5,6 @@ const { isLoggedIn } = require("./middleware");
 
 const router = express.Router();
 
-//multer가 formData의 파일은 req.file(s)로 그 외의 일반 데이터는 req.body로 분리시켜 보낸다.
 router.post("/", isLoggedIn, async (req, res, next) => {
 	// POST /api/post
 	// console.log("request body");
@@ -16,8 +15,8 @@ router.post("/", isLoggedIn, async (req, res, next) => {
 		const newPost = await db.Post.create({
 			title: req.body.title,
 			description: req.body.description,
-      thumbnail: req.body.image,
-      link: req.body.link,
+			thumbnail: req.body.image,
+			link: req.body.link,
 			UserId: req.user.id
 		});
 
@@ -52,7 +51,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
 				}
 			]
 		});
-    res.json(fullPost);
+		res.json(fullPost);
 	} catch (e) {
 		console.error(e);
 		next(e);
@@ -88,5 +87,32 @@ router.post("/scraping", async (req, response, next) => {
 		return next(error);
 	}
 });
+
+//게시물 하나 조회
+// router.get("/:postId", async (req, res, next) => {
+// 	try {
+// 		const post = await db.Post.findOne({
+// 			where: { id: req.params.postId },
+// 			include: [
+// 				{
+// 					model: db.User,
+// 					attributes: ["id", "nickname"]
+// 				},
+// 				{
+// 					model: db.Category
+// 				},
+// 				{
+// 					model: db.User,
+// 					as: "Likers",
+// 					attributes: ["id"]
+// 				}
+// 			]
+// 		});
+// 		res.json(post);
+// 	} catch (e) {
+// 		console.error(e);
+// 		next(e);
+// 	}
+// });
 
 module.exports = router;

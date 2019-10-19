@@ -28,7 +28,7 @@ const NewPostFormWrapper = styled(Card)`
 `;
 
 const SubmitBtn = styled(Button)`
-	margin-top: 14px;
+	margin-top: 20px;
 	padding-right: 34px;
 	padding-left: 34px;
 	background-color: #03c6fc;

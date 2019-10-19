@@ -10,7 +10,7 @@ export const initialState = {
 	scrapedImg: "",
 	scrapingError: "",
 	addPostError: "",
-	loadPostsError: ""
+	loadPostError: ""
 };
 
 // 액션 타입 정의
@@ -23,6 +23,9 @@ export const SCRAPING_FAILURE = "post/SCRAPING_FAILURE";
 export const LOAD_POSTS_REQUEST = "post/LOAD_POSTS_REQUEST";
 export const LOAD_POSTS_SUCCESS = "post/LOAD_POSTS_SUCCESS";
 export const LOAD_POSTS_FAILURE = "post/LOAD_POSTS_FAILURE";
+// export const LOAD_POST_REQUEST = "post/LOAD_POST_REQUEST";
+// export const LOAD_POST_SUCCESS = "post/LOAD_POST_SUCCESS";
+// export const LOAD_POST_FAILURE = "post/LOAD_POST_FAILURE";
 
 // 액션 생성 함수
 export const addPostsRequest = createAction(ADD_POST_REQUEST);
@@ -34,6 +37,9 @@ export const scrapingFailure = createAction(SCRAPING_FAILURE);
 export const loadPostsRequest = createAction(LOAD_POSTS_REQUEST);
 export const loadPostsSuccess = createAction(LOAD_POSTS_SUCCESS);
 export const loadPostsFailure = createAction(LOAD_POSTS_FAILURE);
+// export const loadPostRequest = createAction(LOAD_POST_REQUEST);
+// export const loadPostSuccess = createAction(LOAD_POST_SUCCESS);
+// export const loadPostFailure = createAction(LOAD_POST_FAILURE);
 
 // immer 를 사용하여 값을 수정하는 리듀서
 export default handleActions(
@@ -83,21 +89,21 @@ export default handleActions(
 			}),
 		[LOAD_POSTS_REQUEST]: (state, payload) =>
 			produce(state, draft => {
-        //lastId가 없으면 페이지에 처음 접속해 포스트 로딩하는 것이기에 displayedPosts 초기값은 비어있게 하고, 그렇지 않은 경우 무한 스크롤로 포스트 추가 로딩하는 것이기에 무한 스크롤하는 그 순간 displyaedPosts 그대로 유지
-        draft.displayedPosts = !payload.lastId ? [] : draft.displayedPosts;
-        draft.hasMorePost = payload.lastId ? draft.hasMorePost : true;
+				//lastId가 없으면 페이지에 처음 접속해 포스트 로딩하는 것이기에 displayedPosts 초기값은 비어있게 하고, 그렇지 않은 경우 무한 스크롤로 포스트 추가 로딩하는 것이기에 무한 스크롤하는 그 순간 displyaedPosts 그대로 유지
+				draft.displayedPosts = !payload.lastId ? [] : draft.displayedPosts;
+				draft.hasMorePost = payload.lastId ? draft.hasMorePost : true;
 			}),
 		[LOAD_POSTS_SUCCESS]: (state, { payload }) =>
 			produce(state, draft => {
 				payload.forEach(post => {
 					draft.displayedPosts.push(post);
-        });
-        //로딩한 포스트 개수가 5개가 아니라는 것은 실질적으로는 5개보다 작았다는 것이고, 그러면 남아있는 포스트를 모두 이미 로딩했다는 뜻이 된다.
+				});
+				//로딩한 포스트 개수가 5개가 아니라는 것은 실질적으로는 5개보다 작았다는 것이고, 그러면 남아있는 포스트를 모두 이미 로딩했다는 뜻이 된다.
 				draft.hasMorePost = payload.length === 5;
 			}),
 		[LOAD_POSTS_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
-				draft.loadPostsError = payload;
+				draft.loadPostError = payload;
 			})
 	},
 	initialState

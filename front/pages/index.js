@@ -79,6 +79,7 @@ const Poster = styled.div`
 
 const Main = () => {
 	const [liked, setLike] = useState(false);
+	const { myInfo } = useSelector(state => state.user);
 	const { displayedPosts, hasMorePost } = useSelector(state => state.post);
 	const { providedCategories, colors } = useSelector(state => state.categories);
 
@@ -150,7 +151,12 @@ const Main = () => {
 								<StyledPostbox key={index}>
 									<div style={{ display: "flex", alignItems: "center" }}>
 										<a href={post.link} target="_blank" rel="noopener noreferrer">
-											<img src={post.thumbnail || "/bbakdok.png"} alt="post_thumbnail" />
+											<img
+												src={
+													`https://images.weserv.nl/?url=ssl:${post.thumbnail.slice(8)}&w=200&h=128` || "/bbakdok.png"
+												}
+												alt="post_thumbnail"
+											/>
 										</a>
 										<div className="contents">
 											<div>
@@ -185,6 +191,21 @@ const Main = () => {
 												<div>
 													<TimeAgo date={post.created_at} formatter={formatter}></TimeAgo>
 												</div>
+												{myInfo && myInfo.id === post.UserId && (
+													<>
+														<div
+															style={{
+																marginLeft: 14,
+																paddingRight: 10,
+																paddingLeft: 10,
+																borderRight: "1px solid rgba(0, 0, 0, 0.1)",
+																borderLeft: "1px solid rgba(0, 0, 0, 0.1)"
+															}}>
+															수정
+														</div>
+														<div style={{ marginLeft: 10 }}>삭제</div>
+													</>
+												)}
 											</div>
 										</div>
 									</div>

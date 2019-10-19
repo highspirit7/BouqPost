@@ -70,6 +70,32 @@ function* watchLoadPosts() {
 	yield throttle(1500, LOAD_POSTS_REQUEST, loadPosts);
 }
 
+//포스트 하나 조회
+// function loadPostAPI(postId) {
+// 	return axios.get(`/post?postId=${postId}`);
+// }
+
+// function* loadPost(action) {
+// 	try {
+// 		const result = yield call(loadPostAPI, action.postId);
+
+// 		yield put({
+// 			type: LOAD_POST_SUCCESS,
+// 			payload: result.data
+// 		});
+// 	} catch (e) {
+// 		console.error(e);
+// 		yield put({
+// 			type: LOAD_POST_FAILURE,
+// 			payload: e.message
+// 		});
+// 	}
+// }
+
+// function* watchLoadPost() {
+// 	yield takeLatest(LOAD_POST_REQUEST, loadPost);
+// }
+
 function scrapingForPostAPI(url) {
 	return axios.post(
 		"/post/scraping",
