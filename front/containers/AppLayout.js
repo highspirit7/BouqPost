@@ -58,7 +58,7 @@ const AppLayout = ({ children }) => {
 	const { myInfo } = useSelector(state => state.user);
 	const { isAddingPost } = useSelector(state => state.post);
 
-	const [isLoading, setLoading] = useState(false);
+	// const [isLoading, setLoading] = useState(false);
 
 	const dispatch = useDispatch();
 

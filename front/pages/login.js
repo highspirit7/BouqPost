@@ -4,8 +4,6 @@ import { useDispatch } from "react-redux";
 import { Card } from "antd";
 import styled from "styled-components";
 
-
-
 const LoginFormWrapper = styled(Card)`
 	width: 90%;
 	margin: 0 auto;
@@ -16,17 +14,34 @@ const LoginFormWrapper = styled(Card)`
 	}
 `;
 
-const KakaoLoginBtn = styled.img`
-	content: url("/kakaologinbtn.png");
-	width: 300px;
+const KakaoLoginBtn = styled.div`
+	width: 200px;
 	height: 50px;
 	margin-bottom: 2em;
-	cursor: pointer;
+  cursor: pointer;
+  border-radius: 6px;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+	background-color: #fff;
+  color: #757575;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  img {
+    margin: 0px 12px;
+    width: 31px;
+    height: 32px;
+  }
+
+  div {
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+  }
 `;
 
 const Login = () => {
 	// const dispatch = useDispatch();
-	
 
 	// useEffect(() => {
 	// 	if (myInfo) {
@@ -47,7 +62,10 @@ const Login = () => {
 			<p style={{ fontSize: 18 }}>좋아요 및 포스트 작성을 위해서는 로그인이 필요합니다.</p>
 
 			<a href="http://localhost:2019/api/oauth/kakao">
-				<KakaoLoginBtn />
+				<KakaoLoginBtn>
+          <img src="/kakaolink_btn_small.png" alt="kakaolink_btn"></img>
+					<div>카카오 로그인</div>
+				</KakaoLoginBtn>
 			</a>
 
 			<p style={{ fontSize: 15, color: "#939599" }}>카카오 계정으로 로그인 시 카카오톡 닉네임만 외부에 공개됩니다.</p>

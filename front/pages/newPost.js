@@ -62,12 +62,11 @@ const NewPost = () => {
 
 	useEffect(() => {
 		if (!myInfo) {
-			alert("새 포스트를 작성하시려면 로그인이 필요합니다");
 			Router.push("/login");
 		}
 
 		setTitle(scrapedTitle);
-	}, [scrapedTitle]);
+	}, [scrapedTitle, myInfo]);
 
 	const onChangeLink = useCallback(e => {
 		setLink(e.target.value);
