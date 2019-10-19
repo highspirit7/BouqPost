@@ -1,14 +1,6 @@
 import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 
-// const dummyUser = {
-// 	nickname: "GrownUprince",
-// 	Posts: [],
-// 	likes: 0,
-// 	id: 1,
-// 	profileImg: "/little prince.png"
-// };
-
 // 액션 타입 정의
 export const LOAD_USER_REQUEST = "user/LOAD_USER_REQUEST";
 export const LOAD_USER_SUCCESS = "user/LOAD_USER_SUCCESS";

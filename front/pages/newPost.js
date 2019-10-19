@@ -133,13 +133,12 @@ const NewPost = () => {
 							부가 설명(선택)
 						</div>
 						<Input value={description} onChange={onChangeDesc}></Input>
-						<div className="label">카테코리(필수)</div>
+						<div className="label">카테코리(권장)</div>
 						<Select
 							mode="multiple"
 							style={{ width: "100%" }}
 							placeholder="카테고리를 선택해주세요"
-							onChange={onChangeCategory}
-							required>
+							onChange={onChangeCategory}>
 							{children}
 						</Select>
 						<SubmitBtn size="large" onClick={submitForm}>

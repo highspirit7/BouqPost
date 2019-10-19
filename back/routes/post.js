@@ -7,8 +7,7 @@ const router = express.Router();
 
 router.post("/", isLoggedIn, async (req, res, next) => {
 	// POST /api/post
-	// console.log("request body");
-	console.dir(req.body);
+
 	try {
 		//액션에 들어가는 data객체를 그대로 req.body로 받을 수 있는 것으로 보인다.
 
@@ -89,30 +88,31 @@ router.post("/scraping", async (req, response, next) => {
 });
 
 //게시물 하나 조회
-// router.get("/:postId", async (req, res, next) => {
-// 	try {
-// 		const post = await db.Post.findOne({
-// 			where: { id: req.params.postId },
-// 			include: [
-// 				{
-// 					model: db.User,
-// 					attributes: ["id", "nickname"]
-// 				},
-// 				{
-// 					model: db.Category
-// 				},
-// 				{
-// 					model: db.User,
-// 					as: "Likers",
-// 					attributes: ["id"]
-// 				}
-// 			]
-// 		});
-// 		res.json(post);
-// 	} catch (e) {
-// 		console.error(e);
-// 		next(e);
-// 	}
-// });
+router.get("/:postId", async (req, res, next) => {
+	try {
+		const post = await db.Post.findOne({
+			where: { id: req.params.postId },
+			include: [
+				{
+					model: db.User,
+					attributes: ["id", "nickname"]
+				},
+				{
+					model: db.Category
+				},
+				{
+					model: db.User,
+					as: "Likers",
+					attributes: ["id"]
+				}
+			]
+    });
+    // console.log(post)
+		res.json(post);
+	} catch (e) {
+		console.error(e);
+		next(e);
+	}
+});
 
 module.exports = router;

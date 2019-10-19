@@ -11,13 +11,15 @@ import reducer from "../redux/modules";
 import rootSaga from "../redux/sagas";
 
 const BouqPost = ({ Component, store }) => {
-  
+	
+
 	return (
 		<Provider store={store}>
 			<Head>
 				<title>BouqPost</title>
 				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.23.6/antd.css" />
 			</Head>
+
 			<AppLayout>
 				<Component />
 			</AppLayout>

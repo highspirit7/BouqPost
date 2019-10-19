@@ -9,7 +9,8 @@ export const initialState = {
 	scrapedImg: "",
 	scrapingError: "",
 	addPostError: "",
-	loadPostError: ""
+  loadPostError: "",
+  loadedPost: {}
 };
 
 // 액션 타입 정의
@@ -36,9 +37,9 @@ export const scrapingFailure = createAction(SCRAPING_FAILURE);
 export const loadPostsRequest = createAction(LOAD_POSTS_REQUEST);
 export const loadPostsSuccess = createAction(LOAD_POSTS_SUCCESS);
 export const loadPostsFailure = createAction(LOAD_POSTS_FAILURE);
-// export const loadPostRequest = createAction(LOAD_POST_REQUEST);
-// export const loadPostSuccess = createAction(LOAD_POST_SUCCESS);
-// export const loadPostFailure = createAction(LOAD_POST_FAILURE);
+export const loadPostRequest = createAction(LOAD_POST_REQUEST);
+export const loadPostSuccess = createAction(LOAD_POST_SUCCESS);
+export const loadPostFailure = createAction(LOAD_POST_FAILURE);
 
 // immer 를 사용하여 값을 수정하는 리듀서
 export default handleActions(
@@ -88,6 +89,14 @@ export default handleActions(
 				draft.hasMorePost = payload.length === 5;
 			}),
 		[LOAD_POSTS_FAILURE]: (state, { payload }) =>
+			produce(state, draft => {
+				draft.loadPostError = payload;
+			}),
+		[LOAD_POST_SUCCESS]: (state, { payload }) =>
+			produce(state, draft => {
+				draft.loadedPost = payload;
+			}),
+		[LOAD_POST_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
 				draft.loadPostError = payload;
 			})

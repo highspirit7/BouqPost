@@ -11,7 +11,10 @@ import {
 	SCRAPING_FAILURE,
 	LOAD_POSTS_REQUEST,
 	LOAD_POSTS_FAILURE,
-	LOAD_POSTS_SUCCESS
+	LOAD_POSTS_SUCCESS,
+	LOAD_POST_REQUEST,
+	LOAD_POST_FAILURE,
+	LOAD_POST_SUCCESS
 } from "../modules/post";
 
 function addPostAPI(postData) {
@@ -27,9 +30,9 @@ function* addPost(action) {
 		yield put({
 			type: ADD_POST_SUCCESS
 		});
-
-    yield alert("새 포스트가 저장되었습니다!");
-    yield Router.push("/");
+    
+    //next로 라우팅을 하고 있기때문에 서버 라우터에서 redirect 사용하지 않고 프론트단에서 라우팅 처리를 한다.(100% 이해를 한 것은 아니지만 우선 이 정도로만)
+		yield Router.push("/");
 	} catch (e) {
 		console.error(e);
 		yield put({
@@ -69,31 +72,31 @@ function* watchLoadPosts() {
 	yield throttle(1500, LOAD_POSTS_REQUEST, loadPosts);
 }
 
-//포스트 하나 조회
-// function loadPostAPI(postId) {
-// 	return axios.get(`/post?postId=${postId}`);
-// }
+//포스트 하나 조회(포스트 수정용)
+function loadPostAPI(postId) {
+	return axios.get(`/post/${postId}`);
+}
 
-// function* loadPost(action) {
-// 	try {
-// 		const result = yield call(loadPostAPI, action.postId);
+function* loadPost(action) {
+	try {
+		const result = yield call(loadPostAPI, action.postId);
+    // yield console.log(result.data);
+		yield put({
+			type: LOAD_POST_SUCCESS,
+			payload: result.data
+		});
+	} catch (e) {
+		console.error(e);
+		yield put({
+			type: LOAD_POST_FAILURE,
+			payload: e.message
+		});
+	}
+}
 
-// 		yield put({
-// 			type: LOAD_POST_SUCCESS,
-// 			payload: result.data
-// 		});
-// 	} catch (e) {
-// 		console.error(e);
-// 		yield put({
-// 			type: LOAD_POST_FAILURE,
-// 			payload: e.message
-// 		});
-// 	}
-// }
-
-// function* watchLoadPost() {
-// 	yield takeLatest(LOAD_POST_REQUEST, loadPost);
-// }
+function* watchLoadPost() {
+	yield takeLatest(LOAD_POST_REQUEST, loadPost);
+}
 
 function scrapingForPostAPI(url) {
 	return axios.post(
@@ -109,7 +112,6 @@ function* scrapingForPost(action) {
 	try {
 		const result = yield call(scrapingForPostAPI, action.url);
 
-		// yield delay(2000);
 		yield put({
 			type: SCRAPING_SUCCESS,
 			payload: result.data
@@ -128,5 +130,5 @@ function* watchScrapingForPost() {
 }
 
 export default function* postSaga() {
-	yield all([fork(watchAddPost), fork(watchScrapingForPost), fork(watchLoadPosts)]);
+	yield all([fork(watchAddPost), fork(watchScrapingForPost), fork(watchLoadPosts), fork(watchLoadPost)]);
 }

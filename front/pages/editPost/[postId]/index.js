@@ -2,10 +2,9 @@ import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Card, Input, Row, Col, Form, Select, Button } from "antd";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
-
-import { ADD_POST_REQUEST, SCRAPING_REQUEST } from "../../../redux/modules/post";
+import { ADD_POST_REQUEST, SCRAPING_REQUEST, LOAD_POST_REQUEST } from "../../../redux/modules/post";
 
 const NewPostFormWrapper = styled(Card)`
 	width: 88%;
@@ -38,7 +37,7 @@ const SubmitBtn = styled(Button)`
 `;
 const { Option } = Select;
 
-const EditPost = props => {
+const EditPost = () => {
 	const [link, setLink] = useState("");
 	const [title, setTitle] = useState("");
 	const [description, setDesc] = useState("");
@@ -48,10 +47,10 @@ const EditPost = props => {
 
 	const { myInfo } = useSelector(state => state.user);
 	const { providedCategories } = useSelector(state => state.categories);
-	const { isScraping, scrapedTitle, scrapedImg } = useSelector(state => state.post);
+	const { isScraping, scrapedTitle, scrapedImg, loadedPost } = useSelector(state => state.post);
 
-  const router = useRouter();
-  const { postId } = router.query
+	const router = useRouter();
+	const { postId } = router.query;
 
 	//리덕스 사용해서 기본적으로 넣어둔 카테고리 가져오는 코드
 	const children = [];
@@ -64,13 +63,26 @@ const EditPost = props => {
 	}
 
 	useEffect(() => {
-		// if (!myInfo) {
-		// 	alert("새 포스트를 작성하시려면 로그인이 필요합니다");
-		// 	Router.push("/login");
-		// }
-
 		setTitle(scrapedTitle);
 	}, [scrapedTitle]);
+
+	useEffect(() => {
+		dispatch({
+			type: LOAD_POST_REQUEST,
+			postId
+		});
+	}, []);
+
+	useEffect(() => {
+		const loadedLink = loadedPost.link;
+		const loadedDesc = loadedPost.description;
+		const loadedTitle = loadedPost.title;
+		// console.log(loadedPost.Categories.map(category => category.name));
+		// const loadedCategories = loadedPost.Categories.map(category => category.name);
+		setLink(loadedLink);
+		setTitle(loadedTitle);
+		setDesc(loadedDesc);
+	}, [loadedPost.link, loadedPost.title, loadedPost.description, loadedPost.Categories]);
 
 	const onChangeLink = useCallback(e => {
 		setLink(e.target.value);
@@ -81,7 +93,7 @@ const EditPost = props => {
 	}, []);
 
 	const onChangeDesc = useCallback(e => {
-		setDesc(e.target.value);
+    setDesc(e.target.value);
 	}, []);
 
 	const onChangeCategory = useCallback(value => {
@@ -123,7 +135,7 @@ const EditPost = props => {
 		<NewPostFormWrapper>
 			<Row gutter={24}>
 				<Col className="gutter-row" span={12}>
-					<h1>{postId} 포스트 수정</h1>
+					<h1>포스트 수정</h1>
 					<Form>
 						<div className="label">링크</div>
 						<Input placeholder="http://" value={link} onChange={onChangeLink} onBlur={handleBlur}></Input>
@@ -136,12 +148,13 @@ const EditPost = props => {
 							부가 설명(선택)
 						</div>
 						<Input value={description} onChange={onChangeDesc}></Input>
-						<div className="label">카테코리(필수)</div>
+						<div className="label">카테코리(권장)</div>
 						<Select
 							mode="multiple"
 							style={{ width: "100%" }}
 							placeholder="카테고리를 선택해주세요"
 							onChange={onChangeCategory}
+							defaultValue={loadedPost.Categories && loadedPost.Categories.map(category => category.name)}
 							required>
 							{children}
 						</Select>
