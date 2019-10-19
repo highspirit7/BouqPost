@@ -3,7 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { Tag, Icon, Row, Col, Divider } from "antd";
 import styled from "styled-components";
 import ThumbnailCmp from "../components/ThumbnailCmp";
-import moment from "moment";
+import TimeAgo from "react-timeago";
+import koreanStrings from "react-timeago/lib/language-strings/ko";
+import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
+
 import { LOAD_POSTS_REQUEST } from "../redux/modules/post";
 
 const ThumbnailWrapper = styled.div`
@@ -60,12 +63,18 @@ const StyledPostbox = styled.div`
 	.likeBtn {
 		border: 1px solid rgb(147, 149, 153, 0.6);
 		border-radius: 20px;
-		margin-right: 14px;
 	}
 
 	h1 {
 		font-size: 24px;
 	}
+`;
+
+const Poster = styled.div`
+	margin: 0 10px;
+	padding: 0 10px;
+	border-right: 1px solid rgba(0, 0, 0, 0.1);
+	border-left: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
 const Main = () => {
@@ -75,6 +84,8 @@ const Main = () => {
 
 	const dispatch = useDispatch();
 	const countRef = useRef([]);
+
+	const formatter = buildFormatter(koreanStrings);
 
 	const onScroll = useCallback(() => {
 		//scrollY : 스크롤 내린 거리, clientHeight: 화면 높이, scrollHeight: 전체 화면 높이
@@ -155,9 +166,9 @@ const Main = () => {
 											<a href={post.link} target="blank" rel="noopener noreferrer">
 												<h2>{post.title}</h2>
 											</a>
+											{post.description ? <p>{post.description}</p> : <br />}
 
-											<p>{post.description}</p>
-											<div>
+											<div style={{ display: "flex", alignItems: "center" }}>
 												<button className="likeBtn">
 													{" "}
 													<Icon
@@ -168,7 +179,12 @@ const Main = () => {
 													/>
 													{post.Likers.length !== 0 && <span style={{ marginLeft: 6 }}>{post.Likers.length}</span>}
 												</button>
-												<span>posted by {post.User.nickname}</span>
+
+												<Poster>Posted by {post.User.nickname}</Poster>
+
+												<div>
+													<TimeAgo date={post.created_at} formatter={formatter}></TimeAgo>
+												</div>
 											</div>
 										</div>
 									</div>
