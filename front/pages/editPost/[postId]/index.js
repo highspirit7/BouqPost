@@ -2,9 +2,10 @@ import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Card, Input, Row, Col, Form, Select, Button } from "antd";
-import Router from "next/router";
+import { useRouter } from 'next/router';
 
-import { ADD_POST_REQUEST, SCRAPING_REQUEST } from "../redux/modules/post";
+
+import { ADD_POST_REQUEST, SCRAPING_REQUEST } from "../../../redux/modules/post";
 
 const NewPostFormWrapper = styled(Card)`
 	width: 88%;
@@ -37,7 +38,7 @@ const SubmitBtn = styled(Button)`
 `;
 const { Option } = Select;
 
-const EditPost = () => {
+const EditPost = props => {
 	const [link, setLink] = useState("");
 	const [title, setTitle] = useState("");
 	const [description, setDesc] = useState("");
@@ -48,6 +49,9 @@ const EditPost = () => {
 	const { myInfo } = useSelector(state => state.user);
 	const { providedCategories } = useSelector(state => state.categories);
 	const { isScraping, scrapedTitle, scrapedImg } = useSelector(state => state.post);
+
+  const router = useRouter();
+  const { postId } = router.query
 
 	//리덕스 사용해서 기본적으로 넣어둔 카테고리 가져오는 코드
 	const children = [];
@@ -119,7 +123,7 @@ const EditPost = () => {
 		<NewPostFormWrapper>
 			<Row gutter={24}>
 				<Col className="gutter-row" span={12}>
-					<h1>포스트 수정</h1>
+					<h1>{postId} 포스트 수정</h1>
 					<Form>
 						<div className="label">링크</div>
 						<Input placeholder="http://" value={link} onChange={onChangeLink} onBlur={handleBlur}></Input>

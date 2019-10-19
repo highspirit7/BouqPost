@@ -1,6 +1,6 @@
 import { all, fork, put, takeLatest, throttle, call } from "redux-saga/effects";
 import axios from "axios";
-// import Router from "next/router";
+import Router from "next/router";
 
 import {
 	ADD_POST_REQUEST,
@@ -22,15 +22,14 @@ function addPostAPI(postData) {
 
 function* addPost(action) {
 	try {
-		const result = yield call(addPostAPI, action.data);
+		yield call(addPostAPI, action.data);
 
 		yield put({
-			type: ADD_POST_SUCCESS,
-			data: result.data
+			type: ADD_POST_SUCCESS
 		});
-		console.dir(result.data);
 
-		yield alert("새 포스트가 저장되었습니다!");
+    yield alert("새 포스트가 저장되었습니다!");
+    yield Router.push("/");
 	} catch (e) {
 		console.error(e);
 		yield put({
@@ -115,9 +114,6 @@ function* scrapingForPost(action) {
 			type: SCRAPING_SUCCESS,
 			payload: result.data
 		});
-
-		// alert("새 포스트를 추가하였습니다");
-		// Router.push("/");
 	} catch (e) {
 		console.error(e);
 		yield put({

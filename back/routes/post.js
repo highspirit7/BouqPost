@@ -34,24 +34,24 @@ router.post("/", isLoggedIn, async (req, res, next) => {
 		// newPost.User = User;
 		// res.json(newPost);
 
-		const fullPost = await db.Post.findOne({
-			where: { id: newPost.id },
-			include: [
-				{
-					model: db.User,
-					attributes: ["id", "nickname"]
-				},
-				{
-					model: db.Category
-				},
-				{
-					model: db.User,
-					as: "Likers",
-					attributes: ["id"]
-				}
-			]
-		});
-		res.json(fullPost);
+		// const fullPost = await db.Post.findOne({
+		// 	where: { id: newPost.id },
+		// 	include: [
+		// 		{
+		// 			model: db.User,
+		// 			attributes: ["id", "nickname"]
+		// 		},
+		// 		{
+		// 			model: db.Category
+		// 		},
+		// 		{
+		// 			model: db.User,
+		// 			as: "Likers",
+		// 			attributes: ["id"]
+		// 		}
+		// 	]
+		// });
+    res.send("새 포스트가 추가되었습니다.")
 	} catch (e) {
 		console.error(e);
 		next(e);

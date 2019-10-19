@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Tag, Icon, Row, Col, Divider } from "antd";
+import { Tag, Icon, Row, Col } from "antd";
+import Link from "next/link";
 import styled from "styled-components";
 import ThumbnailCmp from "../components/ThumbnailCmp";
 import TimeAgo from "react-timeago";
@@ -88,6 +89,11 @@ const Main = () => {
 
 	const formatter = buildFormatter(koreanStrings);
 
+	const showDefaultImg = event => {
+    event.target.src = "/bbakdok.png";
+    event.target.title = "해당 링크에서 이미지를 적절한 이미지를 추출하지 못했거나 간혹 이미지를 로드하지 못하는 에러 시 기본 이미지가 출력됩니다"
+	};
+
 	const onScroll = useCallback(() => {
 		//scrollY : 스크롤 내린 거리, clientHeight: 화면 높이, scrollHeight: 전체 화면 높이
 		if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
@@ -153,9 +159,12 @@ const Main = () => {
 										<a href={post.link} target="_blank" rel="noopener noreferrer">
 											<img
 												src={
-													`https://images.weserv.nl/?url=ssl:${post.thumbnail.slice(8)}&w=200&h=128` || "/bbakdok.png"
+													post.thumbnail
+														? `https://images.weserv.nl/?url=ssl:${post.thumbnail.slice(8)}&w=200&h=128`
+														: "/bbakdok.png"
 												}
-												alt="post_thumbnail"
+                        onError={showDefaultImg}
+                        alt="thumbnail_img"
 											/>
 										</a>
 										<div className="contents">
@@ -193,16 +202,21 @@ const Main = () => {
 												</div>
 												{myInfo && myInfo.id === post.UserId && (
 													<>
-														<div
-															style={{
-																marginLeft: 14,
-																paddingRight: 10,
-																paddingLeft: 10,
-																borderRight: "1px solid rgba(0, 0, 0, 0.1)",
-																borderLeft: "1px solid rgba(0, 0, 0, 0.1)"
-															}}>
-															수정
-														</div>
+														<Link href={`/editPost/${post.id}`}>
+															<a>
+																<div
+																	style={{
+																		marginLeft: 14,
+																		paddingRight: 10,
+																		paddingLeft: 10,
+																		borderRight: "1px solid rgba(0, 0, 0, 0.1)",
+																		borderLeft: "1px solid rgba(0, 0, 0, 0.1)"
+																	}}>
+																	수정
+																</div>
+															</a>
+														</Link>
+
 														<div style={{ marginLeft: 10 }}>삭제</div>
 													</>
 												)}

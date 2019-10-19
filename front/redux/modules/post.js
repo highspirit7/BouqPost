@@ -1,6 +1,5 @@
 import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
-import moment from "moment";
 
 export const initialState = {
 	displayedPosts: [],
@@ -23,9 +22,9 @@ export const SCRAPING_FAILURE = "post/SCRAPING_FAILURE";
 export const LOAD_POSTS_REQUEST = "post/LOAD_POSTS_REQUEST";
 export const LOAD_POSTS_SUCCESS = "post/LOAD_POSTS_SUCCESS";
 export const LOAD_POSTS_FAILURE = "post/LOAD_POSTS_FAILURE";
-// export const LOAD_POST_REQUEST = "post/LOAD_POST_REQUEST";
-// export const LOAD_POST_SUCCESS = "post/LOAD_POST_SUCCESS";
-// export const LOAD_POST_FAILURE = "post/LOAD_POST_FAILURE";
+export const LOAD_POST_REQUEST = "post/LOAD_POST_REQUEST";
+export const LOAD_POST_SUCCESS = "post/LOAD_POST_SUCCESS";
+export const LOAD_POST_FAILURE = "post/LOAD_POST_FAILURE";
 
 // 액션 생성 함수
 export const addPostsRequest = createAction(ADD_POST_REQUEST);
@@ -48,21 +47,8 @@ export default handleActions(
 			produce(state, draft => {
 				draft.isAddingPost = true;
 			}),
-		[ADD_POST_SUCCESS]: (state, { payload }) => {
+		[ADD_POST_SUCCESS]: state => {
 			produce(state, draft => {
-				const newPost = payload;
-				console.log(newPost);
-				// //날짜가 그 이전 배열과 다르면 새로운 배열 만들어서 추가해주도록 하는 로직 필요
-				// newPost.createdAt = moment(newPost.createdAt).format("MM월 DD일 dddd");
-
-				// //애초에 첫 게시물 작성하는 경우 + 새 게시물 생성 날짜가 제일 최신 게시물의 날짜와 다를 때
-				// if (draft.mainPosts[0][0].createdAt && draft.mainPosts[0][0].createdAt !== newPost.createdAt) {
-				// 	draft.mainPosts.unshift([]);
-				// 	draft.mainPosts[0].push(newPost);
-				// } else {
-				// 	//새 게시물 생성 날짜가 제일 최신 게시물의 날짜와 같을 때
-				// 	draft.mainPosts[0].unshift(newPost);
-				// }
 				draft.isAddingPost = false;
 			});
 		},
