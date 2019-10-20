@@ -97,6 +97,8 @@ const NewPost = () => {
 		e => {
 			e.preventDefault();
 
+      //카테고리, 링크, 제목 필수로 입력하도록 프론트에서 설정 필요
+
 			const postData = {};
 			postData.link = link;
 			postData.title = title;
@@ -112,7 +114,7 @@ const NewPost = () => {
 				data: postData
 			});
 		},
-		[link, title, description, category]
+		[link, title, description, category, dispatch, scrapedImg]
 	);
 
 	return (

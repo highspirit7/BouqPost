@@ -14,7 +14,10 @@ import {
 	LOAD_POSTS_SUCCESS,
 	LOAD_POST_REQUEST,
 	LOAD_POST_FAILURE,
-	LOAD_POST_SUCCESS
+	LOAD_POST_SUCCESS,
+	UPDATE_POST_REQUEST,
+	UPDATE_POST_FAILURE,
+	UPDATE_POST_SUCCESS
 } from "../modules/post";
 
 function addPostAPI(postData) {
@@ -30,8 +33,8 @@ function* addPost(action) {
 		yield put({
 			type: ADD_POST_SUCCESS
 		});
-    
-    //next로 라우팅을 하고 있기때문에 서버 라우터에서 redirect 사용하지 않고 프론트단에서 라우팅 처리를 한다.(100% 이해를 한 것은 아니지만 우선 이 정도로만)
+
+		//next로 라우팅을 하고 있기때문에 서버 라우터에서 redirect 사용하지 않고 프론트단에서 라우팅 처리를 한다.(100% 이해를 한 것은 아니지만 우선 이 정도로만)
 		yield Router.push("/");
 	} catch (e) {
 		console.error(e);
@@ -44,6 +47,36 @@ function* addPost(action) {
 
 function* watchAddPost() {
 	yield takeLatest(ADD_POST_REQUEST, addPost);
+}
+
+function updatePostAPI(postId, postData) {
+	return axios.put(`/post/${postId}`, postData, {
+		withCredentials: true
+	});
+}
+
+function* updatePost(action) {
+	try {
+		yield call(updatePostAPI, action.postId, action.data);
+
+		yield put({
+			type: UPDATE_POST_SUCCESS
+		});
+
+		yield alert("성공적으로 포스트가 업데이트되었습니다");
+		//next로 라우팅을 하고 있기때문에 서버 라우터에서 redirect 사용하지 않고 프론트단에서 라우팅 처리를 한다.(100% 이해를 한 것은 아니지만 우선 이 정도로만)
+		yield Router.push("/");
+	} catch (e) {
+		console.error(e);
+		yield put({
+			type: UPDATE_POST_FAILURE,
+			payload: e.message
+		});
+	}
+}
+
+function* watchUpdatePost() {
+	yield takeLatest(UPDATE_POST_REQUEST, updatePost);
 }
 
 //lastId가 0이면 DB에서 제일 최신 포스트부터 조회하도록 해줄 것.
@@ -74,13 +107,15 @@ function* watchLoadPosts() {
 
 //포스트 하나 조회(포스트 수정용)
 function loadPostAPI(postId) {
-	return axios.get(`/post/${postId}`);
+	return axios.get(`/post/${postId}`, {
+		withCredentials: true
+	});
 }
 
 function* loadPost(action) {
 	try {
 		const result = yield call(loadPostAPI, action.postId);
-    // yield console.log(result.data);
+		// yield console.log(result.data);
 		yield put({
 			type: LOAD_POST_SUCCESS,
 			payload: result.data
@@ -130,5 +165,11 @@ function* watchScrapingForPost() {
 }
 
 export default function* postSaga() {
-	yield all([fork(watchAddPost), fork(watchScrapingForPost), fork(watchLoadPosts), fork(watchLoadPost)]);
+	yield all([
+		fork(watchAddPost),
+		fork(watchScrapingForPost),
+		fork(watchLoadPosts),
+		fork(watchLoadPost),
+		fork(watchUpdatePost)
+	]);
 }

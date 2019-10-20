@@ -4,19 +4,28 @@ import produce from "immer";
 export const initialState = {
 	displayedPosts: [],
 	isAddingPost: false,
+	isUpdatingPost: false,
 	isScraping: false,
 	scrapedTitle: "",
 	scrapedImg: "",
-	scrapingError: "",
-	addPostError: "",
-  loadPostError: "",
-  loadedPost: {}
+	errors: {
+		scrapingError: "",
+		addPostError: "",
+		loadPostError: "",
+		updatePostError: ""
+	},
+	loadedPost: {
+		link: "",
+		title: "",
+		description: "",
+		category: []
+	}
 };
 
 // 액션 타입 정의
-export const ADD_POST_REQUEST = "post/ADD_POSTS_REQUEST";
-export const ADD_POST_SUCCESS = "post/ADD_POSTS_SUCCESS";
-export const ADD_POST_FAILURE = "post/ADD_POSTS_FAILURE";
+export const ADD_POST_REQUEST = "post/ADD_POST_REQUEST";
+export const ADD_POST_SUCCESS = "post/ADD_POST_SUCCESS";
+export const ADD_POST_FAILURE = "post/ADD_POST_FAILURE";
 export const SCRAPING_REQUEST = "post/SCRAPING_REQUEST";
 export const SCRAPING_SUCCESS = "post/SCRAPING_SUCCESS";
 export const SCRAPING_FAILURE = "post/SCRAPING_FAILURE";
@@ -26,6 +35,9 @@ export const LOAD_POSTS_FAILURE = "post/LOAD_POSTS_FAILURE";
 export const LOAD_POST_REQUEST = "post/LOAD_POST_REQUEST";
 export const LOAD_POST_SUCCESS = "post/LOAD_POST_SUCCESS";
 export const LOAD_POST_FAILURE = "post/LOAD_POST_FAILURE";
+export const UPDATE_POST_REQUEST = "post/UPDATE_POST_REQUEST";
+export const UPDATE_POST_SUCCESS = "post/UPDATE_POST_SUCCESS";
+export const UPDATE_POST_FAILURE = "post/UPDATE_POST_FAILURE";
 
 // 액션 생성 함수
 export const addPostsRequest = createAction(ADD_POST_REQUEST);
@@ -40,6 +52,9 @@ export const loadPostsFailure = createAction(LOAD_POSTS_FAILURE);
 export const loadPostRequest = createAction(LOAD_POST_REQUEST);
 export const loadPostSuccess = createAction(LOAD_POST_SUCCESS);
 export const loadPostFailure = createAction(LOAD_POST_FAILURE);
+export const updatePostRequest = createAction(UPDATE_POST_REQUEST);
+export const updatePostSuccess = createAction(UPDATE_POST_SUCCESS);
+export const updatePostFailure = createAction(UPDATE_POST_FAILURE);
 
 // immer 를 사용하여 값을 수정하는 리듀서
 export default handleActions(
@@ -53,11 +68,24 @@ export default handleActions(
 				draft.isAddingPost = false;
 			});
 		},
-
 		[ADD_POST_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
 				draft.isAddingPost = false;
-				draft.addPostError = payload;
+				draft.errors.addPostError = payload;
+			}),
+		[UPDATE_POST_REQUEST]: state =>
+			produce(state, draft => {
+				draft.isUpdatingPost = true;
+			}),
+		[UPDATE_POST_SUCCESS]: state => {
+			produce(state, draft => {
+				draft.isUpdatingPost = false;
+			});
+		},
+		[UPDATE_POST_FAILURE]: (state, { payload }) =>
+			produce(state, draft => {
+				draft.isUpdatingPost = false;
+				draft.errors.updatePostError = payload;
 			}),
 		[SCRAPING_REQUEST]: state =>
 			produce(state, draft => {
@@ -72,7 +100,7 @@ export default handleActions(
 		[SCRAPING_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
 				draft.isScraping = false;
-				draft.scrapingError = payload;
+				draft.errors.scrapingError = payload;
 			}),
 		[LOAD_POSTS_REQUEST]: (state, payload) =>
 			produce(state, draft => {
@@ -90,15 +118,18 @@ export default handleActions(
 			}),
 		[LOAD_POSTS_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
-				draft.loadPostError = payload;
+				draft.errors.loadPostError = payload;
 			}),
 		[LOAD_POST_SUCCESS]: (state, { payload }) =>
 			produce(state, draft => {
-				draft.loadedPost = payload;
+				draft.loadedPost.link = payload.link;
+				draft.loadedPost.title = payload.title;
+				draft.loadedPost.description = payload.description;
+				draft.loadedPost.category = payload.Categories.map(category => category.name);
 			}),
 		[LOAD_POST_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
-				draft.loadPostError = payload;
+				draft.errors.loadPostError = payload;
 			})
 	},
 	initialState

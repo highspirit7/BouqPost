@@ -27,9 +27,9 @@ const KakaoLoginBtn = styled.div`
   align-items: center;
   justify-content: space-between;
   img {
-    margin: 0px 12px;
-    width: 31px;
-    height: 32px;
+    margin-left: 12px;
+    // width: 32px;
+    // height: 32px;
   }
 
   div {

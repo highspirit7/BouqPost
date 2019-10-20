@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Card, Input, Row, Col, Form, Select, Button } from "antd";
 import { useRouter } from "next/router";
 
-import { ADD_POST_REQUEST, SCRAPING_REQUEST, LOAD_POST_REQUEST } from "../../../redux/modules/post";
+import { UPDATE_POST_REQUEST, SCRAPING_REQUEST, LOAD_POST_REQUEST } from "../../../redux/modules/post";
 
 const NewPostFormWrapper = styled(Card)`
 	width: 88%;
@@ -71,18 +71,22 @@ const EditPost = () => {
 			type: LOAD_POST_REQUEST,
 			postId
 		});
-	}, []);
+	}, [dispatch, postId]);
 
 	useEffect(() => {
 		const loadedLink = loadedPost.link;
 		const loadedDesc = loadedPost.description;
 		const loadedTitle = loadedPost.title;
-		// console.log(loadedPost.Categories.map(category => category.name));
-		// const loadedCategories = loadedPost.Categories.map(category => category.name);
+    const loadedCategory = loadedPost.category;
+    
 		setLink(loadedLink);
 		setTitle(loadedTitle);
-		setDesc(loadedDesc);
-	}, [loadedPost.link, loadedPost.title, loadedPost.description, loadedPost.Categories]);
+    setDesc(loadedDesc);
+    setCategory(loadedCategory);
+	}, [loadedPost.link, loadedPost.title, loadedPost.description, loadedPost.category]);
+
+	
+
 
 	const onChangeLink = useCallback(e => {
 		setLink(e.target.value);
@@ -93,7 +97,7 @@ const EditPost = () => {
 	}, []);
 
 	const onChangeDesc = useCallback(e => {
-    setDesc(e.target.value);
+		setDesc(e.target.value);
 	}, []);
 
 	const onChangeCategory = useCallback(value => {
@@ -109,26 +113,27 @@ const EditPost = () => {
 		}
 	};
 
-	const submitForm = useCallback(
+	const submitUpdate = useCallback(
 		e => {
 			e.preventDefault();
 
-			const postData = {};
-			postData.link = link;
-			postData.title = title;
-			postData.description = description;
-			postData.category = category;
+			const updatePost = {};
+			updatePost.link = link;
+			updatePost.title = title;
+			updatePost.description = description;
+			updatePost.category = category;
 
 			if (scrapedImg) {
-				postData.image = scrapedImg;
+				updatePost.image = scrapedImg;
 			}
 
 			dispatch({
-				type: ADD_POST_REQUEST,
-				data: postData
+				type: UPDATE_POST_REQUEST,
+        data: updatePost,
+        postId
 			});
 		},
-		[link, title, description, category]
+		[dispatch, scrapedImg, link, title, description, category, postId]
 	);
 
 	return (
@@ -154,11 +159,11 @@ const EditPost = () => {
 							style={{ width: "100%" }}
 							placeholder="카테고리를 선택해주세요"
 							onChange={onChangeCategory}
-							defaultValue={loadedPost.Categories && loadedPost.Categories.map(category => category.name)}
+							value={category}
 							required>
 							{children}
 						</Select>
-						<SubmitBtn size="large" onClick={submitForm}>
+						<SubmitBtn size="large" onClick={submitUpdate}>
 							수정하기
 						</SubmitBtn>
 					</Form>
