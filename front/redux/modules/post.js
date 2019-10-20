@@ -42,6 +42,7 @@ export const UPDATE_POST_FAILURE = "post/UPDATE_POST_FAILURE";
 export const REMOVE_POST_REQUEST = "post/REMOVE_POST_REQUEST";
 export const REMOVE_POST_SUCCESS = "post/REMOVE_POST_SUCCESS";
 export const REMOVE_POST_FAILURE = "post/REMOVE_POST_FAILURE";
+export const INITIATE_DISPLAYED_POSTS = "post/INITIATE_DISPLAYED_POSTS";
 
 // 액션 생성 함수
 export const addPostsRequest = createAction(ADD_POST_REQUEST);
@@ -62,7 +63,7 @@ export const updatePostFailure = createAction(UPDATE_POST_FAILURE);
 export const removePostRequest = createAction(REMOVE_POST_REQUEST);
 export const removePostSuccess = createAction(REMOVE_POST_SUCCESS);
 export const removePostFailure = createAction(REMOVE_POST_FAILURE);
-
+export const initiateDisplayedPosts = createAction(INITIATE_DISPLAYED_POSTS);
 // immer 를 사용하여 값을 수정하는 리듀서
 export default handleActions(
 	{
@@ -146,6 +147,10 @@ export default handleActions(
 		[REMOVE_POST_FAILURE]: (state, payload) =>
 			produce(state, draft => {
 				draft.errors.removePostError = payload.error;
+			}),
+		[INITIATE_DISPLAYED_POSTS]: state =>
+			produce(state, draft => {
+				draft.displayedPosts = [];
 			})
 	},
 	initialState
