@@ -12,7 +12,8 @@ export const initialState = {
 		scrapingError: "",
 		addPostError: "",
 		loadPostError: "",
-		updatePostError: ""
+		updatePostError: "",
+		removePostError: ""
 	},
 	loadedPost: {
 		link: "",
@@ -38,6 +39,9 @@ export const LOAD_POST_FAILURE = "post/LOAD_POST_FAILURE";
 export const UPDATE_POST_REQUEST = "post/UPDATE_POST_REQUEST";
 export const UPDATE_POST_SUCCESS = "post/UPDATE_POST_SUCCESS";
 export const UPDATE_POST_FAILURE = "post/UPDATE_POST_FAILURE";
+export const REMOVE_POST_REQUEST = "post/REMOVE_POST_REQUEST";
+export const REMOVE_POST_SUCCESS = "post/REMOVE_POST_SUCCESS";
+export const REMOVE_POST_FAILURE = "post/REMOVE_POST_FAILURE";
 
 // 액션 생성 함수
 export const addPostsRequest = createAction(ADD_POST_REQUEST);
@@ -55,6 +59,9 @@ export const loadPostFailure = createAction(LOAD_POST_FAILURE);
 export const updatePostRequest = createAction(UPDATE_POST_REQUEST);
 export const updatePostSuccess = createAction(UPDATE_POST_SUCCESS);
 export const updatePostFailure = createAction(UPDATE_POST_FAILURE);
+export const removePostRequest = createAction(REMOVE_POST_REQUEST);
+export const removePostSuccess = createAction(REMOVE_POST_SUCCESS);
+export const removePostFailure = createAction(REMOVE_POST_FAILURE);
 
 // immer 를 사용하여 값을 수정하는 리듀서
 export default handleActions(
@@ -130,6 +137,15 @@ export default handleActions(
 		[LOAD_POST_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
 				draft.errors.loadPostError = payload;
+			}),
+		[REMOVE_POST_SUCCESS]: (state, payload) =>
+			produce(state, draft => {
+				const index = draft.displayedPosts.findIndex(post => post.id === payload.data);
+				draft.displayedPosts.splice(index, 1);
+			}),
+		[REMOVE_POST_FAILURE]: (state, payload) =>
+			produce(state, draft => {
+				draft.errors.removePostError = payload.error;
 			})
 	},
 	initialState

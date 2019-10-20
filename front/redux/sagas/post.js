@@ -17,7 +17,10 @@ import {
 	LOAD_POST_SUCCESS,
 	UPDATE_POST_REQUEST,
 	UPDATE_POST_FAILURE,
-	UPDATE_POST_SUCCESS
+	UPDATE_POST_SUCCESS,
+	REMOVE_POST_FAILURE,
+	REMOVE_POST_REQUEST,
+	REMOVE_POST_SUCCESS
 } from "../modules/post";
 
 function addPostAPI(postData) {
@@ -164,12 +167,39 @@ function* watchScrapingForPost() {
 	yield takeLatest(SCRAPING_REQUEST, scrapingForPost);
 }
 
+function removePostAPI(postId) {
+	return axios.delete(`/post/${postId}`, {
+		withCredentials: true
+	});
+}
+
+function* removePost(action) {
+	try {
+		const result = yield call(removePostAPI, action.postId);
+		yield put({
+			type: REMOVE_POST_SUCCESS,
+			data: result.data
+		});
+	} catch (e) {
+		console.error(e);
+		yield put({
+      type: REMOVE_POST_FAILURE,
+      error: e
+		});
+	}
+}
+
+function* watchRemovePost() {
+	yield takeLatest(REMOVE_POST_REQUEST, removePost);
+}
+
 export default function* postSaga() {
 	yield all([
 		fork(watchAddPost),
 		fork(watchScrapingForPost),
 		fork(watchLoadPosts),
 		fork(watchLoadPost),
-		fork(watchUpdatePost)
+		fork(watchUpdatePost),
+		fork(watchRemovePost)
 	]);
 }

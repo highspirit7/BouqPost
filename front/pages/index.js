@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Tag, Icon, Row, Col } from "antd";
+import { Tag, Icon, Row, Col, Popconfirm } from "antd";
 import Link from "next/link";
 import styled from "styled-components";
 import ThumbnailCmp from "../components/ThumbnailCmp";
@@ -8,7 +8,7 @@ import TimeAgo from "react-timeago";
 import koreanStrings from "react-timeago/lib/language-strings/ko";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 
-import { LOAD_POSTS_REQUEST } from "../redux/modules/post";
+import { LOAD_POSTS_REQUEST, REMOVE_POST_REQUEST } from "../redux/modules/post";
 
 const ThumbnailWrapper = styled.div`
 	width: 94%;
@@ -90,9 +90,20 @@ const Main = () => {
 	const formatter = buildFormatter(koreanStrings);
 
 	const showDefaultImg = event => {
-    event.target.src = "/bbakdok.png";
-    event.target.title = "해당 링크에서 이미지를 적절한 이미지를 추출하지 못했거나 간혹 이미지를 로드하지 못하는 에러 시 기본 이미지가 출력됩니다"
+		event.target.src = "/bbakdok.png";
+		event.target.title =
+			"해당 링크에서 이미지를 적절한 이미지를 추출하지 못했거나 간혹 이미지를 로드하지 못하는 에러 시 기본 이미지가 출력됩니다";
 	};
+
+	const onRemovePost = useCallback(
+		postId => () => {
+			dispatch({
+				type: REMOVE_POST_REQUEST,
+				postId
+			});
+		},
+		[dispatch]
+	);
 
 	const onScroll = useCallback(() => {
 		//scrollY : 스크롤 내린 거리, clientHeight: 화면 높이, scrollHeight: 전체 화면 높이
@@ -116,20 +127,20 @@ const Main = () => {
 				// });
 			}
 		}
-	}, [hasMorePost, displayedPosts.length]);
+	}, [hasMorePost, dispatch, displayedPosts]);
 
 	useEffect(() => {
 		window.addEventListener("scroll", onScroll);
 		return () => {
 			window.removeEventListener("scroll", onScroll);
 		};
-	}, [displayedPosts.length]);
+	}, [displayedPosts.length, onScroll]);
 
 	useEffect(() => {
 		dispatch({
 			type: LOAD_POSTS_REQUEST
 		});
-	}, []);
+	}, [dispatch]);
 
 	return (
 		<div>
@@ -163,8 +174,8 @@ const Main = () => {
 														? `https://images.weserv.nl/?url=ssl:${post.thumbnail.slice(8)}&w=200&h=128`
 														: "/bbakdok.png"
 												}
-                        onError={showDefaultImg}
-                        alt="thumbnail_img"
+												onError={showDefaultImg}
+												alt="thumbnail_img"
 											/>
 										</a>
 										<div className="contents">
@@ -210,14 +221,21 @@ const Main = () => {
 																		paddingRight: 10,
 																		paddingLeft: 10,
 																		borderRight: "1px solid rgba(0, 0, 0, 0.1)",
-																		borderLeft: "1px solid rgba(0, 0, 0, 0.1)"
+																		borderLeft: "1px solid rgba(0, 0, 0, 0.1)",
+																		color: "rgba(0, 0, 0, 0.65)"
 																	}}>
 																	수정
 																</div>
 															</a>
 														</Link>
 
-														<div style={{ marginLeft: 10 }}>삭제</div>
+														<Popconfirm
+															title="정말 삭제하시겠습니까?"
+															okText="Yes"
+															cancelText="No"
+															onConfirm={onRemovePost(post.id)}>
+															<div style={{ marginLeft: 10, cursor: "pointer" }}>삭제</div>
+														</Popconfirm>
 													</>
 												)}
 											</div>

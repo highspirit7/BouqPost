@@ -116,6 +116,8 @@ const NewPost = () => {
 		},
 		[link, title, description, category, dispatch, scrapedImg]
 	);
+    //input에 필수로 되있는거 입력하지 않으면 유저에게 경고 제작해야!
+
 
 	return (
 		<NewPostFormWrapper>
