@@ -46,22 +46,33 @@ router.get("/:keyword", async (req, res, next) => {
 				},
 				include,
 				order: [["id", "DESC"]], // DESC는 내림차순, ASC는 오름차순
-				limit: parseInt(req.query.limit, 10)
+				limit: 10
 			});
 
 			return res.json(posts);
 		} else {
 			//lastId 0(falthy)이면 그러니까 제일 처음에 게시물들이 검색되어 출력될 때 위 조건문은 실행되지 않고 lastId 조건 없이 그냥 5개만 불러온다.
 			const posts = await db.Post.findAll({
-				where: Sequelize.literal(
-					`WHERE REPLACE(title,' ','') LIKE '%'+REPLACE(${req.params.keyword},' ','')+'%' OR REPLACE(description,' ','') LIKE '%'+REPLACE(${req.params.keyword},' ','')+'%'`
-				),
+				where: {
+					[Op.or]: [
+						{
+							title: {
+								[Op.like]: "%" + decodeURIComponent(req.params.keyword) + "%"
+							}
+						},
+						{
+							description: {
+								[Op.like]: "%" + decodeURIComponent(req.params.keyword) + "%"
+							}
+						}
+					]
+				},
 				include,
 				order: [["id", "DESC"]], // DESC는 내림차순, ASC는 오름차순
-				limit: parseInt(req.query.limit, 10)
+				limit: 10
 			});
-
-			res.json(posts);
+      console.log(req.query.limit)
+			return res.json(posts);
 		}
 	} catch (e) {
 		console.error(e);

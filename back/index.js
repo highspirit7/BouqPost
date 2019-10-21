@@ -11,6 +11,7 @@ const userAPIRouter = require("./routes/user");
 const postAPIRouter = require("./routes/post");
 const postsAPIRouter = require("./routes/posts");
 const oauthAPIRouter = require("./routes/oauth");
+const searchAPIRouter = require("./routes/search");
 
 const app = express();
 
@@ -67,6 +68,7 @@ app.use("/api/user", userAPIRouter);
 app.use("/api/post", postAPIRouter);
 app.use("/api/posts", postsAPIRouter);
 app.use("/api/oauth", oauthAPIRouter);
+app.use("/api/search", searchAPIRouter);
 
 app.listen(2019, () => {
 	console.log("server is running on http://localhost:2019");

@@ -197,8 +197,8 @@ function* watchRemovePost() {
 }
 
 //lastId가 0이면 DB에서 제일 최신 포스트부터 조회하도록 해줄 것.
-function searchPostsAPI(keyword, lastId = 0, limit = 5) {
-	return axios.get(`/search/${encodeURIComponent(keyword)}?lastId=${lastId}&limit=${limit}`);
+function searchPostsAPI(keyword, lastId = 0) {
+	return axios.get(`/search/${encodeURIComponent(keyword)}?lastId=${lastId}`);
 }
 
 function* searchPosts(action) {
