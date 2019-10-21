@@ -1,6 +1,7 @@
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
+import PropTypes from "prop-types";
 import { Input, Divider, Tag, Icon, Popconfirm } from "antd";
 import styled from "styled-components";
 import TimeAgo from "react-timeago";
@@ -68,7 +69,8 @@ const Poster = styled.div`
 `;
 
 const SearchPage = () => {
-	const { displayedPosts, hasMorePost } = useSelector(state => state.post);
+  const { displayedPosts, hasMorePost } = useSelector(state => state.post);
+
 	const { providedCategories, colors } = useSelector(state => state.categories);
 	const { myInfo } = useSelector(state => state.user);
 
@@ -82,17 +84,18 @@ const SearchPage = () => {
 		});
 	}, []);
 
-	const searchRequest = useCallback(
-		keyword => () => {
-			Router.push({
-				pathname: "/search",
-				query: {
-					q: encodeURIComponent(keyword)
-				}
-			});
-		},
-		[]
-	);
+	// const searchRequest = useCallback(
+	// 	keyword => () => {
+	// 		console.log(keyword);
+	// 		Router.push({
+	// 			pathname: "/search",
+	// 			query: {
+	// 				q: encodeURIComponent(keyword)
+	// 			}
+	// 		});
+	// 	},
+	// 	[]
+	// );
 
 	const countRef = useRef([]);
 
@@ -146,94 +149,123 @@ const SearchPage = () => {
 
 	return (
 		<>
-			<StyledSearch placeholder="검색어를 입력해주세요" onSearch={value => searchRequest(value)} />
-			<StyledPostbox>
-				<h1>검색된 포스트</h1>
-				{displayedPosts.map((post, index) => {
-					return (
-						<>
-							<div style={{ display: "flex", alignItems: "center" }} key={index}>
-								<a href={post.link} target="_blank" rel="noopener noreferrer">
-									<img
-										src={
-											post.thumbnail
-												? `https://images.weserv.nl/?url=ssl:${post.thumbnail.slice(8)}&w=200&h=128`
-												: "/bbakdok.png"
-										}
-										onError={showDefaultImg}
-										alt="thumbnail_img"
-									/>
-								</a>
-								<div className="contents">
-									<div>
-										{post.Categories.map(category => {
-											const indexInCategories = providedCategories.indexOf(category.name);
-											return (
-												<Tag color={colors[indexInCategories]} key={category.name}>
-													{category.name}
-												</Tag>
-											);
-										})}
-									</div>
-									<a href={post.link} target="blank" rel="noopener noreferrer">
-										<h2>{post.title}</h2>
+			<StyledSearch
+				placeholder="검색어를 입력해주세요"
+				onSearch={value =>
+					Router.push({
+						pathname: "/search",
+						query: {
+							q: encodeURIComponent(value)
+						}
+					})
+        }
+			/>
+			{displayedPosts.length !== 0 && (
+				<StyledPostbox>
+					<h1>검색된 포스트</h1>
+					{displayedPosts.map((post, index) => {
+						return (
+							<>
+								<div style={{ display: "flex", alignItems: "center" }} key={index}>
+									<a href={post.link} target="_blank" rel="noopener noreferrer">
+										<img
+											src={
+												post.thumbnail
+													? `https://images.weserv.nl/?url=ssl:${post.thumbnail.slice(8)}&w=200&h=128`
+													: "/bbakdok.png"
+											}
+											onError={showDefaultImg}
+											alt="thumbnail_img"
+										/>
 									</a>
-									{post.description ? <p>{post.description}</p> : <br />}
-
-									<div style={{ display: "flex", alignItems: "center" }}>
-										<button className="likeBtn">
-											{" "}
-											<Icon
-												type="heart"
-												theme={liked ? "twoTone" : "outlined"}
-												twoToneColor="#eb2f96"
-												onClick={() => setLike(!liked)}
-											/>
-											{post.Likers.length !== 0 && <span style={{ marginLeft: 6 }}>{post.Likers.length}</span>}
-										</button>
-
-										<Poster>Posted by {post.User.nickname}</Poster>
-
+									<div className="contents">
 										<div>
-											<TimeAgo date={post.created_at} formatter={formatter}></TimeAgo>
+											{post.Categories.map(category => {
+												const indexInCategories = providedCategories.indexOf(category.name);
+												return (
+													<Tag color={colors[indexInCategories]} key={category.name}>
+														{category.name}
+													</Tag>
+												);
+											})}
 										</div>
-										{myInfo && myInfo.id === post.UserId && (
-											<>
-												<Link href={`/editPost/${post.id}`}>
-													<a>
-														<div
-															style={{
-																marginLeft: 14,
-																paddingRight: 10,
-																paddingLeft: 10,
-																borderRight: "1px solid rgba(0, 0, 0, 0.1)",
-																borderLeft: "1px solid rgba(0, 0, 0, 0.1)",
-																color: "rgba(0, 0, 0, 0.65)"
-															}}>
-															수정
-														</div>
-													</a>
-												</Link>
+										<a href={post.link} target="blank" rel="noopener noreferrer">
+											<h2>{post.title}</h2>
+										</a>
+										{post.description ? <p>{post.description}</p> : <br />}
 
-												<Popconfirm
-													title="정말 삭제하시겠습니까?"
-													okText="Yes"
-													cancelText="No"
-													onConfirm={onRemovePost(post.id)}>
-													<div style={{ marginLeft: 10, cursor: "pointer" }}>삭제</div>
-												</Popconfirm>
-											</>
-										)}
+										<div style={{ display: "flex", alignItems: "center" }}>
+											<button className="likeBtn">
+												{" "}
+												<Icon
+													type="heart"
+													theme={liked ? "twoTone" : "outlined"}
+													twoToneColor="#eb2f96"
+													onClick={() => setLike(!liked)}
+												/>
+												{post.Likers.length !== 0 && <span style={{ marginLeft: 6 }}>{post.Likers.length}</span>}
+											</button>
+
+											<Poster>Posted by {post.User.nickname}</Poster>
+
+											<div>
+												<TimeAgo date={post.created_at} formatter={formatter}></TimeAgo>
+											</div>
+											{myInfo && myInfo.id === post.UserId && (
+												<>
+													<Link href={`/editPost/${post.id}`}>
+														<a>
+															<div
+																style={{
+																	marginLeft: 14,
+																	paddingRight: 10,
+																	paddingLeft: 10,
+																	borderRight: "1px solid rgba(0, 0, 0, 0.1)",
+																	borderLeft: "1px solid rgba(0, 0, 0, 0.1)",
+																	color: "rgba(0, 0, 0, 0.65)"
+																}}>
+																수정
+															</div>
+														</a>
+													</Link>
+
+													<Popconfirm
+														title="정말 삭제하시겠습니까?"
+														okText="Yes"
+														cancelText="No"
+														onConfirm={onRemovePost(post.id)}>
+														<div style={{ marginLeft: 10, cursor: "pointer" }}>삭제</div>
+													</Popconfirm>
+												</>
+											)}
+										</div>
 									</div>
 								</div>
-							</div>
-							{index == !displayedPosts.length && <Divider />}
-						</>
-					);
-				})}
-			</StyledPostbox>
+								{index == !displayedPosts.length && <Divider />}
+							</>
+						);
+					})}
+				</StyledPostbox>
+			)}
 		</>
 	);
+};
+
+// Search.PropTypes = {
+
+// }
+
+SearchPage.getInitialProps = async context => {
+	const keyword = context.query.q;
+	console.log("Search querystring : ", keyword);
+
+	context.store.dispatch({
+		type: SEARCH_POSTS_REQUEST,
+		keyword: decodeURIComponent(keyword)
+	});
+
+	//리턴값은 지금 이 컴포넌트에 props로 전달된다.
+	// return { id };
 };
 
 export default SearchPage;
