@@ -78,6 +78,11 @@ const Poster = styled.div`
 	border-left: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
+const StyledTag = styled(Tag)`
+  cursor: pointer;
+
+`
+
 const Main = () => {
 	const [liked, setLike] = useState(false);
 	const { myInfo } = useSelector(state => state.user);
@@ -183,9 +188,9 @@ const Main = () => {
 												{post.Categories.map(category => {
 													const indexInCategories = providedCategories.indexOf(category.name);
 													return (
-														<Tag color={colors[indexInCategories]} key={category.name}>
+														<StyledTag color={colors[indexInCategories]} key={category.name}>
 															{category.name}
-														</Tag>
+														</StyledTag>
 													);
 												})}
 											</div>
@@ -250,9 +255,9 @@ const Main = () => {
 							<h2>카테고리 별로 보기</h2>
 							{providedCategories.map((category, i) => {
 								return (
-									<Tag color={colors[i]} key={category}>
+									<StyledTag color={colors[i]} key={category}>
 										{category}
-									</Tag>
+									</StyledTag>
 								);
 							})}
 						</Categories>

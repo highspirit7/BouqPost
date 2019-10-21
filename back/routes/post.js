@@ -57,32 +57,31 @@ router.post("/", isLoggedIn, async (req, res, next) => {
 
 //링크 입력 시 크롤링으로 제목 및 썸네일 이미지 추출
 router.post("/scraping", async (req, response, next) => {
-	try {
-		var scrapedData = {};
+	client.fetch(req.body.url, (err, $, res, body) => {
+		const title1 = $("meta[property='og:title']").attr("content");
+		const title2 = $("title").text();
 
-		client.fetch(req.body.url, (err, $, res, body) => {
-			const title1 = $("meta[property='og:title']").attr("content");
-			const title2 = $("title").text();
+		const image_og = $("meta[property='og:image']").attr("content");
 
-			const image_og = $("meta[property='og:image']").attr("content");
+		const scrapedData = {};
 
-			if (!title1) {
-				scrapedData.title = title2;
-			} else {
-				scrapedData.title = title1;
-			}
+		if (!title1) {
+			scrapedData.title = title2;
+		} else {
+			scrapedData.title = title1;
+		}
 
-			if (image_og) {
-				scrapedData.image = image_og;
-			} else {
-			}
+		if (image_og) {
+			scrapedData.image = image_og;
+		}
 
-			return response.json(scrapedData);
-		});
-	} catch (error) {
-		console.error(error);
-		return next(error);
-	}
+		if (err) {
+			console.error(err);
+			return next(error);
+		}
+
+		return response.json(scrapedData);
+	});
 });
 
 //게시물 하나 조회(수정용)

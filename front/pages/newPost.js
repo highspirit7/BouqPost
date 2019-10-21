@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { Card, Input, Row, Col, Form, Select, Button } from "antd";
+import { Card, Input, Row, Col, Form, Select, Button, message } from "antd";
 import Router from "next/router";
 // import client from "cheerio-httpcli";
 
@@ -97,7 +97,7 @@ const NewPost = () => {
 		e => {
 			e.preventDefault();
 
-      //카테고리, 링크, 제목 필수로 입력하도록 프론트에서 설정 필요
+			//카테고리, 링크, 제목 필수로 입력하도록 프론트에서 설정 필요
 
 			const postData = {};
 			postData.link = link;
@@ -108,16 +108,22 @@ const NewPost = () => {
 			if (scrapedImg) {
 				postData.image = scrapedImg;
 			}
-
-			dispatch({
-				type: ADD_POST_REQUEST,
-				data: postData
-			});
+			console.log("link : " + postData.link);
+			console.log("title : " + postData.title);
+      console.log("category : " + typeof postData.category);
+      
+			if (!postData.link || !postData.title || !postData.category.length) {
+				message.warning("필수 항목 중 입력되지 않은 것이 있습니다!");
+			} else {
+				dispatch({
+					type: ADD_POST_REQUEST,
+					data: postData
+				});
+			}
 		},
 		[link, title, description, category, dispatch, scrapedImg]
 	);
-    //input에 필수로 되있는거 입력하지 않으면 유저에게 경고 제작해야!
-
+	//input에 필수로 되있는거 입력하지 않으면 유저에게 경고 제작해야!
 
 	return (
 		<NewPostFormWrapper>
@@ -136,11 +142,11 @@ const NewPost = () => {
 							부가 설명(선택)
 						</div>
 						<Input value={description} onChange={onChangeDesc}></Input>
-						<div className="label">카테코리(권장)</div>
+						<div className="label">카테코리(필수)</div>
 						<Select
 							mode="multiple"
 							style={{ width: "100%" }}
-							placeholder="카테고리를 선택해주세요"
+							placeholder="포스트에 적합한 카테고리를 선택해주세요"
 							onChange={onChangeCategory}>
 							{children}
 						</Select>

@@ -8,7 +8,7 @@ export const initialState = {
 		"#f39c12",
 		"#b8cecd",
 		"#c7acb4",
-		"#94faff",
+		"#3ff3fc",
 		"#9b018a",
 		"#00f429",
 		"#4b5320",
@@ -23,7 +23,8 @@ export const initialState = {
     "#433e90",
     "#ffe700",
     "#a2790d",
-    "#d4a348"
+    "#d4a348",
+    "#323536"
 	]
 };
 
@@ -57,7 +58,8 @@ export default handleActions(
 					"외국어",
 					"서평 Tip",
 					"독서 Tip",
-					"정치/사회"
+          "정치/사회",
+          "빡독"
 				];
 			})
 	},
