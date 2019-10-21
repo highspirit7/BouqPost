@@ -166,7 +166,6 @@ router.put("/:postId", isLoggedIn, async (req, res, next) => {
 				);
 
 				await post.setCategories(categories);
-				console.log(post);
 			} else {
 				//바뀐 카테고리 개수와 기존 카테고리 개수가 다른 경우
 				//기존 카테고리 전부 삭제

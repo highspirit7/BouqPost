@@ -108,9 +108,9 @@ const NewPost = () => {
 			if (scrapedImg) {
 				postData.image = scrapedImg;
 			}
-			console.log("link : " + postData.link);
-			console.log("title : " + postData.title);
-      console.log("category : " + typeof postData.category);
+			// console.log("link : " + postData.link);
+			// console.log("title : " + postData.title);
+      // console.log("category : " + typeof postData.category);
       
 			if (!postData.link || !postData.title || !postData.category.length) {
 				message.warning("필수 항목 중 입력되지 않은 것이 있습니다!");
