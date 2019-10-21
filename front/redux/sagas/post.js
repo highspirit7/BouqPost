@@ -12,6 +12,9 @@ import {
 	LOAD_POSTS_REQUEST,
 	LOAD_POSTS_FAILURE,
 	LOAD_POSTS_SUCCESS,
+	SEARCH_POSTS_REQUEST,
+	SEARCH_POSTS_FAILURE,
+	SEARCH_POSTS_SUCCESS,
 	LOAD_POST_REQUEST,
 	LOAD_POST_FAILURE,
 	LOAD_POST_SUCCESS,
@@ -183,14 +186,41 @@ function* removePost(action) {
 	} catch (e) {
 		console.error(e);
 		yield put({
-      type: REMOVE_POST_FAILURE,
-      error: e
+			type: REMOVE_POST_FAILURE,
+			error: e
 		});
 	}
 }
 
 function* watchRemovePost() {
 	yield takeLatest(REMOVE_POST_REQUEST, removePost);
+}
+
+//lastId가 0이면 DB에서 제일 최신 포스트부터 조회하도록 해줄 것.
+function searchPostsAPI(keyword, lastId = 0, limit = 5) {
+	return axios.get(`/search/${encodeURIComponent(keyword)}?lastId=${lastId}&limit=${limit}`);
+}
+
+function* searchPosts(action) {
+	try {
+		const result = yield call(searchPostsAPI, action.keyword, action.lastId);
+
+		yield put({
+			type: SEARCH_POSTS_SUCCESS,
+			payload: result.data
+		});
+
+	} catch (e) {
+		console.error(e);
+		yield put({
+			type: SEARCH_POSTS_FAILURE,
+			payload: e.message
+		});
+	}
+}
+
+function* watchSearchPosts() {
+	yield throttle(1500, SEARCH_POSTS_REQUEST, searchPosts);
 }
 
 export default function* postSaga() {
@@ -200,6 +230,7 @@ export default function* postSaga() {
 		fork(watchLoadPosts),
 		fork(watchLoadPost),
 		fork(watchUpdatePost),
-		fork(watchRemovePost)
+		fork(watchRemovePost),
+		fork(watchSearchPosts)
 	]);
 }
