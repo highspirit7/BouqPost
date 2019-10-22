@@ -12,6 +12,7 @@ const postAPIRouter = require("./routes/post");
 const postsAPIRouter = require("./routes/posts");
 const oauthAPIRouter = require("./routes/oauth");
 const searchAPIRouter = require("./routes/search");
+const categoryAPIRouter = require("./routes/category");
 
 const app = express();
 
@@ -21,8 +22,6 @@ db.sequelize.sync();
 dotenv.config();
 
 passportConfig();
-
-
 
 //로그 기록 남기는 용도.
 app.use(morgan("dev"));
@@ -35,8 +34,8 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
 	expressSession({
 		resave: false,
-    saveUninitialized: true,
-    maxAge: 604800000, //일주일
+		saveUninitialized: true,
+		maxAge: 604800000, //일주일
 		secret: process.env.COOKIE_SECRET,
 		cookie: {
 			httpOnly: true,
@@ -69,6 +68,7 @@ app.use("/api/post", postAPIRouter);
 app.use("/api/posts", postsAPIRouter);
 app.use("/api/oauth", oauthAPIRouter);
 app.use("/api/search", searchAPIRouter);
+app.use("/api/category", categoryAPIRouter);
 
 app.listen(2019, () => {
 	console.log("server is running on http://localhost:2019");

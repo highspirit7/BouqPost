@@ -1,4 +1,4 @@
-import { all, fork, put, takeEvery, call } from "redux-saga/effects";
+import { all, fork, put, takeLatest, takeEvery, call } from "redux-saga/effects";
 import axios from "axios";
 import {
 	LOAD_USER_FAILURE,
@@ -103,7 +103,7 @@ function* loadUser(action) {
 }
 
 function* watchLoadUser() {
-	yield takeEvery(LOAD_USER_REQUEST, loadUser);
+	yield takeLatest(LOAD_USER_REQUEST, loadUser);
 }
 
 export default function* userSaga() {

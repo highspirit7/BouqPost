@@ -45,10 +45,12 @@ export const UPDATE_POST_FAILURE = "post/UPDATE_POST_FAILURE";
 export const REMOVE_POST_REQUEST = "post/REMOVE_POST_REQUEST";
 export const REMOVE_POST_SUCCESS = "post/REMOVE_POST_SUCCESS";
 export const REMOVE_POST_FAILURE = "post/REMOVE_POST_FAILURE";
-export const INITIATE_DISPLAYED_POSTS = "post/INITIATE_DISPLAYED_POSTS";
 export const SEARCH_POSTS_REQUEST = "post/SEARCH_POSTS_REQUEST";
 export const SEARCH_POSTS_SUCCESS = "post/SEARCH_POSTS_SUCCESS";
 export const SEARCH_POSTS_FAILURE = "post/SEARCH_POSTS_FAILURE";
+export const LOAD_CATEGORY_POSTS_REQUEST = "post/LOAD_CATEGORY_POSTS_REQUEST";
+export const LOAD_CATEGORY_POSTS_SUCCESS = "post/LOAD_CATEGORY_POSTS_SUCCESS";
+export const LOAD_CATEGORY_POSTS_FAILURE = "post/LOAD_CATEGORY_POSTS_FAILURE";
 
 // 액션 생성 함수
 export const addPostsRequest = createAction(ADD_POST_REQUEST);
@@ -69,10 +71,12 @@ export const updatePostFailure = createAction(UPDATE_POST_FAILURE);
 export const removePostRequest = createAction(REMOVE_POST_REQUEST);
 export const removePostSuccess = createAction(REMOVE_POST_SUCCESS);
 export const removePostFailure = createAction(REMOVE_POST_FAILURE);
-export const initiateDisplayedPosts = createAction(INITIATE_DISPLAYED_POSTS);
 export const searchPostRequest = createAction(SEARCH_POSTS_REQUEST);
 export const searchPostSuccess = createAction(SEARCH_POSTS_SUCCESS);
 export const searchPostFailure = createAction(SEARCH_POSTS_FAILURE);
+export const loadCategoryPostsRequest = createAction(LOAD_CATEGORY_POSTS_REQUEST);
+export const loadCategoryPostsSuccess = createAction(LOAD_CATEGORY_POSTS_SUCCESS);
+export const loadCategoryPostsFailure = createAction(LOAD_CATEGORY_POSTS_FAILURE);
 
 // immer 를 사용하여 값을 수정하는 리듀서
 export default handleActions(
@@ -158,10 +162,10 @@ export default handleActions(
 			produce(state, draft => {
 				draft.errors.removePostError = payload.error;
 			}),
-		[INITIATE_DISPLAYED_POSTS]: state =>
-			produce(state, draft => {
-				draft.displayedPosts = [];
-			}),
+		// [INITIATE_DISPLAYED_POSTS]: state =>
+		// 	produce(state, draft => {
+		// 		draft.displayedPosts = [];
+		// 	}),
 		[SEARCH_POSTS_REQUEST]: (state, payload) =>
 			produce(state, draft => {
 				draft.displayedPosts = !payload.lastId ? [] : draft.displayedPosts;
@@ -182,6 +186,24 @@ export default handleActions(
 			produce(state, draft => {
         draft.errors.searchPostError = payload;
 				draft.isSearchingPosts = false;
+			}),
+		[LOAD_CATEGORY_POSTS_REQUEST]: (state, payload) =>
+			produce(state, draft => {
+				draft.displayedPosts = !payload.lastId ? [] : draft.displayedPosts;
+				draft.hasMorePost = payload.lastId ? draft.hasMorePost : true;
+			}),
+		[LOAD_CATEGORY_POSTS_SUCCESS]: (state, { payload }) =>
+			produce(state, draft => {
+				payload.forEach(post => {
+					draft.displayedPosts.push(post);
+				});
+
+				//로딩한 포스트 개수가 5개가 아니라는 것은 실질적으로는 5개보다 작았다는 것이고, 그러면 남아있는 포스트를 모두 이미 로딩했다는 뜻이 된다.
+				draft.hasMorePost = payload.length === 5;
+			}),
+		[LOAD_CATEGORY_POSTS_FAILURE]: (state, { payload }) =>
+			produce(state, draft => {
+        draft.errors.loadPostError = payload;
 			})
 	},
 	initialState

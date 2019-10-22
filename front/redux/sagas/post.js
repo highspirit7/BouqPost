@@ -23,7 +23,10 @@ import {
 	UPDATE_POST_SUCCESS,
 	REMOVE_POST_FAILURE,
 	REMOVE_POST_REQUEST,
-	REMOVE_POST_SUCCESS
+	REMOVE_POST_SUCCESS,
+	LOAD_CATEGORY_POSTS_REQUEST,
+	LOAD_CATEGORY_POSTS_FAILURE,
+	LOAD_CATEGORY_POSTS_SUCCESS
 } from "../modules/post";
 
 function addPostAPI(postData) {
@@ -222,6 +225,32 @@ function* watchSearchPosts() {
 	yield throttle(1500, SEARCH_POSTS_REQUEST, searchPosts);
 }
 
+//lastId가 0이면 DB에서 제일 최신 포스트부터 조회하도록 해줄 것.
+function loadCategoryPostsAPI(category, lastId = 0) {
+	return axios.get(`/category/${encodeURIComponent(category)}?lastId=${lastId}`);
+}
+
+function* loadCategoryPosts(action) {
+	try {
+		const result = yield call(loadCategoryPostsAPI, action.category, action.lastId);
+
+		yield put({
+			type: LOAD_CATEGORY_POSTS_SUCCESS,
+			payload: result.data
+		});
+	} catch (e) {
+		console.error(e);
+		yield put({
+			type: LOAD_CATEGORY_POSTS_FAILURE,
+			payload: e.message
+		});
+	}
+}
+
+function* watchLoadCategoryPosts() {
+	yield throttle(1500, LOAD_CATEGORY_POSTS_REQUEST, loadCategoryPosts);
+}
+
 export default function* postSaga() {
 	yield all([
 		fork(watchAddPost),
@@ -230,6 +259,7 @@ export default function* postSaga() {
 		fork(watchLoadPost),
 		fork(watchUpdatePost),
 		fork(watchRemovePost),
-		fork(watchSearchPosts)
+		fork(watchSearchPosts),
+		fork(watchLoadCategoryPosts)
 	]);
 }
