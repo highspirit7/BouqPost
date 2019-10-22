@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { Card, Input, Row, Col, Form, Select, Button } from "antd";
+import { Card, Input, Row, Col, Form, Select, Button, message } from "antd";
 import { useRouter } from "next/router";
 
 import { UPDATE_POST_REQUEST, SCRAPING_REQUEST, LOAD_POST_REQUEST } from "../../../redux/modules/post";
@@ -77,16 +77,13 @@ const EditPost = () => {
 		const loadedLink = loadedPost.link;
 		const loadedDesc = loadedPost.description;
 		const loadedTitle = loadedPost.title;
-    const loadedCategory = loadedPost.category;
-    
+		const loadedCategory = loadedPost.category;
+
 		setLink(loadedLink);
 		setTitle(loadedTitle);
-    setDesc(loadedDesc);
-    setCategory(loadedCategory);
+		setDesc(loadedDesc);
+		setCategory(loadedCategory);
 	}, [loadedPost.link, loadedPost.title, loadedPost.description, loadedPost.category]);
-
-	
-
 
 	const onChangeLink = useCallback(e => {
 		setLink(e.target.value);
@@ -126,12 +123,15 @@ const EditPost = () => {
 			if (scrapedImg) {
 				updatePost.image = scrapedImg;
 			}
-
-			dispatch({
-				type: UPDATE_POST_REQUEST,
-        data: updatePost,
-        postId
-			});
+			if (!updatePost.link || !updatePost.title || !updatePost.category.length) {
+				message.warning("필수 항목 중 입력되지 않은 것이 있습니다!");
+			} else {
+				dispatch({
+					type: UPDATE_POST_REQUEST,
+					data: updatePost,
+					postId
+				});
+			}
 		},
 		[dispatch, scrapedImg, link, title, description, category, postId]
 	);
@@ -153,7 +153,7 @@ const EditPost = () => {
 							부가 설명(선택)
 						</div>
 						<Input value={description} onChange={onChangeDesc}></Input>
-						<div className="label">카테코리(권장)</div>
+						<div className="label">카테코리(필수)</div>
 						<Select
 							mode="multiple"
 							style={{ width: "100%" }}

@@ -48,6 +48,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
 		// 		}
 		// 	]
 		// });
+
 		res.send("새 포스트가 추가되었습니다.");
 	} catch (e) {
 		console.error(e);
@@ -143,53 +144,15 @@ router.put("/:postId", isLoggedIn, async (req, res, next) => {
 				}
 			}
 		);
-		const previousCategory = post.Categories.map(category => category.name);
 
-		//카테고리에 변화가 없는 경우에 굳이 기존 카테고리를 삭제하고 새로 생성할 필요가 없으므로 카테고리에 변화가 없는 경우 필터
-		if (req.body.category.sort().join(",") !== previousCategory.sort().join(",")) {
-			//해당 포스트에 기존 카테고리 아이디만 추출
-			const previousCategoriesId = post.Categories.map(category => category.id);
+		//업데이트된 카테고리를 새로이(새로운 아이디로) 생성
+		const categories = await Promise.all(
+			req.body.category.map(category => {
+				return db.Category.findOne({ where: { name: category } });
+			})
+		);
 
-			//바뀐 카테고리와 기존의 카테고리 개수가 동일한 경우
-			if (req.body.category.length === previousCategory.length) {
-				//카테고리를 업데이트
-				const categories = await Promise.all(
-					req.body.category.map((category, index) => {
-						return db.Category.update(
-							{ name: category },
-							{
-								where: {
-									id: previousCategoriesId[index]
-								}
-							}
-						);
-					})
-				);
-
-				await post.setCategories(categories);
-			} else {
-				//바뀐 카테고리 개수와 기존 카테고리 개수가 다른 경우
-				//기존 카테고리 전부 삭제
-				//이 방식이 적합한 것인지 모르겠지만 기존의 카테고리 숫자와 업데이트할 카테고리 숫자가 다른 경우에는 처리가 까다로워진다고 판단하였다.(associations도 고려한다면)
-				await previousCategoriesId.forEach(categoryId => {
-					db.Category.destroy({
-						where: {
-							id: categoryId
-						}
-					});
-				});
-
-				//업데이트된 카테고리를 새로이(새로운 아이디로) 생성
-				const categories = await Promise.all(
-					req.body.category.map(category => {
-						return db.Category.create({ name: category });
-					})
-				);
-
-				await post.setCategories(categories);
-				console.dir(post);
-			}
-		}
+		await post.setCategories(categories);
 
 		res.send("포스트가 성공적으로 수정되었습니다.");
 	} catch (e) {
