@@ -204,12 +204,11 @@ function searchPostsAPI(keyword, lastId = 0) {
 function* searchPosts(action) {
 	try {
 		const result = yield call(searchPostsAPI, action.keyword, action.lastId);
-    
+
 		yield put({
 			type: SEARCH_POSTS_SUCCESS,
 			payload: result.data
 		});
-
 	} catch (e) {
 		console.error(e);
 		yield put({

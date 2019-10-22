@@ -48,7 +48,7 @@ router.get("/:keyword", async (req, res, next) => {
 				order: [["id", "DESC"]], // DESC는 내림차순, ASC는 오름차순
 				limit: 10
 			});
-
+      console.log(posts);
 			return res.json(posts);
 		} else {
 			//lastId 0(falthy)이면 그러니까 제일 처음에 게시물들이 검색되어 출력될 때 위 조건문은 실행되지 않고 lastId 조건 없이 그냥 5개만 불러온다.
@@ -71,7 +71,7 @@ router.get("/:keyword", async (req, res, next) => {
 				order: [["id", "DESC"]], // DESC는 내림차순, ASC는 오름차순
 				limit: 10
 			});
-      console.log(req.query.limit)
+			console.log(posts);
 			return res.json(posts);
 		}
 	} catch (e) {

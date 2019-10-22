@@ -1,8 +1,8 @@
 import React, { useCallback, useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
-import PropTypes from "prop-types";
-import { Input, Divider, Tag, Icon, Popconfirm } from "antd";
+import propTypes from "prop-types";
+import { Input, Divider, Tag, Icon, Popconfirm, message } from "antd";
 import styled from "styled-components";
 import TimeAgo from "react-timeago";
 import Router from "next/router";
@@ -41,6 +41,12 @@ const StyledPostbox = styled.div`
 	margin: 0 auto;
 	margin-bottom: 16px;
 
+	h1 {
+		font-size: 24px;
+	}
+`;
+
+const PostContent = styled.div`
 	img {
 		width: 186px;
 		height: 112px;
@@ -55,10 +61,6 @@ const StyledPostbox = styled.div`
 		border: 1px solid rgb(147, 149, 153, 0.6);
 		border-radius: 20px;
 	}
-
-	h1 {
-		font-size: 24px;
-	}
 `;
 
 const Poster = styled.div`
@@ -68,8 +70,15 @@ const Poster = styled.div`
 	border-left: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
-const SearchPage = () => {
-  const { displayedPosts, hasMorePost } = useSelector(state => state.post);
+const NoResultMsg = styled.div`
+  text-align: center;
+  font-size: 30px;
+  margin-top: 70px;
+  color: #939599;
+`;
+const SearchPage = ({ keyword }) => {
+	console.log(keyword);
+	const { displayedPosts, hasMorePost } = useSelector(state => state.post);
 
 	const { providedCategories, colors } = useSelector(state => state.categories);
 	const { myInfo } = useSelector(state => state.user);
@@ -84,6 +93,13 @@ const SearchPage = () => {
 		});
 	}, []);
 
+	// useEffect(() => {
+	//   if(keyword && !displayedPosts.length) {
+	//     message.error("검색 결과가 없습니다")
+	//   }
+	// },[keyword, displayedPosts])
+	// 아래 함수를 직접 Search 컴포넌트의 onSearch에 넣어줬었는데 동작하질 않았다.
+	// 아마 useCallback 때문인 것인지 원인은 모르지만 그래서 함수 안 쓰고 직접 onSearch에 라우팅 코드를 삽입했다.
 	// const searchRequest = useCallback(
 	// 	keyword => () => {
 	// 		console.log(keyword);
@@ -131,6 +147,7 @@ const SearchPage = () => {
 					if (!countRef.current.includes(lastId)) {
 						dispatch({
 							type: SEARCH_POSTS_REQUEST,
+							keyword,
 							lastId
 						});
 						countRef.current.push(lastId);
@@ -158,14 +175,14 @@ const SearchPage = () => {
 							q: encodeURIComponent(value)
 						}
 					})
-        }
+				}
 			/>
 			{displayedPosts.length !== 0 && (
 				<StyledPostbox>
 					<h1>검색된 포스트</h1>
 					{displayedPosts.map((post, index) => {
 						return (
-							<>
+							<PostContent key={index}>
 								<div style={{ display: "flex", alignItems: "center" }} key={index}>
 									<a href={post.link} target="_blank" rel="noopener noreferrer">
 										<img
@@ -241,31 +258,33 @@ const SearchPage = () => {
 										</div>
 									</div>
 								</div>
-								{index == !displayedPosts.length && <Divider />}
-							</>
+								{index !== displayedPosts.length - 1 && <Divider />}
+							</PostContent>
 						);
 					})}
 				</StyledPostbox>
 			)}
+			<NoResultMsg>{keyword !== "undefined" && displayedPosts.length === 0 && "- 검색 결과가 없습니다 -"}</NoResultMsg>
 		</>
 	);
 };
 
-// Search.PropTypes = {
-
-// }
+SearchPage.propTypes = {
+	keyword: propTypes.string
+};
 
 SearchPage.getInitialProps = async context => {
-	const keyword = context.query.q;
-	console.log("Search querystring : ", keyword);
-
-	context.store.dispatch({
-		type: SEARCH_POSTS_REQUEST,
-		keyword: decodeURIComponent(keyword)
-	});
+	const keyword = decodeURIComponent(context.query.q);
+	// console.log("Search querystring : ", keyword);
+	if (keyword) {
+		context.store.dispatch({
+			type: SEARCH_POSTS_REQUEST,
+			keyword
+		});
+	}
 
 	//리턴값은 지금 이 컴포넌트에 props로 전달된다.
-	// return { id };
+	return { keyword };
 };
 
 export default SearchPage;
