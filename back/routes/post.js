@@ -21,7 +21,7 @@ router.post("/", isLoggedIn, async (req, res, next) => {
 
 		const categories = await Promise.all(
 			req.body.category.map(category => {
-				return db.Category.create({ name: category });
+				return db.Category.findOne({ where: { name: category } });
 			})
 		);
 		await newPost.addCategories(categories);
@@ -112,6 +112,7 @@ router.get("/:postId", isLoggedIn, async (req, res, next) => {
 	}
 });
 
+//게시물 수정
 router.put("/:postId", isLoggedIn, async (req, res, next) => {
 	// POST /api/post
 

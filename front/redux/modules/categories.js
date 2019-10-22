@@ -14,7 +14,7 @@ export const initialState = {
 		"#4b5320",
 		"#bcc6e5",
 		"#7f99b1",
-    "#dcedc1",
+    "#6db087",
     "#8ec127",
     "#00aedb",
     "#fc3468",
@@ -56,10 +56,10 @@ export default handleActions(
 					"시",
 					"여행",
 					"외국어",
-					"서평 Tip",
-					"독서 Tip",
+					"Tip",
           "정치/사회",
-          "빡독"
+          "빡독",
+          "글쓰기"
 				];
 			})
 	},
