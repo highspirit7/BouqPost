@@ -69,6 +69,15 @@ const StyledPostbox = styled.div`
 	h1 {
 		font-size: 24px;
 	}
+
+	p {
+		color: #939599;
+		cursor: pointer;
+	}
+
+	p:hover {
+		color: #2b2a28;
+	}
 `;
 
 const Poster = styled.div`
@@ -76,6 +85,37 @@ const Poster = styled.div`
 	padding: 0 10px;
 	border-right: 1px solid rgba(0, 0, 0, 0.1);
 	border-left: 1px solid rgba(0, 0, 0, 0.1);
+`;
+
+const UserName = styled.a`
+	color: rgba(0, 0, 0, 0.65);
+	font-weight: 500;
+	:hover {
+		color: #5cd12a;
+	}
+`;
+
+const EditBtn = styled.a`
+	margin-left: 14px;
+	padding-right: 10px;
+	padding-left: 10px;
+	border-right: 1px solid rgba(0, 0, 0, 0.1);
+	border-left: 1px solid rgba(0, 0, 0, 0.1);
+	color: rgba(0, 0, 0, 0.65);
+
+	:hover {
+		color: #326ada;
+	}
+`;
+
+const DeleteBtn = styled.div`
+	margin-left: 10px;
+	cursor: pointer;
+
+	color: rgba(0, 0, 0, 0.65);
+	:hover {
+		color: #fc3468;
+	}
 `;
 
 const Main = () => {
@@ -190,10 +230,24 @@ const Main = () => {
 													);
 												})}
 											</div>
-											<a href={post.link} target="blank" rel="noopener noreferrer">
-												<h2>{post.title}</h2>
+											<a
+												href={post.link}
+												target="blank"
+												rel="noopener noreferrer"
+												style={{
+													color: "#2b2a28",
+													fontSize: 20,
+													fontWeight: 500
+												}}>
+												{post.title}
 											</a>
-											{post.description ? <p>{post.description}</p> : <br />}
+											{post.description ? (
+												<a href={post.link} target="blank" rel="noopener noreferrer">
+													<p style={{ marginTop: 2, fontSize: 16 }}>{post.description}</p>
+												</a>
+											) : (
+												<p style={{ marginTop: 6 }}></p>
+											)}
 
 											<div style={{ display: "flex", alignItems: "center" }}>
 												<button className="likeBtn">
@@ -210,7 +264,7 @@ const Main = () => {
 												<Poster>
 													Posted by{" "}
 													<Link href={`/user/${post.UserId}`}>
-														<a>{post.User.nickname}</a>
+														<UserName style={{}}>{post.User.nickname}</UserName>
 													</Link>
 												</Poster>
 
@@ -220,19 +274,7 @@ const Main = () => {
 												{myInfo && myInfo.id === post.UserId && (
 													<>
 														<Link href={`/editPost/${post.id}`}>
-															<a>
-																<div
-																	style={{
-																		marginLeft: 14,
-																		paddingRight: 10,
-																		paddingLeft: 10,
-																		borderRight: "1px solid rgba(0, 0, 0, 0.1)",
-																		borderLeft: "1px solid rgba(0, 0, 0, 0.1)",
-																		color: "rgba(0, 0, 0, 0.65)"
-																	}}>
-																	수정
-																</div>
-															</a>
+															<EditBtn>수정</EditBtn>
 														</Link>
 
 														<Popconfirm
@@ -240,7 +282,7 @@ const Main = () => {
 															okText="Yes"
 															cancelText="No"
 															onConfirm={onRemovePost(post.id)}>
-															<div style={{ marginLeft: 10, cursor: "pointer" }}>삭제</div>
+															<DeleteBtn>삭제</DeleteBtn>
 														</Popconfirm>
 													</>
 												)}
