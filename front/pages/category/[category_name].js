@@ -1,7 +1,8 @@
 import React, { useEffect, useCallback, useRef, useState } from "react";
-import PropTypes from "prop-types";
+import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
+import propTypes from "prop-types";
 // import Router from "next/router";
 import { Divider, Tag, Icon, Popconfirm } from "antd";
 import styled from "styled-components";
@@ -10,7 +11,7 @@ import TimeAgo from "react-timeago";
 import koreanStrings from "react-timeago/lib/language-strings/ko";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 
-import { LOAD_CATEGORY_POSTS_REQUEST, REMOVE_POST_REQUEST } from "../redux/modules/post";
+import { LOAD_CATEGORY_POSTS_REQUEST, REMOVE_POST_REQUEST } from "../../redux/modules/post";
 
 const StyledPostbox = styled.div`
 	width: 82%;
@@ -60,17 +61,29 @@ const NoResultMsg = styled.div`
 	color: #939599;
 `;
 
-const Category = ({ category }) => {
+const Category = ({category_name}) => {
 	const dispatch = useDispatch();
 	const { displayedPosts, hasMorePost } = useSelector(state => state.post);
 	const { providedCategories, colors } = useSelector(state => state.categories);
 	const { myInfo } = useSelector(state => state.user);
+	const categoryKeys = Object.keys(providedCategories);
+	const categoryValues = Object.values(providedCategories);
 
 	const [liked, setLike] = useState(false);
 
 	const countRef = useRef([]);
 
 	const formatter = buildFormatter(koreanStrings);
+
+	// const router = useRouter();
+	// const { category_name } = router.query;
+
+	// useEffect(() => {
+	// 	dispatch({
+	// 		type: LOAD_CATEGORY_POSTS_REQUEST,
+	// 		category: category_name
+	// 	});
+	// }, [dispatch, category_name]);
 
 	const showDefaultImg = event => {
 		event.target.src = "/bbakdok.png";
@@ -92,21 +105,25 @@ const Category = ({ category }) => {
 		//scrollY : 스크롤 내린 거리, clientHeight: 화면 높이, scrollHeight: 전체 화면 높이
 		if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
 			if (hasMorePost) {
-				const lastId = displayedPosts[displayedPosts.length - 1].id; //제일 하단 게시물의 id
+				// console.log("displayedPosts length : " + typeof displayedPosts.length);
+				const lastId = displayedPosts.length > 0 ? displayedPosts[displayedPosts.length - 1][0].id : 0; //제일 하단 게시물의 id
 
 				//프론트단에서 불필요하게 액션이 디스패치되는 것을 막기 위해
 				//사가상으로는 상관없지만(쓰로틀링으로인해 사가에서는 인식하고 처리하는 액션은 1.5초에 하나) 리덕스 상에서 액션이 중복실행되는 현상 방지용
 				//lastId가 countRef에 담겨 있으면(이미 해당 액션이 한 번은 디스패치되었다는 의미), 더 이상 포스트 로드 요청하는 액션 디스패치하지 않도록 해준다.
+				// console.log("lastId : " + lastId);
+
 				if (!countRef.current.includes(lastId)) {
 					dispatch({
 						type: LOAD_CATEGORY_POSTS_REQUEST,
+						category: category_name,
 						lastId
 					});
 					countRef.current.push(lastId);
 				}
 			}
 		}
-	}, [hasMorePost, dispatch, displayedPosts]);
+	}, [hasMorePost, dispatch, displayedPosts, category_name]);
 
 	useEffect(() => {
 		window.addEventListener("scroll", onScroll);
@@ -115,20 +132,27 @@ const Category = ({ category }) => {
 		};
 	}, [displayedPosts.length, onScroll]);
 
+	// console.log("카테고리 : " + category_name);
+	// useEffect(() => {
+	// 	dispatch({
+	// 		type: LOAD_CATEGORY_POSTS_REQUEST,
+	// 		category: category_name
+	// 	});
+	// }, []);
+
 	return (
 		<>
 			{displayedPosts.length !== 0 ? (
 				<StyledPostbox>
-					<h1>검색된 포스트</h1>
 					{displayedPosts.map((post, index) => {
 						return (
 							<PostContent key={index}>
 								<div style={{ display: "flex", alignItems: "center" }} key={index}>
-									<a href={post.link} target="_blank" rel="noopener noreferrer">
+									<a href={post[0].link} target="_blank" rel="noopener noreferrer">
 										<img
 											src={
-												post.thumbnail
-													? `https://images.weserv.nl/?url=ssl:${post.thumbnail.slice(8)}&w=200&h=128`
+												post[0].thumbnail
+													? `https://images.weserv.nl/?url=ssl:${post[0].thumbnail.slice(8)}&w=200&h=128`
 													: "/bbakdok.png"
 											}
 											onError={showDefaultImg}
@@ -137,10 +161,11 @@ const Category = ({ category }) => {
 									</a>
 									<div className="contents">
 										<div>
-											{post.Categories.map(category => {
-												const indexInCategories = providedCategories.indexOf(category.name);
+											{post[0].Categories.map(category => {
+												const indexInCategories = categoryValues.indexOf(category.name);
+
 												return (
-													<Link key={category.name} href={`/category/?category=${category.name}`}>
+													<Link key={category.name} href={`/category/${categoryKeys[indexInCategories]}`}>
 														<a>
 															<Tag color={colors[indexInCategories]} style={{ curosr: "pointer" }}>
 																{category.name}
@@ -150,10 +175,10 @@ const Category = ({ category }) => {
 												);
 											})}
 										</div>
-										<a href={post.link} target="blank" rel="noopener noreferrer">
-											<h2>{post.title}</h2>
+										<a href={post[0].link} target="blank" rel="noopener noreferrer">
+											<h2>{post[0].title}</h2>
 										</a>
-										{post.description ? <p>{post.description}</p> : <br />}
+										{post[0].description ? <p>{post[0].description}</p> : <br />}
 
 										<div style={{ display: "flex", alignItems: "center" }}>
 											<button className="likeBtn">
@@ -164,17 +189,17 @@ const Category = ({ category }) => {
 													twoToneColor="#eb2f96"
 													onClick={() => setLike(!liked)}
 												/>
-												{post.Likers.length !== 0 && <span style={{ marginLeft: 6 }}>{post.Likers.length}</span>}
+												{post[0].Likers.length !== 0 && <span style={{ marginLeft: 6 }}>{post[0].Likers.length}</span>}
 											</button>
 
-											<Poster>Posted by {post.User.nickname}</Poster>
+											<Poster>Posted by {post[0].User.nickname}</Poster>
 
 											<div>
-												<TimeAgo date={post.created_at} formatter={formatter}></TimeAgo>
+												<TimeAgo date={post[0].created_at} formatter={formatter}></TimeAgo>
 											</div>
-											{myInfo && myInfo.id === post.UserId && (
+											{myInfo && myInfo.id === post[0].UserId && (
 												<>
-													<Link href={`/editPost/${post.id}`}>
+													<Link href={`/editPost/${post[0].id}`}>
 														<a>
 															<div
 																style={{
@@ -194,7 +219,7 @@ const Category = ({ category }) => {
 														title="정말 삭제하시겠습니까?"
 														okText="Yes"
 														cancelText="No"
-														onConfirm={onRemovePost(post.id)}>
+														onConfirm={onRemovePost(post[0].id)}>
 														<div style={{ marginLeft: 10, cursor: "pointer" }}>삭제</div>
 													</Popconfirm>
 												</>
@@ -208,33 +233,28 @@ const Category = ({ category }) => {
 					})}
 				</StyledPostbox>
 			) : (
-				<NoResultMsg>
-					{category !== "undefined" && displayedPosts.length === 0 && "- 현재 카테고리에 포스트가 존재하지 않습니다 -"}
-				</NoResultMsg>
+				<NoResultMsg>{displayedPosts.length === 0 && "- 현재 카테고리에 포스트가 존재하지 않습니다 -"}</NoResultMsg>
 			)}
 		</>
 	);
 };
 
 Category.propTypes = {
-	category: PropTypes.string.isRequired
+	category_name: propTypes.string
 };
 
-//pathname - path section of URL
-// query - query string section of URL parsed as an object
-// asPath - String of the actual path (including the query) shows in the browser
-// req - HTTP request object (server only)
-// res - HTTP response object (server only)
-// jsonPageRes - Fetch Response object (client only)
-// err - Error object if any error is encountered during the rendering
 Category.getInitialProps = async context => {
-	const category = decodeURIComponent(context.query.category);
+	const category_name = context.query.category_name;
+	// console.log("Search querystring : ", keyword);
+	if (category_name !== "undefined") {
+		context.store.dispatch({
+			type: LOAD_CATEGORY_POSTS_REQUEST,
+			category: category_name
+		});
+	}
 
-	context.store.dispatch({
-		type: LOAD_CATEGORY_POSTS_REQUEST,
-		category
-	});
-	return { category };
+	//리턴값은 지금 이 컴포넌트에 props로 전달된다.
+	return { category_name };
 };
 
 export default Category;

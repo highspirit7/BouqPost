@@ -14,6 +14,7 @@ import AppLayout from "../containers/AppLayout";
 import reducer from "../redux/modules";
 import rootSaga from "../redux/sagas";
 import { LOAD_USER_REQUEST } from "../redux/modules/user";
+import { LOAD_CATEGORIES } from "../redux/modules/categories";
 
 class BouqPost extends App {
 	render() {
@@ -61,7 +62,12 @@ BouqPost.getInitialProps = async context => {
 		ctx.store.dispatch({
 			type: LOAD_USER_REQUEST
 		});
-	}
+  }
+  
+  ctx.store.dispatch({
+		type: LOAD_CATEGORIES
+	});
+
 	if (Component.getInitialProps) {
 		//최상위 부모 컴포넌트가 자신의 컨텍스트(ctx)를 자식 컴포넌트에게 넘겨주는 코드로 보인다..
 		//pageProps 인자를 isRequired로 해놓았기때문에 존재하지 않을 때 빈 객체라도 세팅.

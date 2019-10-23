@@ -51,6 +51,7 @@ export const SEARCH_POSTS_FAILURE = "post/SEARCH_POSTS_FAILURE";
 export const LOAD_CATEGORY_POSTS_REQUEST = "post/LOAD_CATEGORY_POSTS_REQUEST";
 export const LOAD_CATEGORY_POSTS_SUCCESS = "post/LOAD_CATEGORY_POSTS_SUCCESS";
 export const LOAD_CATEGORY_POSTS_FAILURE = "post/LOAD_CATEGORY_POSTS_FAILURE";
+export const CLEAR_DISPLAYED_POSTS = "post/CLEAR_DISPLAYED_POSTS";
 
 // 액션 생성 함수
 export const addPostsRequest = createAction(ADD_POST_REQUEST);
@@ -77,6 +78,7 @@ export const searchPostFailure = createAction(SEARCH_POSTS_FAILURE);
 export const loadCategoryPostsRequest = createAction(LOAD_CATEGORY_POSTS_REQUEST);
 export const loadCategoryPostsSuccess = createAction(LOAD_CATEGORY_POSTS_SUCCESS);
 export const loadCategoryPostsFailure = createAction(LOAD_CATEGORY_POSTS_FAILURE);
+export const clearDisplayedPosts = createAction(CLEAR_DISPLAYED_POSTS);
 
 // immer 를 사용하여 값을 수정하는 리듀서
 export default handleActions(
@@ -184,7 +186,7 @@ export default handleActions(
 			}),
 		[SEARCH_POSTS_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
-        draft.errors.searchPostError = payload;
+				draft.errors.searchPostError = payload;
 				draft.isSearchingPosts = false;
 			}),
 		[LOAD_CATEGORY_POSTS_REQUEST]: (state, payload) =>
@@ -203,7 +205,11 @@ export default handleActions(
 			}),
 		[LOAD_CATEGORY_POSTS_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
-        draft.errors.loadPostError = payload;
+				draft.errors.loadPostError = payload;
+			}),
+		[CLEAR_DISPLAYED_POSTS]: state =>
+			produce(state, draft => {
+				draft.displayedPosts = [];
 			})
 	},
 	initialState

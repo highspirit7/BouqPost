@@ -49,13 +49,14 @@ const NewPost = () => {
 	const { myInfo } = useSelector(state => state.user);
 	const { providedCategories } = useSelector(state => state.categories);
 	const { isScraping, scrapedTitle, scrapedImg } = useSelector(state => state.post);
+	const categoryValues = Object.values(providedCategories);
 
 	//리덕스 사용해서 기본적으로 넣어둔 카테고리 가져오는 코드
 	const children = [];
-	for (let i = 0; i < providedCategories.length; i++) {
+	for (let i = 0; i < categoryValues.length; i++) {
 		children.push(
-			<Option key={providedCategories[i]} value={providedCategories[i]}>
-				{providedCategories[i]}
+			<Option key={categoryValues[i]} value={categoryValues[i]}>
+				{categoryValues[i]}
 			</Option>
 		);
 	}
@@ -110,8 +111,8 @@ const NewPost = () => {
 			}
 			// console.log("link : " + postData.link);
 			// console.log("title : " + postData.title);
-      // console.log("category : " + typeof postData.category);
-      
+			// console.log("category : " + typeof postData.category);
+
 			if (!postData.link || !postData.title || !postData.category.length) {
 				message.warning("필수 항목 중 입력되지 않은 것이 있습니다!");
 			} else {

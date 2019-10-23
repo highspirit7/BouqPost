@@ -2,7 +2,7 @@
 
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.addColumn("Posts", "link", Sequelize.STRING);
+		return queryInterface.addColumn("Categories", "params", Sequelize.STRING);
 		/*
       Add altering commands here.
       Return a promise to correctly handle asynchronicity.
@@ -10,6 +10,7 @@ module.exports = {
       Example:
       return queryInterface.createTable('users', { id: Sequelize.INTEGER });
     */
+		/* queryInterface.addColumn("Posts", "link", Sequelize.STRING) */
 	},
 
 	down: (queryInterface, Sequelize) => {

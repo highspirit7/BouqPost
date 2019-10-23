@@ -2,7 +2,7 @@ import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 
 export const initialState = {
-	providedCategories: [],
+	providedCategories: {},
 	colors: [
 		"#d69da9",
 		"#f39c12",
@@ -38,29 +38,31 @@ export default handleActions(
 	{
 		[LOAD_CATEGORIES]: state =>
 			produce(state, draft => {
-				draft.providedCategories = [
-					"기타",
-					"서평",
-					"경제/경영",
-					"역사",
-					"문화",
-					"IT",
-					"철학",
-					"에세이",
-					"과학",
-					"예술",
-					"소설",
-					"인문",
-					"건강",
-					"자기계발",
-					"시",
-					"여행",
-					"외국어",
-					"Tip",
-          "정치/사회",
-          "빡독",
-          "글쓰기"
-				];
+				draft.providedCategories = {
+          etc: "기타",
+					bookreview: "서평",
+					economyandmanagement: "경제/경영",
+					history: "역사",
+					culture: "문화",
+					informationTech: "IT",
+					philosophy: "철학",
+					essay: "에세이",
+					science: "과학",
+					art: "예술",
+					novel: "소설",
+					humanities: "인문",
+					health: "건강",
+					selfdevelopment: "자기계발",
+					poem: "시",
+					travel: "여행",
+					foreignlanguage: "외국어",
+					tip: "Tip",
+          politicsandsociety: "정치/사회",
+          bbakdok: "빡독",
+          writing: "글쓰기"
+        }
+				
+				;
 			})
 	},
 	initialState

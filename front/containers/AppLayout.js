@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import Link from "next/link";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
@@ -62,19 +62,15 @@ const AppLayout = ({ children }) => {
 
 	const dispatch = useDispatch();
 
-	useEffect(() => {
-		if (!myInfo) {
-			dispatch({
-				type: LOAD_USER_REQUEST
-			});
-		}
-	}, []);
+	// useEffect(() => {
+	// 	if (!myInfo) {
+	// 		dispatch({
+	// 			type: LOAD_USER_REQUEST
+	// 		});
+	// 	}
+	// }, []);
 
-	useEffect(() => {
-		dispatch({
-			type: LOAD_CATEGORIES
-		});
-	}, []);
+
 
 	const onLogout = useCallback(() => {
 		dispatch({
@@ -184,5 +180,11 @@ const AppLayout = ({ children }) => {
 AppLayout.propTypes = {
 	children: PropTypes.node
 };
+
+// AppLayout.getInitialProps = async context => {
+// 	context.store.dispatch({
+// 		type: LOAD_CATEGORIES
+// 	});
+// };
 
 export default AppLayout;

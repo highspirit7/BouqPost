@@ -226,8 +226,8 @@ function* watchSearchPosts() {
 }
 
 //lastId가 0이면 DB에서 제일 최신 포스트부터 조회하도록 해줄 것.
-function loadCategoryPostsAPI(category, lastId = 0) {
-	return axios.get(`/category/${encodeURIComponent(category)}?lastId=${lastId}`);
+function loadCategoryPostsAPI(category, lastId = 0, limit = 5) {
+	return axios.get(`/category/${category}?lastId=${lastId}&limit=${limit}`);
 }
 
 function* loadCategoryPosts(action) {
@@ -248,7 +248,7 @@ function* loadCategoryPosts(action) {
 }
 
 function* watchLoadCategoryPosts() {
-	yield throttle(1500, LOAD_CATEGORY_POSTS_REQUEST, loadCategoryPosts);
+	yield takeLatest(LOAD_CATEGORY_POSTS_REQUEST, loadCategoryPosts);
 }
 
 export default function* postSaga() {

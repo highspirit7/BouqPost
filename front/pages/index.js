@@ -83,6 +83,8 @@ const Main = () => {
 	const { myInfo } = useSelector(state => state.user);
 	const { displayedPosts, hasMorePost } = useSelector(state => state.post);
 	const { providedCategories, colors } = useSelector(state => state.categories);
+	const categoryKeys = Object.keys(providedCategories);
+	const categoryValues = Object.values(providedCategories);
 
 	const dispatch = useDispatch();
 	const countRef = useRef([]);
@@ -136,12 +138,6 @@ const Main = () => {
 		};
 	}, [displayedPosts.length, onScroll]);
 
-	useEffect(() => {
-		dispatch({
-			type: LOAD_POSTS_REQUEST
-		});
-	}, [dispatch]);
-
 	return (
 		<div>
 			<ThumbnailWrapper>
@@ -181,9 +177,10 @@ const Main = () => {
 										<div className="contents">
 											<div>
 												{post.Categories.map(category => {
-													const indexInCategories = providedCategories.indexOf(category.name);
+													const indexInCategories = categoryValues.indexOf(category.name);
+
 													return (
-														<Link key={category.name} href={`/category/?category=${category.name}`}>
+														<Link key={category.name} href={`/category/${categoryKeys[indexInCategories]}`}>
 															<a>
 																<Tag color={colors[indexInCategories]} style={{ curosr: "pointer" }}>
 																	{category.name}
@@ -252,12 +249,13 @@ const Main = () => {
 					<Col className="gutter-row" span={6}>
 						<Categories>
 							<h2>카테고리 별로 보기</h2>
-							{providedCategories.map((category, i) => {
+							{categoryKeys.map((params, i) => {
 								return (
-									<Link key={category} href={`/category/?category=${category}`}>
+									<Link key={params} href={`/category/${params}`}>
 										<a>
 											<Tag color={colors[i]} style={{ cursor: "pointer" }}>
-												{category}
+												{/* 객체 내부에 params라는 키값은 없고 params라는 변수가 담고 있는 스트링이 키값이 된다 이러한 경우에는 []를 써서 객체의 value에 접근해야 한다. */}
+												{providedCategories[params]}
 											</Tag>
 										</a>
 									</Link>
@@ -269,6 +267,14 @@ const Main = () => {
 			</ContentsWrapper>
 		</div>
 	);
+};
+
+Main.propTypes = {};
+
+Main.getInitialProps = async context => {
+	context.store.dispatch({
+		type: LOAD_POSTS_REQUEST
+	});
 };
 
 export default Main;

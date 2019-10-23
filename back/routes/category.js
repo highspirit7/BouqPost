@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 const router = express.Router();
 
 router.get("/:category", async (req, res, next) => {
-  // GET /api/category
+	// GET /api/category
 	try {
 		let where = {};
 		if (parseInt(req.query.lastId, 10)) {
@@ -17,27 +17,45 @@ router.get("/:category", async (req, res, next) => {
 		}
 
 		const posts = await db.Post.findAll({
+			where,
+			attributes: ["id"],
 			include: [
 				{
 					model: db.Category,
-					//이스케이핑 처리된 것을 디코드처리. DB에서는 애초에 사용자가 입력했던 대로 해시태그가 저장되어 있기 때문.
-					where: { name: decodeURIComponent(req.params.category) }
-				},
-				{
-					model: db.User,
-					attributes: ["id", "nickname"]
-				},
-				{
-					model: db.User,
-					through: "Like",
-					as: "Likers",
-					attributes: ["id"]
+					where: { params: req.params.category },
+					attributes: ["name"]
 				}
 			],
 			order: [["id", "DESC"]],
-			limit: 5
+			limit: parseInt(req.query.limit, 10)
 		});
-		res.json(posts);
+
+		const postId = posts.map(post => post.id);
+
+		const fullPosts = await Promise.all(
+			postId.map(id =>
+				db.Post.findAll({
+					where: { id },
+					include: [
+						{
+							model: db.User,
+							attributes: ["id", "nickname"]
+						},
+						{
+							model: db.Category
+						},
+						{
+							model: db.User,
+							as: "Likers",
+							attributes: ["id"]
+						}
+					],
+					order: [["id", "DESC"]]
+				})
+			)
+		);
+
+		return res.json(fullPosts);
 	} catch (e) {
 		console.error(e);
 		next(e);
