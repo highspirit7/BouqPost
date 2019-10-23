@@ -10,7 +10,7 @@ import Helmet from "react-helmet";
 import axios from "axios";
 import App from "next/app";
 
-import AppLayout from "../containers/AppLayout";
+import AppLayout from "../components/AppLayout";
 import reducer from "../redux/modules";
 import rootSaga from "../redux/sagas";
 import { LOAD_USER_REQUEST } from "../redux/modules/user";
