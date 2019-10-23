@@ -127,7 +127,7 @@ const AppLayout = ({ children }) => {
 	return (
 		<Spin spinning={isAddingPost} indicator={loadingIcon}>
 			<Layout className="layout">
-				<Header style={{ background: "white", borderBottom: "1px solid #d9d9d9" }}>
+				<Header style={{ background: "white", borderBottom: "1px solid #d9d9d9", position: 'fixed', width: '100%', zIndex: 10000 }}>
 					<Logo>
 						<Link href="/">
 							<a>BouqPost</a>
@@ -168,7 +168,7 @@ const AppLayout = ({ children }) => {
 						</Dropdown>
 					</RightHeaderItems>
 				</Header>
-				<Content style={{ padding: "0 50px" }}>
+				<Content style={{ padding: "0 50px", marginTop: 63 }}>
 					<div style={{ background: "#f0f2f5", padding: 24, minHeight: 600 }}>{children}</div>
 				</Content>
 				<StyledFooter style={{ textAlign: "center" }}>- BouqPost -</StyledFooter>

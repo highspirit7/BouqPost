@@ -61,7 +61,20 @@ const NoResultMsg = styled.div`
 	color: #939599;
 `;
 
-const Category = ({category_name}) => {
+const CategoryTitle = styled.div`
+	width: 100%;
+  height: 100px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  h1 {
+    font-size: 40px;
+  }
+`;
+
+const Category = ({ category_name }) => {
 	const dispatch = useDispatch();
 	const { displayedPosts, hasMorePost } = useSelector(state => state.post);
 	const { providedCategories, colors } = useSelector(state => state.categories);
@@ -142,6 +155,9 @@ const Category = ({category_name}) => {
 
 	return (
 		<>
+			<CategoryTitle>
+        <h1>{providedCategories[category_name]}</h1>
+      </CategoryTitle>
 			{displayedPosts.length !== 0 ? (
 				<StyledPostbox>
 					{displayedPosts.map((post, index) => {
