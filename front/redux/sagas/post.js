@@ -26,7 +26,10 @@ import {
 	REMOVE_POST_SUCCESS,
 	LOAD_CATEGORY_POSTS_REQUEST,
 	LOAD_CATEGORY_POSTS_FAILURE,
-	LOAD_CATEGORY_POSTS_SUCCESS
+	LOAD_CATEGORY_POSTS_SUCCESS,
+	LOAD_USER_POSTS_REQUEST,
+	LOAD_USER_POSTS_FAILURE,
+	LOAD_USER_POSTS_SUCCESS
 } from "../modules/post";
 
 function addPostAPI(postData) {
@@ -251,6 +254,31 @@ function* watchLoadCategoryPosts() {
 	yield takeLatest(LOAD_CATEGORY_POSTS_REQUEST, loadCategoryPosts);
 }
 
+function loadUserPostsAPI(userId, lastId = 0, limit = 5) {
+	return axios.get(`/user/${userId}?lastId=${lastId}&limit=${limit}`);
+}
+
+function* loadUserPosts(action) {
+	try {
+		const result = yield call(loadUserPostsAPI, action.user_id, action.lastId);
+
+		yield put({
+			type: LOAD_USER_POSTS_SUCCESS,
+			payload: result.data
+		});
+	} catch (e) {
+		console.error(e);
+		yield put({
+			type: LOAD_USER_POSTS_FAILURE,
+			payload: e.message
+		});
+	}
+}
+
+function* watchLoadUserPosts() {
+	yield takeLatest(LOAD_USER_POSTS_REQUEST, loadUserPosts);
+}
+
 export default function* postSaga() {
 	yield all([
 		fork(watchAddPost),
@@ -260,6 +288,7 @@ export default function* postSaga() {
 		fork(watchUpdatePost),
 		fork(watchRemovePost),
 		fork(watchSearchPosts),
-		fork(watchLoadCategoryPosts)
+		fork(watchLoadCategoryPosts),
+		fork(watchLoadUserPosts)
 	]);
 }

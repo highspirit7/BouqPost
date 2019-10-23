@@ -6,7 +6,6 @@ import { Avatar, Icon, Button, Layout, Menu, Dropdown, Spin } from "antd";
 import styled from "styled-components";
 import { LOG_OUT_REQUEST } from "../redux/modules/user";
 
-
 const { Header, Footer, Content } = Layout;
 
 const Logo = styled.div`
@@ -70,38 +69,42 @@ const AppLayout = ({ children }) => {
 	// 	}
 	// }, []);
 
-
-
 	const onLogout = useCallback(() => {
 		dispatch({
 			type: LOG_OUT_REQUEST
 		});
 	}, []);
 
-	const collapsedMenu = (
+	const collapsedMenu = myInfo ? (
 		<Menu>
+			<Menu.Item style={{ fontWeight: 600 }}>{myInfo.nickname}</Menu.Item>
 			<Menu.Item key="newPost">
 				<Link href="/newPost">
 					<a>새 포스트</a>
 				</Link>
 			</Menu.Item>
 			<Menu.Item key="myPage">
-				<Link href="/myPage">
+				<Link href={`/user/${myInfo && myInfo.id}`}>
 					<a>내 페이지</a>
 				</Link>
 			</Menu.Item>
+			<Menu.Item key="myPage">
+				<Link href="/myPage">
+					<a>내 좋아요</a>
+				</Link>
+			</Menu.Item>
 			<Menu.Divider />
-			{myInfo ? (
-				<Menu.Item key="logout">
-					<a onClick={onLogout}>로그아웃</a>
-				</Menu.Item>
-			) : (
-				<Menu.Item key="login">
-					<Link href="/login">
-						<a>로그인</a>
-					</Link>
-				</Menu.Item>
-			)}
+			<Menu.Item key="logout">
+				<a onClick={onLogout}>로그아웃</a>
+			</Menu.Item>
+		</Menu>
+	) : (
+		<Menu>
+			<Menu.Item key="login">
+				<Link href="/login">
+					<a>로그인</a>
+				</Link>
+			</Menu.Item>
 		</Menu>
 	);
 
@@ -110,8 +113,13 @@ const AppLayout = ({ children }) => {
 			<Menu.Item key="user_name">{myInfo && myInfo.nickname}</Menu.Item>
 			<Menu.Divider />
 			<Menu.Item key="myPage">
-				<Link href="/myPage">
+				<Link href={`/user/${myInfo && myInfo.id}`}>
 					<a>내 페이지</a>
+				</Link>
+			</Menu.Item>
+			<Menu.Item key="myPage">
+				<Link href="/myPage">
+					<a>내 좋아요</a>
 				</Link>
 			</Menu.Item>
 			{myInfo && (
@@ -127,7 +135,14 @@ const AppLayout = ({ children }) => {
 	return (
 		<Spin spinning={isAddingPost} indicator={loadingIcon}>
 			<Layout className="layout">
-				<Header style={{ background: "white", borderBottom: "1px solid #d9d9d9", position: 'fixed', width: '100%', zIndex: 10000 }}>
+				<Header
+					style={{
+						background: "white",
+						borderBottom: "1px solid #d9d9d9",
+						position: "fixed",
+						width: "100%",
+						zIndex: 999
+					}}>
 					<Logo>
 						<Link href="/">
 							<a>BouqPost</a>
@@ -146,7 +161,10 @@ const AppLayout = ({ children }) => {
 							</a>
 						</Link>
 						{myInfo ? (
-							<Dropdown overlay={myMenu} trigger={["hover"]}>
+							<Dropdown
+								overlayStyle={{ border: "1px solid rgb(147, 149, 153, 0.6)", borderRadius: 5 }}
+								overlay={myMenu}
+								trigger={["hover"]}>
 								<a className="ant-dropdown-link" href="#">
 									<Avatar src={myInfo && myInfo.thumbnail_img} className="collapsingMenu" />
 								</a>
@@ -161,7 +179,10 @@ const AppLayout = ({ children }) => {
 							</Link>
 						)}
 
-						<Dropdown overlay={collapsedMenu} trigger={["click"]}>
+						<Dropdown
+							overlayStyle={{ border: "1px solid rgb(147, 149, 153, 0.6)", borderRadius: 5 }}
+							overlay={collapsedMenu}
+							trigger={["click"]}>
 							<a className="ant-dropdown-link" href="#" style={{ marginLeft: 10, color: "#2b2a28" }}>
 								<Icon type="menu" className="burger-menu" style={{ fontSize: 22 }} />
 							</a>

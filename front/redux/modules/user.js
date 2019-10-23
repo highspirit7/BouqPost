@@ -1,6 +1,7 @@
 import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 
+
 // 액션 타입 정의
 export const LOAD_USER_REQUEST = "user/LOAD_USER_REQUEST";
 export const LOAD_USER_SUCCESS = "user/LOAD_USER_SUCCESS";
@@ -9,6 +10,7 @@ export const LOG_OUT_REQUEST = "user/LOG_OUT_REQUEST";
 export const LOG_OUT_SUCCESS = "user/LOG_OUT_SUCCESS";
 export const LOG_OUT_FAILURE = "user/LOG_OUT_FAILURE";
 
+
 // 액션 생성 함수
 export const loginRequest = createAction(LOAD_USER_REQUEST);
 export const loginSuccess = createAction(LOAD_USER_SUCCESS);
@@ -16,6 +18,7 @@ export const loginFailure = createAction(LOAD_USER_FAILURE);
 export const logoutRequest = createAction(LOG_OUT_REQUEST);
 export const logoutSuccess = createAction(LOG_OUT_SUCCESS);
 export const logoutFailure = createAction(LOG_OUT_FAILURE);
+
 
 export const initialState = {
 	// isLoggedIn: false, // 로그인 여부
@@ -62,7 +65,7 @@ export default handleActions(
 		[LOG_OUT_FAILURE]: state =>
 			produce(state, draft => {
 				draft.myInfo = null;
-			})
+      })
 	},
 	initialState
 );

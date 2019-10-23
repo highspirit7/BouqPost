@@ -207,7 +207,12 @@ const Main = () => {
 													{post.Likers.length !== 0 && <span style={{ marginLeft: 6 }}>{post.Likers.length}</span>}
 												</button>
 
-												<Poster>Posted by {post.User.nickname}</Poster>
+												<Poster>
+													Posted by{" "}
+													<Link href={`/user/${post.UserId}`}>
+														<a>{post.User.nickname}</a>
+													</Link>
+												</Poster>
 
 												<div>
 													<TimeAgo date={post.created_at} formatter={formatter}></TimeAgo>

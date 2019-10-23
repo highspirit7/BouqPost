@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useRef, useState } from "react";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import propTypes from "prop-types";
@@ -11,7 +11,7 @@ import TimeAgo from "react-timeago";
 import koreanStrings from "react-timeago/lib/language-strings/ko";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 
-import { LOAD_CATEGORY_POSTS_REQUEST, REMOVE_POST_REQUEST } from "../../redux/modules/post";
+import { LOAD_USER_POSTS_REQUEST, REMOVE_POST_REQUEST } from "../../redux/modules/post";
 
 const StyledPostbox = styled.div`
 	width: 82%;
@@ -61,7 +61,7 @@ const NoResultMsg = styled.div`
 	color: #939599;
 `;
 
-const Category = ({ category_name }) => {
+const User = ({ user_id }) => {
 	const dispatch = useDispatch();
 	const { displayedPosts, hasMorePost } = useSelector(state => state.post);
 	const { providedCategories, colors } = useSelector(state => state.categories);
@@ -106,7 +106,7 @@ const Category = ({ category_name }) => {
 		if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
 			if (hasMorePost) {
 				// console.log("displayedPosts length : " + typeof displayedPosts.length);
-				const lastId = displayedPosts.length > 0 ? displayedPosts[displayedPosts.length - 1][0].id : 0; //제일 하단 게시물의 id
+				const lastId = displayedPosts.length > 0 ? displayedPosts[displayedPosts.length - 1].id : 0; //제일 하단 게시물의 id
 
 				//프론트단에서 불필요하게 액션이 디스패치되는 것을 막기 위해
 				//사가상으로는 상관없지만(쓰로틀링으로인해 사가에서는 인식하고 처리하는 액션은 1.5초에 하나) 리덕스 상에서 액션이 중복실행되는 현상 방지용
@@ -115,15 +115,15 @@ const Category = ({ category_name }) => {
 
 				if (!countRef.current.includes(lastId)) {
 					dispatch({
-						type: LOAD_CATEGORY_POSTS_REQUEST,
-						category: category_name,
+						type: LOAD_USER_POSTS_REQUEST,
+						user_id,
 						lastId
 					});
 					countRef.current.push(lastId);
 				}
 			}
 		}
-	}, [hasMorePost, dispatch, displayedPosts, category_name]);
+	}, [hasMorePost, dispatch, displayedPosts, user_id]);
 
 	useEffect(() => {
 		window.addEventListener("scroll", onScroll);
@@ -147,16 +147,21 @@ const Category = ({ category_name }) => {
       </CategoryTitle> */}
 			{displayedPosts.length !== 0 ? (
 				<StyledPostbox>
-					<h1 style={{ fontSize: 28 }}>{`'${providedCategories[category_name]}' 카테고리의 포스트`}</h1>
+					<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+						<h1 style={{ fontSize: 28 }}>{displayedPosts[0].User.nickname}</h1>
+						<h1>{`${myInfo.Posts.length}개의 포스트`}</h1>
+						<Divider style={{ marginTop: "6px", marginBottom: "20px" }} dashed />
+					</div>
+
 					{displayedPosts.map((post, index) => {
 						return (
 							<PostContent key={index}>
 								<div style={{ display: "flex", alignItems: "center" }} key={index}>
-									<a href={post[0].link} target="_blank" rel="noopener noreferrer">
+									<a href={post.link} target="_blank" rel="noopener noreferrer">
 										<img
 											src={
-												post[0].thumbnail
-													? `https://images.weserv.nl/?url=ssl:${post[0].thumbnail.slice(8)}&w=200&h=128`
+												post.thumbnail
+													? `https://images.weserv.nl/?url=ssl:${post.thumbnail.slice(8)}&w=200&h=128`
 													: "/bbakdok.png"
 											}
 											onError={showDefaultImg}
@@ -165,7 +170,7 @@ const Category = ({ category_name }) => {
 									</a>
 									<div className="contents">
 										<div>
-											{post[0].Categories.map(category => {
+											{post.Categories.map(category => {
 												const indexInCategories = categoryValues.indexOf(category.name);
 
 												return (
@@ -179,10 +184,10 @@ const Category = ({ category_name }) => {
 												);
 											})}
 										</div>
-										<a href={post[0].link} target="blank" rel="noopener noreferrer">
-											<h2>{post[0].title}</h2>
+										<a href={post.link} target="blank" rel="noopener noreferrer">
+											<h2>{post.title}</h2>
 										</a>
-										{post[0].description ? <p>{post[0].description}</p> : <br />}
+										{post.description ? <p>{post.description}</p> : <br />}
 
 										<div style={{ display: "flex", alignItems: "center" }}>
 											<button className="likeBtn">
@@ -193,17 +198,17 @@ const Category = ({ category_name }) => {
 													twoToneColor="#eb2f96"
 													onClick={() => setLike(!liked)}
 												/>
-												{post[0].Likers.length !== 0 && <span style={{ marginLeft: 6 }}>{post[0].Likers.length}</span>}
+												{post.Likers.length !== 0 && <span style={{ marginLeft: 6 }}>{post.Likers.length}</span>}
 											</button>
 
-											<Poster>Posted by {post[0].User.nickname}</Poster>
+											<Poster>Posted by {post.User.nickname}</Poster>
 
 											<div>
-												<TimeAgo date={post[0].created_at} formatter={formatter}></TimeAgo>
+												<TimeAgo date={post.created_at} formatter={formatter}></TimeAgo>
 											</div>
-											{myInfo && myInfo.id === post[0].UserId && (
+											{myInfo && myInfo.id === post.UserId && (
 												<>
-													<Link href={`/editPost/${post[0].id}`}>
+													<Link href={`/editPost/${post.id}`}>
 														<a>
 															<div
 																style={{
@@ -223,7 +228,7 @@ const Category = ({ category_name }) => {
 														title="정말 삭제하시겠습니까?"
 														okText="Yes"
 														cancelText="No"
-														onConfirm={onRemovePost(post[0].id)}>
+														onConfirm={onRemovePost(post.id)}>
 														<div style={{ marginLeft: 10, cursor: "pointer" }}>삭제</div>
 													</Popconfirm>
 												</>
@@ -237,28 +242,30 @@ const Category = ({ category_name }) => {
 					})}
 				</StyledPostbox>
 			) : (
-				<NoResultMsg>{displayedPosts.length === 0 && "- 현재 카테고리에 포스트가 존재하지 않습니다 -"}</NoResultMsg>
+				<NoResultMsg>
+					{displayedPosts.length === 0 && `- ${displayedPosts[0].User.nickname}의 포스트가 존재하지 않습니다 -`}
+				</NoResultMsg>
 			)}
 		</>
 	);
 };
 
-Category.propTypes = {
-	category_name: propTypes.string.isRequired
+User.propTypes = {
+	user_id: propTypes.string
 };
 
-Category.getInitialProps = async context => {
-	const category_name = context.query.category_name;
+User.getInitialProps = async context => {
+	const user_id = context.query.user_id;
 	// console.log("Search querystring : ", keyword);
-	if (category_name !== "undefined") {
+	if (user_id !== "undefined") {
 		context.store.dispatch({
-			type: LOAD_CATEGORY_POSTS_REQUEST,
-			category: category_name
+			type: LOAD_USER_POSTS_REQUEST,
+			user_id
 		});
 	}
 
 	//리턴값은 지금 이 컴포넌트에 props로 전달된다.
-	return { category_name };
+	return { user_id };
 };
 
-export default Category;
+export default User;
