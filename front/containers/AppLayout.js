@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { Avatar, Icon, Button, Layout, Menu, Dropdown, Spin } from "antd";
 import styled from "styled-components";
-import { LOG_OUT_REQUEST, LOAD_USER_REQUEST } from "../redux/modules/user";
-import { LOAD_CATEGORIES } from "../redux/modules/categories";
+import { LOG_OUT_REQUEST } from "../redux/modules/user";
+
 
 const { Header, Footer, Content } = Layout;
 

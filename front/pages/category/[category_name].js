@@ -61,19 +61,6 @@ const NoResultMsg = styled.div`
 	color: #939599;
 `;
 
-const CategoryTitle = styled.div`
-	width: 100%;
-  height: 100px;
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  h1 {
-    font-size: 40px;
-  }
-`;
-
 const Category = ({ category_name }) => {
 	const dispatch = useDispatch();
 	const { displayedPosts, hasMorePost } = useSelector(state => state.post);
@@ -155,11 +142,12 @@ const Category = ({ category_name }) => {
 
 	return (
 		<>
-			<CategoryTitle>
+			{/* <CategoryTitle>
         <h1>{providedCategories[category_name]}</h1>
-      </CategoryTitle>
+      </CategoryTitle> */}
 			{displayedPosts.length !== 0 ? (
 				<StyledPostbox>
+					<h1 style={{ fontSize: 28 }}>{`'${providedCategories[category_name]}' 카테고리의 포스트`}</h1>
 					{displayedPosts.map((post, index) => {
 						return (
 							<PostContent key={index}>
