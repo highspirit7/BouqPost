@@ -8,7 +8,7 @@ import TimeAgo from "react-timeago";
 import koreanStrings from "react-timeago/lib/language-strings/ko";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 
-import { LOAD_POSTS_REQUEST, REMOVE_POST_REQUEST } from "../redux/modules/post";
+import { LOAD_POSTS_REQUEST, REMOVE_POST_REQUEST, LOAD_RANDOM_POSTS_REQUEST } from "../redux/modules/post";
 
 const ThumbnailWrapper = styled.div`
 	width: 94%;
@@ -121,7 +121,7 @@ const DeleteBtn = styled.div`
 const Main = () => {
 	const [liked, setLike] = useState(false);
 	const { myInfo } = useSelector(state => state.user);
-	const { displayedPosts, hasMorePost } = useSelector(state => state.post);
+	const { displayedPosts, hasMorePost, randomPosts } = useSelector(state => state.post);
 	const { providedCategories, colors } = useSelector(state => state.categories);
 	const categoryKeys = Object.keys(providedCategories);
 	const categoryValues = Object.values(providedCategories);
@@ -182,18 +182,11 @@ const Main = () => {
 		<div>
 			<ThumbnailWrapper>
 				<Row gutter={20}>
-					<Col className="gutter-row" span={6}>
-						<ThumbnailCmp />
-					</Col>
-					<Col className="gutter-row" span={6}>
-						<ThumbnailCmp />
-					</Col>
-					<Col className="gutter-row" span={6}>
-						<ThumbnailCmp />
-					</Col>
-					<Col className="gutter-row" span={6}>
-						<ThumbnailCmp />
-					</Col>
+					{randomPosts.map(post => (
+						<Col className="gutter-row" span={6} key={post.title}>
+							<ThumbnailCmp post={post} />
+						</Col>
+					))}
 				</Row>
 			</ThumbnailWrapper>
 			<ContentsWrapper>
@@ -321,6 +314,9 @@ Main.propTypes = {};
 Main.getInitialProps = async context => {
 	context.store.dispatch({
 		type: LOAD_POSTS_REQUEST
+	});
+	context.store.dispatch({
+		type: LOAD_RANDOM_POSTS_REQUEST
 	});
 };
 

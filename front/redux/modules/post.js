@@ -3,6 +3,7 @@ import produce from "immer";
 
 export const initialState = {
 	displayedPosts: [],
+	randomPosts: [],
 	isAddingPost: false,
 	isUpdatingPost: false,
 	isScraping: false,
@@ -16,14 +17,15 @@ export const initialState = {
 		loadPostError: "",
 		updatePostError: "",
 		removePostError: "",
-		searchPostError: ""
+		searchPostError: "",
+		loadRandomPostsError: ""
 	},
 	loadedPost: {
 		link: "",
 		title: "",
 		description: "",
 		category: []
-  }
+	}
 };
 
 // 액션 타입 정의
@@ -55,6 +57,9 @@ export const CLEAR_DISPLAYED_POSTS = "post/CLEAR_DISPLAYED_POSTS";
 export const LOAD_USER_POSTS_REQUEST = "post/LOAD_USER_POSTS_REQUEST";
 export const LOAD_USER_POSTS_SUCCESS = "post/LOAD_USER_POSTS_SUCCESS";
 export const LOAD_USER_POSTS_FAILURE = "post/LOAD_USER_POSTS_FAILURE";
+export const LOAD_RANDOM_POSTS_REQUEST = "post/LOAD_RANDOM_POSTS_REQUEST";
+export const LOAD_RANDOM_POSTS_SUCCESS = "post/LOAD_RANDOM_POSTS_SUCCESS";
+export const LOAD_RANDOM_POSTS_FAILURE = "post/LOAD_RANDOM_POSTS_FAILURE";
 
 // 액션 생성 함수
 export const addPostsRequest = createAction(ADD_POST_REQUEST);
@@ -85,6 +90,9 @@ export const clearDisplayedPosts = createAction(CLEAR_DISPLAYED_POSTS);
 export const loadUserPostsRequest = createAction(LOAD_USER_POSTS_REQUEST);
 export const loadUserPostsSuccess = createAction(LOAD_USER_POSTS_SUCCESS);
 export const loadUserPostsFailure = createAction(LOAD_USER_POSTS_FAILURE);
+export const loadRandomPostsRequest = createAction(LOAD_RANDOM_POSTS_REQUEST);
+export const loadRandomPostsSuccess = createAction(LOAD_RANDOM_POSTS_SUCCESS);
+export const loadRandomPostsFailure = createAction(LOAD_RANDOM_POSTS_FAILURE);
 
 // immer 를 사용하여 값을 수정하는 리듀서
 export default handleActions(
@@ -227,13 +235,23 @@ export default handleActions(
 				payload.forEach(post => {
 					draft.displayedPosts.push(post);
 				});
-        // draft.numberOfPosts = payload.count;
+				// draft.numberOfPosts = payload.count;
 				//로딩한 포스트 개수가 5개가 아니라는 것은 실질적으로는 5개보다 작았다는 것이고, 그러면 남아있는 포스트를 모두 이미 로딩했다는 뜻이 된다.
 				draft.hasMorePost = payload.length === 5;
 			}),
 		[LOAD_USER_POSTS_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
 				draft.errors.loadPostError = payload;
+			}),
+		[LOAD_RANDOM_POSTS_SUCCESS]: (state, { payload }) =>
+			produce(state, draft => {
+				payload.forEach(post => {
+					draft.randomPosts.push(post);
+				});
+			}),
+		[LOAD_RANDOM_POSTS_FAILURE]: (state, { payload }) =>
+			produce(state, draft => {
+				draft.errors.loadRandomPostsError = payload;
 			})
 	},
 	initialState

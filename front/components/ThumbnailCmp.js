@@ -1,49 +1,70 @@
 import React from "react";
 import styled from "styled-components";
+import propTypes from "prop-types";
 
-const StyledThumbnail = styled.div`
-	position: relative;
-	z-index: 111;
-	// width: 23%;
-	height: 180px;
-	border: 1px solid rgb(147, 149, 153, 0.6);
-	border-radius: 4px;
-	cursor: pointer;
-	box-shadow: #939599 2px 2px 6px -2px;
+const ThumbnailCmp = ({ post }) => {
+	const AlterThumbnail = styled.div`
+		position: relative;
+		height: 180px;
+		border: 1px solid rgb(147, 149, 153, 0.6);
+		border-radius: 4px;
+		cursor: pointer;
+		box-shadow: #939599 2px 2px 6px -2px;
+		background-image: url(${post.thumbnail
+			? `https://images.weserv.nl/?url=ssl:${post.thumbnail.slice(8)}&w=300&h=180`
+			: "/bbakdok.png"});
+		background-repeat: no-repeat;
+		background-size: cover;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-end;
+		padding: 10px 0;
 
-	.thumbnail {
-		width: 100%;
-		height: 100%;
-		opacity: 0.4;
-	}
+		:before {
+			position: absolute;
+			top: 0;
+			right: 0;
+			left: 0;
+			bottom: 0;
+			background: -webkit-linear-gradient(to top, rgba(0, 0, 0, 0.66), rgba(0, 0, 0, 0.14));
+			background: -o-linear-gradient(to top, rgba(0, 0, 0, 0.66), rgba(0, 0, 0, 0.14));
+			background: -moz-linear-gradient(to top, rgba(0, 0, 0, 0.66), rgba(0, 0, 0, 0.14));
+			background: linear-gradient(to top, rgba(0, 0, 0, 0.66), rgba(0, 0, 0, 0.14));
+			content: "";
+		}
 
-	.content {
-		position: absolute;
-		width: 100%;
-		top: 60%;
-		left: 0;
-		z-index: 10;
-	}
+		.title,
+		.description {
+			width: 90%;
+			position: relative;
+		}
 
-	.title,
-	.description {
-		color: "#939599";
-		font-size: 16px;
-		margin: 0 14px;
-	}
-`;
+		.title {
+			color: white;
+			font-size: 1rem;
+		}
+		.description {
+			font-size: 0.88rem;
+			color: #b8bcc2;
+		}
+	`;
 
-const ThumbnailCmp = () => {
-  return (
-    <StyledThumbnail>
-    <img className="thumbnail" src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png" />
+	const description = post.description.length > 22 ? `${post.description.substring(0, 22)}...` : post.description;
+	const title = post.title > 60 ? `${post.title.substring(0, 60)}...` : post.title;
 
-    <div className="content">
-      <div className="title">북극곰의 멸종</div>
-      <div className="description">북극곰의 멸종</div>
-    </div>
-  </StyledThumbnail>
-  )
-}
+	return (
+		<a href={post.link} target="_blank" rel="noopener noreferrer">
+			<AlterThumbnail>
+				<div className="title">{title}</div>
+				<div className="description">{description}</div>
+			</AlterThumbnail>
+		</a>
+	);
+};
+
+ThumbnailCmp.propTypes = {
+	post: propTypes.object.isRequired
+};
 
 export default ThumbnailCmp;

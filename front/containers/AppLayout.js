@@ -73,7 +73,7 @@ const AppLayout = ({ children }) => {
 		dispatch({
 			type: LOG_OUT_REQUEST
 		});
-	}, []);
+	}, [dispatch]);
 
 	const collapsedMenu = myInfo ? (
 		<Menu>

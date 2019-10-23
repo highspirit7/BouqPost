@@ -29,7 +29,10 @@ import {
 	LOAD_CATEGORY_POSTS_SUCCESS,
 	LOAD_USER_POSTS_REQUEST,
 	LOAD_USER_POSTS_FAILURE,
-	LOAD_USER_POSTS_SUCCESS
+	LOAD_USER_POSTS_SUCCESS,
+	LOAD_RANDOM_POSTS_FAILURE,
+	LOAD_RANDOM_POSTS_SUCCESS,
+	LOAD_RANDOM_POSTS_REQUEST
 } from "../modules/post";
 
 function addPostAPI(postData) {
@@ -279,6 +282,31 @@ function* watchLoadUserPosts() {
 	yield takeLatest(LOAD_USER_POSTS_REQUEST, loadUserPosts);
 }
 
+function loadRandomPostsAPI() {
+	return axios.get(`/posts/random`);
+}
+
+function* loadRandomPosts() {
+	try {
+		const result = yield call(loadRandomPostsAPI);
+
+		yield put({
+			type: LOAD_RANDOM_POSTS_SUCCESS,
+			payload: result.data
+		});
+	} catch (e) {
+		console.error(e);
+		yield put({
+			type: LOAD_RANDOM_POSTS_FAILURE,
+			payload: e.message
+		});
+	}
+}
+
+function* watchLoadRandomPosts() {
+	yield takeLatest(LOAD_RANDOM_POSTS_REQUEST, loadRandomPosts);
+}
+
 export default function* postSaga() {
 	yield all([
 		fork(watchAddPost),
@@ -289,6 +317,7 @@ export default function* postSaga() {
 		fork(watchRemovePost),
 		fork(watchSearchPosts),
 		fork(watchLoadCategoryPosts),
-		fork(watchLoadUserPosts)
+		fork(watchLoadUserPosts),
+		fork(watchLoadRandomPosts)
 	]);
 }
