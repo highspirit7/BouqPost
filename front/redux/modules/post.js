@@ -32,34 +32,52 @@ export const initialState = {
 export const ADD_POST_REQUEST = "post/ADD_POST_REQUEST";
 export const ADD_POST_SUCCESS = "post/ADD_POST_SUCCESS";
 export const ADD_POST_FAILURE = "post/ADD_POST_FAILURE";
+
 export const SCRAPING_REQUEST = "post/SCRAPING_REQUEST";
 export const SCRAPING_SUCCESS = "post/SCRAPING_SUCCESS";
 export const SCRAPING_FAILURE = "post/SCRAPING_FAILURE";
+
 export const LOAD_POSTS_REQUEST = "post/LOAD_POSTS_REQUEST";
 export const LOAD_POSTS_SUCCESS = "post/LOAD_POSTS_SUCCESS";
 export const LOAD_POSTS_FAILURE = "post/LOAD_POSTS_FAILURE";
+
 export const LOAD_POST_REQUEST = "post/LOAD_POST_REQUEST";
 export const LOAD_POST_SUCCESS = "post/LOAD_POST_SUCCESS";
 export const LOAD_POST_FAILURE = "post/LOAD_POST_FAILURE";
+
 export const UPDATE_POST_REQUEST = "post/UPDATE_POST_REQUEST";
 export const UPDATE_POST_SUCCESS = "post/UPDATE_POST_SUCCESS";
 export const UPDATE_POST_FAILURE = "post/UPDATE_POST_FAILURE";
+
 export const REMOVE_POST_REQUEST = "post/REMOVE_POST_REQUEST";
 export const REMOVE_POST_SUCCESS = "post/REMOVE_POST_SUCCESS";
 export const REMOVE_POST_FAILURE = "post/REMOVE_POST_FAILURE";
+
 export const SEARCH_POSTS_REQUEST = "post/SEARCH_POSTS_REQUEST";
 export const SEARCH_POSTS_SUCCESS = "post/SEARCH_POSTS_SUCCESS";
 export const SEARCH_POSTS_FAILURE = "post/SEARCH_POSTS_FAILURE";
+
 export const LOAD_CATEGORY_POSTS_REQUEST = "post/LOAD_CATEGORY_POSTS_REQUEST";
 export const LOAD_CATEGORY_POSTS_SUCCESS = "post/LOAD_CATEGORY_POSTS_SUCCESS";
 export const LOAD_CATEGORY_POSTS_FAILURE = "post/LOAD_CATEGORY_POSTS_FAILURE";
+
 export const CLEAR_DISPLAYED_POSTS = "post/CLEAR_DISPLAYED_POSTS";
+
 export const LOAD_USER_POSTS_REQUEST = "post/LOAD_USER_POSTS_REQUEST";
 export const LOAD_USER_POSTS_SUCCESS = "post/LOAD_USER_POSTS_SUCCESS";
 export const LOAD_USER_POSTS_FAILURE = "post/LOAD_USER_POSTS_FAILURE";
+
 export const LOAD_RANDOM_POSTS_REQUEST = "post/LOAD_RANDOM_POSTS_REQUEST";
 export const LOAD_RANDOM_POSTS_SUCCESS = "post/LOAD_RANDOM_POSTS_SUCCESS";
 export const LOAD_RANDOM_POSTS_FAILURE = "post/LOAD_RANDOM_POSTS_FAILURE";
+
+export const LIKE_POST_REQUEST = "post/LIKE_POST_REQUEST";
+export const LIKE_POST_SUCCESS = "post/LIKE_POST_SUCCESS";
+export const LIKE_POST_FAILURE = "post/LIKE_POST_FAILURE";
+
+export const UNLIKE_POST_REQUEST = "post/UNLIKE_POST_REQUEST";
+export const UNLIKE_POST_SUCCESS = "post/UNLIKE_POST_SUCCESS";
+export const UNLIKE_POST_FAILURE = "post/UNLIKE_POST_FAILURE";
 
 // 액션 생성 함수
 export const addPostsRequest = createAction(ADD_POST_REQUEST);
@@ -252,6 +270,18 @@ export default handleActions(
 		[LOAD_RANDOM_POSTS_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
 				draft.errors.loadRandomPostsError = payload;
+			}),
+		[LIKE_POST_SUCCESS]: (state, payload) =>
+			produce(state, draft => {
+				const postIndex = draft.displayedPosts.findIndex(post => post.id === payload.data.postId);
+
+				draft.displayedPosts[postIndex].Likers.unshift({ id: payload.data.userId });
+			}),
+		[UNLIKE_POST_SUCCESS]: (state, payload) =>
+			produce(state, draft => {
+				const postIndex = draft.displayedPosts.findIndex(post => post.id === payload.data.postId);
+				const likeIndex = draft.displayedPosts[postIndex].Likers.findIndex(liker => liker.id === payload.data.userId);
+				draft.displayedPosts[postIndex].Likers.splice(likeIndex, 1);
 			})
 	},
 	initialState

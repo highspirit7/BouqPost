@@ -176,4 +176,35 @@ router.delete("/:postId", isLoggedIn, async (req, res, next) => {
 	}
 });
 
+//게시물 좋아요 클릭
+router.post("/:postId/like", isLoggedIn, async (req, res, next) => {
+	try {
+		const post = await db.Post.findOne({ where: { id: req.params.postId } });
+		if (!post) {
+			return res.status(404).send("포스트가 존재하지 않습니다.");
+		}
+    await post.addLiker(req.user.id);
+    console.log(req.user)
+		res.json({ userId: req.user.id });
+	} catch (e) {
+		console.error(e);
+		next(e);
+	}
+});
+
+//게시물 좋아요 클릭 해제
+router.delete("/:postId/like", isLoggedIn, async (req, res, next) => {
+	try {
+		const post = await db.Post.findOne({ where: { id: req.params.postId } });
+		if (!post) {
+			return res.status(404).send("포스트가 존재하지 않습니다.");
+		}
+		await post.removeLiker(req.user.id);
+		res.json({ userId: req.user.id });
+	} catch (e) {
+		console.error(e);
+		next(e);
+	}
+});
+
 module.exports = router;

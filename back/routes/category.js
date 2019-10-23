@@ -34,7 +34,7 @@ router.get("/:category", async (req, res, next) => {
 
 		const fullPosts = await Promise.all(
 			postId.map(id =>
-				db.Post.findAll({
+				db.Post.findOne({
 					where: { id },
 					include: [
 						{
@@ -45,9 +45,10 @@ router.get("/:category", async (req, res, next) => {
 							model: db.Category
 						},
 						{
-							model: db.User,
-							as: "Likers",
-							attributes: ["id"]
+              model: db.User,
+              through: "Like",
+              as: "Likers",
+              attributes: ["id"]
 						}
 					],
 					order: [["id", "DESC"]]

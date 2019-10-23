@@ -152,11 +152,11 @@ const Category = ({ category_name }) => {
 						return (
 							<PostContent key={index}>
 								<div style={{ display: "flex", alignItems: "center" }} key={index}>
-									<a href={post[0].link} target="_blank" rel="noopener noreferrer">
+									<a href={post.link} target="_blank" rel="noopener noreferrer">
 										<img
 											src={
-												post[0].thumbnail
-													? `https://images.weserv.nl/?url=ssl:${post[0].thumbnail.slice(8)}&w=200&h=128`
+												post.thumbnail
+													? `https://images.weserv.nl/?url=ssl:${post.thumbnail.slice(8)}&w=200&h=128`
 													: "/bbakdok.png"
 											}
 											onError={showDefaultImg}
@@ -165,7 +165,7 @@ const Category = ({ category_name }) => {
 									</a>
 									<div className="contents">
 										<div>
-											{post[0].Categories.map(category => {
+											{post.Categories.map(category => {
 												const indexInCategories = categoryValues.indexOf(category.name);
 
 												return (
@@ -179,10 +179,10 @@ const Category = ({ category_name }) => {
 												);
 											})}
 										</div>
-										<a href={post[0].link} target="blank" rel="noopener noreferrer">
-											<h2>{post[0].title}</h2>
+										<a href={post.link} target="blank" rel="noopener noreferrer">
+											<h2>{post.title}</h2>
 										</a>
-										{post[0].description ? <p>{post[0].description}</p> : <br />}
+										{post.description ? <p>{post.description}</p> : <br />}
 
 										<div style={{ display: "flex", alignItems: "center" }}>
 											<button className="likeBtn">
@@ -193,17 +193,17 @@ const Category = ({ category_name }) => {
 													twoToneColor="#eb2f96"
 													onClick={() => setLike(!liked)}
 												/>
-												{post[0].Likers.length !== 0 && <span style={{ marginLeft: 6 }}>{post[0].Likers.length}</span>}
+												{post.Likers.length !== 0 && <span style={{ marginLeft: 6 }}>{post.Likers.length}</span>}
 											</button>
 
-											<Poster>Posted by {post[0].User.nickname}</Poster>
+											<Poster>Posted by {post.User.nickname}</Poster>
 
 											<div>
-												<TimeAgo date={post[0].created_at} formatter={formatter}></TimeAgo>
+												<TimeAgo date={post.created_at} formatter={formatter}></TimeAgo>
 											</div>
-											{myInfo && myInfo.id === post[0].UserId && (
+											{myInfo && myInfo.id === post.UserId && (
 												<>
-													<Link href={`/editPost/${post[0].id}`}>
+													<Link href={`/editPost/${post.id}`}>
 														<a>
 															<div
 																style={{
@@ -223,7 +223,7 @@ const Category = ({ category_name }) => {
 														title="정말 삭제하시겠습니까?"
 														okText="Yes"
 														cancelText="No"
-														onConfirm={onRemovePost(post[0].id)}>
+														onConfirm={onRemovePost(post.id)}>
 														<div style={{ marginLeft: 10, cursor: "pointer" }}>삭제</div>
 													</Popconfirm>
 												</>

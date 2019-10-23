@@ -12,9 +12,6 @@ const MainPostsbox = styled.div`
 	border-radius: 5px;
 	background: white;
 	padding: 22px;
-	// height: 240px;
-	// display: flex;
-	// align-items: center;
 	margin-bottom: 16px;
 
 	img {
@@ -84,14 +81,19 @@ const DeleteBtn = styled.div`
 	}
 `;
 
-const MainPosts = ({ post, categoryKeys, categoryValues, colors, myInfo, onRemovePost }) => {
-  const formatter = buildFormatter(koreanStrings);
+const MainPosts = ({ post, categoryKeys, categoryValues, colors, myInfo, onRemovePost, onToggleLike }) => {
+	const formatter = buildFormatter(koreanStrings);
 
-  const showDefaultImg = event => {
+	const showDefaultImg = event => {
 		event.target.src = "/bbakdok.png";
 		event.target.title =
 			"해당 링크에서 이미지를 적절한 이미지를 추출하지 못했거나 간혹 이미지를 로드하지 못하는 에러 시 기본 이미지가 출력됩니다";
 	};
+
+	const myId = myInfo ? myInfo.id : 0;
+
+	const liked = myId && post.Likers && post.Likers.find(v => v.id === myInfo.id);
+
 	return (
 		<MainPostsbox>
 			<div style={{ display: "flex", alignItems: "center" }}>
@@ -146,9 +148,9 @@ const MainPosts = ({ post, categoryKeys, categoryValues, colors, myInfo, onRemov
 							{" "}
 							<Icon
 								type="heart"
-								// theme={liked ? "twoTone" : "outlined"}
-								// twoToneColor="#eb2f96"
-								// onClick={() => setLike(!liked)}
+								theme={liked ? "twoTone" : "outlined"}
+								twoToneColor="#eb2f96"
+								onClick={onToggleLike(myId, liked, post)}
 							/>
 							{post.Likers.length !== 0 && <span style={{ marginLeft: 6 }}>{post.Likers.length}</span>}
 						</button>
@@ -186,12 +188,13 @@ const MainPosts = ({ post, categoryKeys, categoryValues, colors, myInfo, onRemov
 };
 
 MainPosts.propTypes = {
-  post: propTypes.object.isRequired,
-  categoryKeys: propTypes.array.isRequired,
-  categoryValues: propTypes.array.isRequired,
-  colors: propTypes.array.isRequired,
-  myInfo: propTypes.object.isRequired,
-  onRemovePost: propTypes.func.isRequired
+	post: propTypes.object.isRequired,
+	categoryKeys: propTypes.array.isRequired,
+	categoryValues: propTypes.array.isRequired,
+	colors: propTypes.array.isRequired,
+	myInfo: propTypes.object,
+	onRemovePost: propTypes.func.isRequired,
+	onToggleLike: propTypes.func.isRequired
 };
 
 export default MainPosts;

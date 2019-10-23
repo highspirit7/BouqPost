@@ -6,7 +6,13 @@ import styled from "styled-components";
 import ThumbnailCmp from "../components/index/ThumbnailCmp";
 
 import MainPosts from "../components/index/MainPosts";
-import { LOAD_POSTS_REQUEST, REMOVE_POST_REQUEST, LOAD_RANDOM_POSTS_REQUEST } from "../redux/modules/post";
+import {
+	LOAD_POSTS_REQUEST,
+	REMOVE_POST_REQUEST,
+	LOAD_RANDOM_POSTS_REQUEST,
+	UNLIKE_POST_REQUEST,
+	LIKE_POST_REQUEST
+} from "../redux/modules/post";
 
 const ThumbnailWrapper = styled.div`
 	width: 94%;
@@ -40,8 +46,8 @@ const ContentsWrapper = styled.div`
 `;
 
 const Main = () => {
-	const [liked, setLike] = useState(false);
 	const { myInfo } = useSelector(state => state.user);
+	// const { id } = useSelector(state => state.user.myInfo && state.user.myInfo.id);
 	const { displayedPosts, hasMorePost, randomPosts } = useSelector(state => state.post);
 	const { providedCategories, colors } = useSelector(state => state.categories);
 	const categoryKeys = Object.keys(providedCategories);
@@ -50,13 +56,35 @@ const Main = () => {
 	const dispatch = useDispatch();
 	const countRef = useRef([]);
 
-  //포스트 하나 제거
+	//포스트 하나 제거
 	const onRemovePost = useCallback(
 		postId => () => {
 			dispatch({
 				type: REMOVE_POST_REQUEST,
 				postId
 			});
+		},
+		[dispatch]
+	);
+
+	const onToggleLike = useCallback(
+		(id, liked, post) => () => {
+			if (!id) {
+				return alert("로그인이 필요합니다!");
+			}
+			if (liked) {
+				// 좋아요 누른 상태
+				dispatch({
+					type: UNLIKE_POST_REQUEST,
+					postId: post.id
+				});
+			} else {
+				// 좋아요 안 누른 상태
+				dispatch({
+					type: LIKE_POST_REQUEST,
+					postId: post.id
+				});
+			}
 		},
 		[dispatch]
 	);
@@ -97,7 +125,7 @@ const Main = () => {
 			<ThumbnailWrapper>
 				<Row gutter={20}>
 					{randomPosts.map(post => (
-						<Col className="gutter-row" span={6} key={post.title}>
+						<Col className="gutter-row" span={6} key={post.id}>
 							<ThumbnailCmp post={post} />
 						</Col>
 					))}
@@ -112,10 +140,12 @@ const Main = () => {
 									post={post}
 									key={index}
 									categoryKeys={categoryKeys}
-                  categoryValues={categoryValues}
-                  colors={colors}
-                  myInfo={myInfo}
-                  onRemovePost={onRemovePost} />
+									categoryValues={categoryValues}
+									colors={colors}
+									myInfo={myInfo}
+									onRemovePost={onRemovePost}
+                  onToggleLike={onToggleLike}
+								/>
 							);
 						})}
 					</Col>

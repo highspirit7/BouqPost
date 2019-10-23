@@ -17,9 +17,10 @@ router.get("/:keyword", async (req, res, next) => {
 			model: db.Category
 		},
 		{
-			model: db.User,
-			as: "Likers",
-			attributes: ["id"]
+      model: db.User,
+      through: "Like",
+      as: "Likers",
+      attributes: ["id"]
 		}
 	];
 

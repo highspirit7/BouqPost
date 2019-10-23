@@ -32,7 +32,13 @@ import {
 	LOAD_USER_POSTS_SUCCESS,
 	LOAD_RANDOM_POSTS_FAILURE,
 	LOAD_RANDOM_POSTS_SUCCESS,
-	LOAD_RANDOM_POSTS_REQUEST
+	LOAD_RANDOM_POSTS_REQUEST,
+	LIKE_POST_REQUEST,
+	LIKE_POST_SUCCESS,
+	LIKE_POST_FAILURE,
+	UNLIKE_POST_REQUEST,
+	UNLIKE_POST_SUCCESS,
+	UNLIKE_POST_FAILURE
 } from "../modules/post";
 
 function addPostAPI(postData) {
@@ -185,9 +191,9 @@ function removePostAPI(postId) {
 	});
 }
 
-function* removePost(action) {
+function* removePost(payload) {
 	try {
-		const result = yield call(removePostAPI, action.postId);
+		const result = yield call(removePostAPI, payload.postId);
 		yield put({
 			type: REMOVE_POST_SUCCESS,
 			data: result.data
@@ -307,6 +313,70 @@ function* watchLoadRandomPosts() {
 	yield takeLatest(LOAD_RANDOM_POSTS_REQUEST, loadRandomPosts);
 }
 
+function likePostAPI(postId) {
+	return axios.post(
+		`/post/${postId}/like`,
+		{},
+		{
+			withCredentials: true
+		}
+	);
+}
+
+function* likePost(payload) {
+	try {
+		const result = yield call(likePostAPI, payload.postId);
+		yield put({
+			type: LIKE_POST_SUCCESS,
+      data: {
+        postId: payload.postId,
+        userId: result.data.userId
+      }
+		
+    });
+
+	} catch (e) {
+		console.error(e);
+		yield put({
+			type: LIKE_POST_FAILURE,
+			error: e
+		});
+	}
+}
+
+function* watchLikePost() {
+	yield takeLatest(LIKE_POST_REQUEST, likePost);
+}
+
+function unlikePostAPI(postId) {
+	return axios.delete(`/post/${postId}/like`, {
+		withCredentials: true
+	});
+}
+
+function* unlikePost(payload) {
+	try {
+		const result = yield call(unlikePostAPI, payload.postId);
+		yield put({
+			type: UNLIKE_POST_SUCCESS,
+			data: {
+				postId: payload.postId,
+				userId: result.data.userId
+			}
+		});
+	} catch (e) {
+		console.error(e);
+		yield put({
+			type: UNLIKE_POST_FAILURE,
+			error: e
+		});
+	}
+}
+
+function* watchUnlikePost() {
+	yield takeLatest(UNLIKE_POST_REQUEST, unlikePost);
+}
+
 export default function* postSaga() {
 	yield all([
 		fork(watchAddPost),
@@ -318,6 +388,8 @@ export default function* postSaga() {
 		fork(watchSearchPosts),
 		fork(watchLoadCategoryPosts),
 		fork(watchLoadUserPosts),
-		fork(watchLoadRandomPosts)
+		fork(watchLoadRandomPosts),
+		fork(watchLikePost),
+		fork(watchUnlikePost)
 	]);
 }

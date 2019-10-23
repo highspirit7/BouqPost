@@ -29,7 +29,8 @@ router.get("/", async (req, res, next) => {
 					model: db.Category
 				},
 				{
-					model: db.User,
+          model: db.User,
+          through: "Like",
 					as: "Likers",
 					attributes: ["id"]
 				}
@@ -49,7 +50,7 @@ router.get("/random", async (req, res, next) => {
 	// GET /api/posts
 	try {
 		const posts = await db.Post.findAll({
-			attributes: ["title", "description", "link", "thumbnail"],
+			attributes: ["title", "description", "link", "thumbnail", "id"],
 			order: Sequelize.literal("rand()"),
 			limit: 4
 		});
