@@ -1,5 +1,4 @@
 import React from "react";
-// import Helmet from "react-helmet";
 import PropTypes from "prop-types";
 import Document, { Main, NextScript, Head } from "next/document";
 import { ServerStyleSheet } from "styled-components";
@@ -21,11 +20,9 @@ class MyDocument extends Document {
 
 	render() {
 		return (
-			<html>
+			<html lang="ko">
 				<Head>
 					{/* Step 5: Output the styles in the head  */}
-					<meta charSet="utf-8" />
-					<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 					{this.props.styleTags}
 				</Head>
 				<body>
@@ -38,7 +35,6 @@ class MyDocument extends Document {
 }
 
 MyDocument.propTypes = {
-	helmet: PropTypes.object.isRequired,
 	styleTags: PropTypes.object
 };
 

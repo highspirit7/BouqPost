@@ -21,6 +21,18 @@ class BouqPost extends App {
 		return (
 			<Provider store={store}>
 				<Head>
+					<meta charSet="utf-8" />
+					<meta
+						name="viewport"
+						content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no viewport-fit=cover"
+					/>
+					<meta name="description" content="서평 및 독서 관련 글 공유 서비스" />
+					<meta name="keywords" content="졸꾸,독서,서평,글쓰기,책,빡독" />
+					<meta property="og:type" content="website" />
+					<meta property="og:title" content="BouqPost - 졸꾸러기를 위한 콘텐츠 공유 서비스" />
+					<meta property="og:description" content="서평 및 독서 관련 글 공유 서비스" />
+					<meta property="og:url" content="http://"></meta>
+					<meta name="author" content="Jiyeol Lee" />
 					<title>BouqPost - 졸꾸러기를 위한 콘텐츠 공유 서비스</title>
 					<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.23.6/antd.css" />
 				</Head>
