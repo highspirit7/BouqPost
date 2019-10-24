@@ -1,4 +1,4 @@
-import { all, fork, put, takeLatest, throttle, call } from "redux-saga/effects";
+import { delay, all, fork, put, takeLatest, throttle, call } from "redux-saga/effects";
 import axios from "axios";
 import Router from "next/router";
 
@@ -222,7 +222,7 @@ function searchPostsAPI(keyword, lastId = 0) {
 function* searchPosts(action) {
 	try {
 		const result = yield call(searchPostsAPI, action.keyword, action.lastId);
-
+    // yield delay(1500);
 		yield put({
 			type: SEARCH_POSTS_SUCCESS,
 			payload: result.data

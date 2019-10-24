@@ -9,6 +9,7 @@ import { Logo, StyledFooter, RightHeaderItems } from "../styledcomponents/appLay
 const { Header, Content } = Layout;
 
 const AppLayout = ({ children }) => {
+
 	const { myInfo } = useSelector(state => state.user);
 	const { isAddingPost } = useSelector(state => state.post);
 

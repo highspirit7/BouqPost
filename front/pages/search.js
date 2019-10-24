@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import propTypes from "prop-types";
-import { Divider } from "antd";
+import { Divider, Spin, Icon } from "antd";
 import Router from "next/router";
 
 import {
@@ -15,9 +15,8 @@ import PostForOthers from "../components/PostForOthers";
 import { NoResultMsg, StyledSearch } from "../styledcomponents/etc";
 import { StyledPostbox } from "../styledcomponents/post";
 
-
 const SearchPage = ({ keyword }) => {
-	const { displayedPosts, hasMorePost } = useSelector(state => state.post);
+	const { displayedPosts, hasMorePost, isSearchingPosts } = useSelector(state => state.post);
 
 	const { providedCategories, colors } = useSelector(state => state.categories);
 	const { myInfo } = useSelector(state => state.user);
@@ -105,6 +104,8 @@ const SearchPage = ({ keyword }) => {
 		};
 	}, [displayedPosts.length, onScroll]);
 
+	const loadingIcon = <Icon type="loading" style={{ fontSize: 48, color: "#939599" }} spin />;
+
 	return (
 		<>
 			<StyledSearch
@@ -118,29 +119,33 @@ const SearchPage = ({ keyword }) => {
 					})
 				}
 			/>
-			{displayedPosts.length !== 0 && (
-				<StyledPostbox>
-					<h1>검색된 포스트</h1>
-					{displayedPosts.map((post, index) => {
-						return (
-							<div key={index}>
-								<PostForOthers
-									post={post}
-									key={index}
-									categoryKeys={categoryKeys}
-									categoryValues={categoryValues}
-									colors={colors}
-									myInfo={myInfo}
-									onRemovePost={onRemovePost}
-									onToggleLike={onToggleLike}
-								/>
-								{index !== displayedPosts.length - 1 && <Divider />}
-							</div>
-						);
-					})}
-				</StyledPostbox>
-			)}
-			<NoResultMsg>{keyword !== "undefined" && displayedPosts.length === 0 && "- 검색 결과가 없습니다 -"}</NoResultMsg>
+			<Spin spinning={isSearchingPosts} indicator={loadingIcon}>
+				{displayedPosts.length !== 0 && (
+					<StyledPostbox>
+						<h1>검색된 포스트</h1>
+						{displayedPosts.map((post, index) => {
+							return (
+								<div key={index}>
+									<PostForOthers
+										post={post}
+										key={index}
+										categoryKeys={categoryKeys}
+										categoryValues={categoryValues}
+										colors={colors}
+										myInfo={myInfo}
+										onRemovePost={onRemovePost}
+										onToggleLike={onToggleLike}
+									/>
+									{index !== displayedPosts.length - 1 && <Divider />}
+								</div>
+							);
+						})}
+					</StyledPostbox>
+				)}
+				<NoResultMsg>
+					{!isSearchingPosts && keyword !== "undefined" && displayedPosts.length === 0 && "- 검색 결과가 없습니다 -"}
+				</NoResultMsg>
+			</Spin>
 		</>
 	);
 };
