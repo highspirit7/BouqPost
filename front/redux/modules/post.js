@@ -197,15 +197,11 @@ export default handleActions(
 			produce(state, draft => {
 				draft.errors.removePostError = payload.error;
 			}),
-		// [INITIATE_DISPLAYED_POSTS]: state =>
-		// 	produce(state, draft => {
-		// 		draft.displayedPosts = [];
-		// 	}),
 		[SEARCH_POSTS_REQUEST]: (state, payload) =>
 			produce(state, draft => {
 				draft.displayedPosts = !payload.lastId ? [] : draft.displayedPosts;
 				draft.hasMorePost = payload.lastId ? draft.hasMorePost : true;
-				draft.isSearchingPosts = payload.lastId ? true : false;
+				// draft.isSearchingPosts = payload.lastId ? true : false;
 			}),
 		[SEARCH_POSTS_SUCCESS]: (state, { payload }) =>
 			produce(state, draft => {
@@ -214,13 +210,13 @@ export default handleActions(
 				});
 
 				//로딩한 포스트 개수가 5개가 아니라는 것은 실질적으로는 5개보다 작았다는 것이고, 그러면 남아있는 포스트를 모두 이미 로딩했다는 뜻이 된다.
-				draft.hasMorePost = payload.length === 10;
-				draft.isSearchingPosts = false;
+				draft.hasMorePost = payload.length === 5;
+				// draft.isSearchingPosts = false;
 			}),
 		[SEARCH_POSTS_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
 				draft.errors.searchPostError = payload;
-				draft.isSearchingPosts = false;
+				// draft.isSearchingPosts = false;
 			}),
 		[LOAD_CATEGORY_POSTS_REQUEST]: (state, payload) =>
 			produce(state, draft => {
