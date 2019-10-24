@@ -47,7 +47,7 @@ router.get("/:keyword", async (req, res, next) => {
 				},
 				include,
 				order: [["id", "DESC"]], // DESC는 내림차순, ASC는 오름차순
-				// limit: 6
+				limit: 5
 			});
 
 			return res.json(posts);
@@ -70,7 +70,7 @@ router.get("/:keyword", async (req, res, next) => {
 				},
 				include,
 				order: [["id", "DESC"]], // DESC는 내림차순, ASC는 오름차순
-				// limit: 6
+				limit: 5
 			});
 
 			return res.json(posts);

@@ -267,13 +267,16 @@ function loadUserPostsAPI(userId, lastId = 0, limit = 5) {
 	return axios.get(`/user/${userId}?lastId=${lastId}&limit=${limit}`);
 }
 
-function* loadUserPosts(action) {
+function* loadUserPosts(payload) {
 	try {
-		const result = yield call(loadUserPostsAPI, action.user_id, action.lastId);
+		const result = yield call(loadUserPostsAPI, payload.user_id, payload.lastId);
 
 		yield put({
 			type: LOAD_USER_POSTS_SUCCESS,
-			payload: result.data
+			data: {
+				posts: result.data.rows,
+				count: result.data.count
+			}
 		});
 	} catch (e) {
 		console.error(e);
@@ -328,13 +331,11 @@ function* likePost(payload) {
 		const result = yield call(likePostAPI, payload.postId);
 		yield put({
 			type: LIKE_POST_SUCCESS,
-      data: {
-        postId: payload.postId,
-        userId: result.data.userId
-      }
-		
-    });
-
+			data: {
+				postId: payload.postId,
+				userId: result.data.userId
+			}
+		});
 	} catch (e) {
 		console.error(e);
 		yield put({

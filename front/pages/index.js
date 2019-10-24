@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Tag, Row, Col } from "antd";
 import Link from "next/link";
 import styled from "styled-components";
-import ThumbnailCmp from "../components/index/ThumbnailCmp";
+import ThumbnailCmp from "../components/main/ThumbnailCmp";
 
-import MainPosts from "../components/index/MainPosts";
 import {
 	LOAD_POSTS_REQUEST,
 	REMOVE_POST_REQUEST,
@@ -13,6 +12,7 @@ import {
 	UNLIKE_POST_REQUEST,
 	LIKE_POST_REQUEST
 } from "../redux/modules/post";
+import PostForMain from "../components/main/PostForMain";
 
 const ThumbnailWrapper = styled.div`
 	width: 94%;
@@ -136,7 +136,7 @@ const Main = () => {
 					<Col className="gutter-row" span={18}>
 						{displayedPosts.map((post, index) => {
 							return (
-								<MainPosts
+								<PostForMain
 									post={post}
 									key={index}
 									categoryKeys={categoryKeys}

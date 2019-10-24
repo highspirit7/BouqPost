@@ -7,7 +7,7 @@ import TimeAgo from "react-timeago";
 import koreanStrings from "react-timeago/lib/language-strings/ko";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 
-const MainPostsbox = styled.div`
+const MainPostbox = styled.div`
 	border: 1px solid rgb(147, 149, 153, 0.6);
 	border-radius: 5px;
 	background: white;
@@ -81,7 +81,7 @@ const DeleteBtn = styled.div`
 	}
 `;
 
-const MainPosts = ({ post, categoryKeys, categoryValues, colors, myInfo, onRemovePost, onToggleLike }) => {
+const PostForMain = ({ post, categoryKeys, categoryValues, colors, myInfo, onRemovePost, onToggleLike }) => {
 	const formatter = buildFormatter(koreanStrings);
 
 	const showDefaultImg = event => {
@@ -95,7 +95,7 @@ const MainPosts = ({ post, categoryKeys, categoryValues, colors, myInfo, onRemov
 	const liked = myId && post.Likers && post.Likers.find(v => v.id === myInfo.id);
 
 	return (
-		<MainPostsbox>
+		<MainPostbox>
 			<div style={{ display: "flex", alignItems: "center" }}>
 				<a href={post.link} target="_blank" rel="noopener noreferrer">
 					<img
@@ -183,11 +183,11 @@ const MainPosts = ({ post, categoryKeys, categoryValues, colors, myInfo, onRemov
 					</div>
 				</div>
 			</div>
-		</MainPostsbox>
+		</MainPostbox>
 	);
 };
 
-MainPosts.propTypes = {
+PostForMain.propTypes = {
 	post: propTypes.object.isRequired,
 	categoryKeys: propTypes.array.isRequired,
 	categoryValues: propTypes.array.isRequired,
@@ -197,4 +197,4 @@ MainPosts.propTypes = {
 	onToggleLike: propTypes.func.isRequired
 };
 
-export default MainPosts;
+export default PostForMain;

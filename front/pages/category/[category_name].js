@@ -1,17 +1,18 @@
-import React, { useEffect, useCallback, useRef, useState } from "react";
+import React, { useEffect, useCallback, useRef } from "react";
 // import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
-import Link from "next/link";
 import propTypes from "prop-types";
 // import Router from "next/router";
-import { Divider, Tag, Icon, Popconfirm } from "antd";
+import { Divider } from "antd";
 import styled from "styled-components";
-import TimeAgo from "react-timeago";
 
-import koreanStrings from "react-timeago/lib/language-strings/ko";
-import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
-
-import { LOAD_CATEGORY_POSTS_REQUEST, REMOVE_POST_REQUEST } from "../../redux/modules/post";
+import {
+	LOAD_CATEGORY_POSTS_REQUEST,
+	REMOVE_POST_REQUEST,
+	LIKE_POST_REQUEST,
+	UNLIKE_POST_REQUEST
+} from "../../redux/modules/post";
+import PostForOthers from "../../components/PostForOthers";
 
 const StyledPostbox = styled.div`
 	width: 82%;
@@ -30,30 +31,6 @@ const StyledPostbox = styled.div`
 	}
 `;
 
-const PostContent = styled.div`
-	img {
-		width: 186px;
-		height: 112px;
-		margin-right: 16px;
-	}
-
-	.contents {
-		display: inline-block;
-	}
-
-	.likeBtn {
-		border: 1px solid rgb(147, 149, 153, 0.6);
-		border-radius: 20px;
-	}
-`;
-
-const Poster = styled.div`
-	margin: 0 10px;
-	padding: 0 10px;
-	border-right: 1px solid rgba(0, 0, 0, 0.1);
-	border-left: 1px solid rgba(0, 0, 0, 0.1);
-`;
-
 const NoResultMsg = styled.div`
 	text-align: center;
 	font-size: 30px;
@@ -69,11 +46,7 @@ const Category = ({ category_name }) => {
 	const categoryKeys = Object.keys(providedCategories);
 	const categoryValues = Object.values(providedCategories);
 
-	const [liked, setLike] = useState(false);
-
 	const countRef = useRef([]);
-
-	const formatter = buildFormatter(koreanStrings);
 
 	// const router = useRouter();
 	// const { category_name } = router.query;
@@ -85,12 +58,6 @@ const Category = ({ category_name }) => {
 	// 	});
 	// }, [dispatch, category_name]);
 
-	const showDefaultImg = event => {
-		event.target.src = "/bbakdok.png";
-		event.target.title =
-			"해당 링크에서 이미지를 적절한 이미지를 추출하지 못했거나 간혹 이미지를 로드하지 못하는 에러 시 기본 이미지가 출력됩니다";
-	};
-
 	const onRemovePost = useCallback(
 		postId => () => {
 			dispatch({
@@ -101,11 +68,32 @@ const Category = ({ category_name }) => {
 		[dispatch]
 	);
 
+	const onToggleLike = useCallback(
+		(id, liked, post) => () => {
+			if (!id) {
+				return alert("로그인이 필요합니다!");
+			}
+			if (liked) {
+				// 좋아요 누른 상태
+				dispatch({
+					type: UNLIKE_POST_REQUEST,
+					postId: post.id
+				});
+			} else {
+				// 좋아요 안 누른 상태
+				dispatch({
+					type: LIKE_POST_REQUEST,
+					postId: post.id
+				});
+			}
+		},
+		[dispatch]
+	);
+
 	const onScroll = useCallback(() => {
 		//scrollY : 스크롤 내린 거리, clientHeight: 화면 높이, scrollHeight: 전체 화면 높이
 		if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
 			if (hasMorePost) {
-				// console.log("displayedPosts length : " + typeof displayedPosts.length);
 				const lastId = displayedPosts.length > 0 ? displayedPosts[displayedPosts.length - 1][0].id : 0; //제일 하단 게시물의 id
 
 				//프론트단에서 불필요하게 액션이 디스패치되는 것을 막기 위해
@@ -142,97 +130,24 @@ const Category = ({ category_name }) => {
 
 	return (
 		<>
-			{/* <CategoryTitle>
-        <h1>{providedCategories[category_name]}</h1>
-      </CategoryTitle> */}
 			{displayedPosts.length !== 0 ? (
 				<StyledPostbox>
 					<h1 style={{ fontSize: 28 }}>{`'${providedCategories[category_name]}' 카테고리의 포스트`}</h1>
 					{displayedPosts.map((post, index) => {
 						return (
-							<PostContent key={index}>
-								<div style={{ display: "flex", alignItems: "center" }} key={index}>
-									<a href={post.link} target="_blank" rel="noopener noreferrer">
-										<img
-											src={
-												post.thumbnail
-													? `https://images.weserv.nl/?url=ssl:${post.thumbnail.slice(8)}&w=200&h=128`
-													: "/bbakdok.png"
-											}
-											onError={showDefaultImg}
-											alt="thumbnail_img"
-										/>
-									</a>
-									<div className="contents">
-										<div>
-											{post.Categories.map(category => {
-												const indexInCategories = categoryValues.indexOf(category.name);
-
-												return (
-													<Link key={category.name} href={`/category/${categoryKeys[indexInCategories]}`}>
-														<a>
-															<Tag color={colors[indexInCategories]} style={{ curosr: "pointer" }}>
-																{category.name}
-															</Tag>
-														</a>
-													</Link>
-												);
-											})}
-										</div>
-										<a href={post.link} target="blank" rel="noopener noreferrer">
-											<h2>{post.title}</h2>
-										</a>
-										{post.description ? <p>{post.description}</p> : <br />}
-
-										<div style={{ display: "flex", alignItems: "center" }}>
-											<button className="likeBtn">
-												{" "}
-												<Icon
-													type="heart"
-													theme={liked ? "twoTone" : "outlined"}
-													twoToneColor="#eb2f96"
-													onClick={() => setLike(!liked)}
-												/>
-												{post.Likers.length !== 0 && <span style={{ marginLeft: 6 }}>{post.Likers.length}</span>}
-											</button>
-
-											<Poster>Posted by {post.User.nickname}</Poster>
-
-											<div>
-												<TimeAgo date={post.created_at} formatter={formatter}></TimeAgo>
-											</div>
-											{myInfo && myInfo.id === post.UserId && (
-												<>
-													<Link href={`/editPost/${post.id}`}>
-														<a>
-															<div
-																style={{
-																	marginLeft: 14,
-																	paddingRight: 10,
-																	paddingLeft: 10,
-																	borderRight: "1px solid rgba(0, 0, 0, 0.1)",
-																	borderLeft: "1px solid rgba(0, 0, 0, 0.1)",
-																	color: "rgba(0, 0, 0, 0.65)"
-																}}>
-																수정
-															</div>
-														</a>
-													</Link>
-
-													<Popconfirm
-														title="정말 삭제하시겠습니까?"
-														okText="Yes"
-														cancelText="No"
-														onConfirm={onRemovePost(post.id)}>
-														<div style={{ marginLeft: 10, cursor: "pointer" }}>삭제</div>
-													</Popconfirm>
-												</>
-											)}
-										</div>
-									</div>
-								</div>
+							<>
+								<PostForOthers
+									post={post}
+									key={index}
+									categoryKeys={categoryKeys}
+									categoryValues={categoryValues}
+									colors={colors}
+									myInfo={myInfo}
+									onRemovePost={onRemovePost}
+									onToggleLike={onToggleLike}
+								/>
 								{index !== displayedPosts.length - 1 && <Divider />}
-							</PostContent>
+							</>
 						);
 					})}
 				</StyledPostbox>

@@ -19,6 +19,7 @@ router.post("/logout", (req, res) => {
 	res.send("로그아웃 처리되었습니다");
 });
 
+//특정 유저 모든 포스트 조회
 router.get("/:userId", async (req, res, next) => {
 	// GET /api/user
 	try {
@@ -36,7 +37,7 @@ router.get("/:userId", async (req, res, next) => {
       }
     }
 
-		const posts = await db.Post.findAll({
+		const posts = await db.Post.findAndCountAll({
 			where,
       include: [
         {
