@@ -25,3 +25,6 @@
 # Mac OS에서 폴더 메타데이터 저장하는 파일
 */.DS_Store
 .DS_Store
+
+# AWS EC2 키 페어
+*/.pem
