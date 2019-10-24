@@ -4,7 +4,8 @@
   "description": "서평 및 독서 관련 글 공유 서비스",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "start": "NODE_ENV=production PORT=80 pm2 start index.js"
   },
   "keywords": [
     "서평",
