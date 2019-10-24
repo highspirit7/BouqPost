@@ -56,7 +56,7 @@ const AppLayout = ({ children }) => {
 
 	const myMenu = (
 		<Menu>
-			<Menu.Item key="user_name">{myInfo && myInfo.nickname}</Menu.Item>
+			<Menu.Item key="user_name" disabled>{myInfo && myInfo.nickname}</Menu.Item>
 			<Menu.Divider />
 			<Menu.Item key="myPage">
 				<Link href={`/user/${myInfo && myInfo.id}`}>
