@@ -41,25 +41,17 @@ class MyDocument extends Document {
 	}
 
 	// render() {
-	// 	const { htmlAttributes, bodyAttributes, ...helmet } = this.props.helmet;
-	// 	const htmlAttrs = htmlAttributes.toComponent();
-	// 	const bodyAttrs = bodyAttributes.toComponent();
-
 	// 	//아래와 같이 html이나 body 태그 등에 직접 attributes 세팅해주고 하려면 next에서는 _document.js 파일을 생성해야 해야 한다.
 	// 	//근본적으로 위와 같이 해주는 이유는 검색엔진 봇에 검색될 수 있게 하기 위함. 결국 SEO
 	// 	//<Main />은 각 라우트에 해당하는 페이지가 렌더링되는 부분이며,
 	// 	//<NextScript />는 Next.js 관련한 자바스크립트 파일이다.
 	// 	return (
-	// 		<html {...htmlAttrs}>
+	// 		<html>
 	// 			<head>
-	// 				{this.props.styleTags}
-	// 				{Object.values(helmet).map(el => el.toComponent())}
+				
 	// 			</head>
-	// 			<body {...bodyAttrs}>
+	// 			<body>
 	// 				<Main />
-	// 				{process.env.NODE_ENV === "production" && (
-	// 					<script src="https://polyfill.io/v3/polyfill.min.js?features=es6,es7,es8,es9,NodeList.prototype.forEach&flags=gated" />
-	// 				)}
 	// 				<NextScript />
 	// 			</body>
 	// 		</html>

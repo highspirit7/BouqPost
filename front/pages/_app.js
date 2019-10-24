@@ -6,7 +6,6 @@ import withReduxSaga from "next-redux-saga";
 import { applyMiddleware, compose, createStore } from "redux";
 import { Provider } from "react-redux";
 import createSagaMiddleware from "redux-saga";
-import Helmet from "react-helmet";
 import axios from "axios";
 import App from "next/app";
 
@@ -22,7 +21,7 @@ class BouqPost extends App {
 		return (
 			<Provider store={store}>
 				<Head>
-					<title>BouqPost</title>
+					<title>BouqPost - 졸꾸러기를 위한 콘텐츠 공유 서비스</title>
 					<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.23.6/antd.css" />
 				</Head>
 				<style jsx global>{`
@@ -62,9 +61,9 @@ BouqPost.getInitialProps = async context => {
 		ctx.store.dispatch({
 			type: LOAD_USER_REQUEST
 		});
-  }
-  
-  ctx.store.dispatch({
+	}
+
+	ctx.store.dispatch({
 		type: LOAD_CATEGORIES
 	});
 
