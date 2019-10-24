@@ -15,10 +15,9 @@ export const initialState = {
 	errors: {
 		scrapingError: "",
 		addPostError: "",
-		loadPostError: "",
+		loadPostsError: "",
 		updatePostError: "",
 		removePostError: "",
-		searchPostError: "",
 		loadRandomPostsError: ""
 	},
 	loadedPost: {
@@ -79,6 +78,10 @@ export const LIKE_POST_FAILURE = "post/LIKE_POST_FAILURE";
 export const UNLIKE_POST_REQUEST = "post/UNLIKE_POST_REQUEST";
 export const UNLIKE_POST_SUCCESS = "post/UNLIKE_POST_SUCCESS";
 export const UNLIKE_POST_FAILURE = "post/UNLIKE_POST_FAILURE";
+
+export const LOAD_USER_LIKES_REQUEST = "post/LOAD_USER_LIKES_REQUEST";
+export const LOAD_USER_LIKES_SUCCESS = "post/LOAD_USER_LIKES_SUCCESS";
+export const LOAD_USER_LIKES_FAILURE = "post/LOAD_USER_LIKES_FAILURE";
 
 // 액션 생성 함수
 export const addPostsRequest = createAction(ADD_POST_REQUEST);
@@ -175,7 +178,7 @@ export default handleActions(
 			}),
 		[LOAD_POSTS_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
-				draft.errors.loadPostError = payload;
+				draft.errors.loadPostsError = payload;
 			}),
 		[LOAD_POST_SUCCESS]: (state, { payload }) =>
 			produce(state, draft => {
@@ -186,7 +189,7 @@ export default handleActions(
 			}),
 		[LOAD_POST_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
-				draft.errors.loadPostError = payload;
+				draft.errors.loadPostsError = payload;
 			}),
 		[REMOVE_POST_SUCCESS]: (state, payload) =>
 			produce(state, draft => {
@@ -215,7 +218,7 @@ export default handleActions(
 			}),
 		[SEARCH_POSTS_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
-				draft.errors.searchPostError = payload;
+				draft.errors.loadPostsError = payload;
 				// draft.isSearchingPosts = false;
 			}),
 		[LOAD_CATEGORY_POSTS_REQUEST]: (state, payload) =>
@@ -234,7 +237,7 @@ export default handleActions(
 			}),
 		[LOAD_CATEGORY_POSTS_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
-				draft.errors.loadPostError = payload;
+				draft.errors.loadPostsError = payload;
 			}),
 		[CLEAR_DISPLAYED_POSTS]: state =>
 			produce(state, draft => {
@@ -252,11 +255,15 @@ export default handleActions(
 				});
 				draft.countPosts = payload.data.count;
 				//로딩한 포스트 개수가 5개가 아니라는 것은 실질적으로는 5개보다 작았다는 것이고, 그러면 남아있는 포스트를 모두 이미 로딩했다는 뜻이 된다.
-				draft.hasMorePost = payload.length === 5;
+				draft.hasMorePost = payload.data.posts.length === 5;
 			}),
 		[LOAD_USER_POSTS_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
-				draft.errors.loadPostError = payload;
+				draft.errors.loadPostsError = payload;
+			}),
+		[LOAD_RANDOM_POSTS_REQUEST]: state =>
+			produce(state, draft => {
+				draft.randomPosts = draft.randomPosts.length ? [] : [];
 			}),
 		[LOAD_RANDOM_POSTS_SUCCESS]: (state, { payload }) =>
 			produce(state, draft => {
@@ -279,6 +286,23 @@ export default handleActions(
 				const postIndex = draft.displayedPosts.findIndex(post => post.id === payload.data.postId);
 				const likeIndex = draft.displayedPosts[postIndex].Likers.findIndex(liker => liker.id === payload.data.userId);
 				draft.displayedPosts[postIndex].Likers.splice(likeIndex, 1);
+			}),
+		[LOAD_USER_LIKES_REQUEST]: (state, payload) =>
+			produce(state, draft => {
+				draft.displayedPosts = !payload.lastId ? [] : draft.displayedPosts;
+				draft.hasMorePost = payload.lastId ? draft.hasMorePost : true;
+			}),
+		[LOAD_USER_LIKES_SUCCESS]: (state, payload) =>
+			produce(state, draft => {
+				payload.data.forEach(post => {
+					draft.displayedPosts.push(post);
+				});
+				//로딩한 포스트 개수가 5개가 아니라는 것은 실질적으로는 5개보다 작았다는 것이고, 그러면 남아있는 포스트를 모두 이미 로딩했다는 뜻이 된다.
+				draft.hasMorePost = payload.data.length === 5;
+			}),
+		[LOAD_USER_LIKES_FAILURE]: (state, { payload }) =>
+			produce(state, draft => {
+				draft.errors.loadPostsError = payload;
 			})
 	},
 	initialState

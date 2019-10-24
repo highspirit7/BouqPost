@@ -38,7 +38,10 @@ import {
 	LIKE_POST_FAILURE,
 	UNLIKE_POST_REQUEST,
 	UNLIKE_POST_SUCCESS,
-	UNLIKE_POST_FAILURE
+	UNLIKE_POST_FAILURE,
+	LOAD_USER_LIKES_SUCCESS,
+	LOAD_USER_LIKES_FAILURE,
+	LOAD_USER_LIKES_REQUEST
 } from "../modules/post";
 
 function addPostAPI(postData) {
@@ -378,6 +381,33 @@ function* watchUnlikePost() {
 	yield takeLatest(UNLIKE_POST_REQUEST, unlikePost);
 }
 
+function loadUserLikesAPI(lastId = 0, limit = 5) {
+	return axios.get(`/posts/likes?lastId=${lastId}&limit=${limit}`, {
+		withCredentials: true
+	});
+}
+
+function* loadUserLikes(payload) {
+	try {
+		const result = yield call(loadUserLikesAPI, payload.lastId);
+
+		yield put({
+			type: LOAD_USER_LIKES_SUCCESS,
+			data: result.data
+		});
+	} catch (e) {
+		console.error(e);
+		yield put({
+			type: LOAD_USER_LIKES_FAILURE,
+			payload: e.message
+		});
+	}
+}
+
+function* watchLoadUserLikes() {
+	yield takeLatest(LOAD_USER_LIKES_REQUEST, loadUserLikes);
+}
+
 export default function* postSaga() {
 	yield all([
 		fork(watchAddPost),
@@ -391,6 +421,7 @@ export default function* postSaga() {
 		fork(watchLoadUserPosts),
 		fork(watchLoadRandomPosts),
 		fork(watchLikePost),
-		fork(watchUnlikePost)
+		fork(watchUnlikePost),
+		fork(watchLoadUserLikes)
 	]);
 }

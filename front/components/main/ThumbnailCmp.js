@@ -13,7 +13,7 @@ const ThumbnailCmp = ({ post }) => {
 		background-image: url(${post.thumbnail
 			? `https://images.weserv.nl/?url=ssl:${post.thumbnail.slice(8)}&w=300&h=180`
 			: "/bbakdok.png"});
-		background-repeat: no-repeat;
+		// background-repeat: no-repeat;
 		background-size: cover;
 		display: flex;
 		flex-direction: column;

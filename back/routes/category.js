@@ -51,7 +51,7 @@ router.get("/:category", async (req, res, next) => {
               attributes: ["id"]
 						}
 					],
-					order: [["id", "DESC"]]
+					// order: [["id", "DESC"]]
 				})
 			)
 		);

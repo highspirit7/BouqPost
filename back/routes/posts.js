@@ -17,7 +17,7 @@ router.get("/", async (req, res, next) => {
 				}
 			};
 		}
-		//lastId 0(falthy)이면 그러니까 제일 처음에 게시물들이 출력될 때 위 조건문은 실행되지 않고 lastId 조건 없이 그냥 10개만 불러온다.
+		//lastId 0(falthy)이면 그러니까 제일 처음에 게시물들이 출력될 때 위 조건문은 실행되지 않고 lastId 조건 없이 불러온다.
 		const posts = await db.Post.findAll({
 			where,
 			include: [
@@ -29,8 +29,8 @@ router.get("/", async (req, res, next) => {
 					model: db.Category
 				},
 				{
-          model: db.User,
-          through: "Like",
+					model: db.User,
+					through: "Like",
 					as: "Likers",
 					attributes: ["id"]
 				}
@@ -55,6 +55,88 @@ router.get("/random", async (req, res, next) => {
 			limit: 4
 		});
 		res.json(posts);
+	} catch (e) {
+		console.error(e);
+		next(e);
+	}
+});
+
+router.get("/likes", async (req, res, next) => {
+	// GET /api/posts
+	try {
+		const user = await db.User.findOne({
+			where: { id: 1 },
+			include: [
+				{
+					model: db.Post,
+					as: "Liked",
+					attributes: ["id"]
+				}
+			]
+		});
+
+		const postIdLike = user.Liked.map(post => post.id).reverse();
+		console.log(postIdLike);
+		if (!parseInt(req.query.lastId)) {
+			const neededPostIdLike = postIdLike.slice(0, parseInt(req.query.limit, 10));
+
+			const fullPosts = await Promise.all(
+				neededPostIdLike.map(id =>
+					db.Post.findOne({
+						where: { id },
+						include: [
+							{
+								model: db.User,
+								attributes: ["id", "nickname"]
+							},
+							{
+								model: db.Category
+							},
+							{
+								model: db.User,
+								through: "Like",
+								as: "Likers",
+								attributes: ["id"]
+							}
+						]
+						// order: [["id", "DESC"]]
+					})
+				)
+			);
+
+			return res.json(fullPosts);
+		} else {
+			const index = postIdLike.findIndex(id => id === parseInt(req.query.lastId, 10));
+			console.log("index : " + index);
+			const neededPostIdLike = postIdLike.slice(index + 1, index + 6);
+
+			console.log("neededPostIdLike : " + postIdLike);
+			const fullPosts = await Promise.all(
+				neededPostIdLike.map(id =>
+					db.Post.findOne({
+						where: { id },
+						include: [
+							{
+								model: db.User,
+								attributes: ["id", "nickname"]
+							},
+							{
+								model: db.Category
+							},
+							{
+								model: db.User,
+								through: "Like",
+								as: "Likers",
+								attributes: ["id"]
+							}
+						]
+						// order: [["id", "DESC"]]
+					})
+				)
+			);
+
+			return res.json(fullPosts);
+		}
 	} catch (e) {
 		console.error(e);
 		next(e);

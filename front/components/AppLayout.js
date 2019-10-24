@@ -88,8 +88,8 @@ const AppLayout = ({ children }) => {
 					<a>내 페이지</a>
 				</Link>
 			</Menu.Item>
-			<Menu.Item key="myPage">
-				<Link href="/myPage">
+			<Menu.Item key="myLikes">
+				<Link href="/likes">
 					<a>내 좋아요</a>
 				</Link>
 			</Menu.Item>
@@ -117,8 +117,8 @@ const AppLayout = ({ children }) => {
 					<a>내 페이지</a>
 				</Link>
 			</Menu.Item>
-			<Menu.Item key="myPage">
-				<Link href="/myPage">
+			<Menu.Item key="myLikes">
+				<Link href="/likes">
 					<a>내 좋아요</a>
 				</Link>
 			</Menu.Item>
