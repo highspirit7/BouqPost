@@ -79,6 +79,9 @@ app.use("/api/oauth", oauthAPIRouter);
 app.use("/api/search", searchAPIRouter);
 app.use("/api/category", categoryAPIRouter);
 
+app.get('/', (req, res) => {
+  res.send('react nodebird 백엔드 정상 동작!');
+});
 
 app.listen(prod ? process.env.PORT : 2019, () => {
   console.log(`server is running on ${process.env.PORT}`);
