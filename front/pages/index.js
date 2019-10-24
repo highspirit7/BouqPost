@@ -16,8 +16,6 @@ import PostForMain from "../components/main/PostForMain";
 
 const ThumbnailWrapper = styled.div`
 	width: 94%;
-	// display: flex;
-	// justify-content: space-between;
 	margin: 0 auto;
 	margin-bottom: 2em;
 `;
@@ -26,7 +24,6 @@ const Categories = styled.div`
 	border: 1px solid rgb(147, 149, 153, 0.6);
 	border-radius: 5px;
 	background: white;
-	// width: 20%;
 	padding: 20px;
 
 	span {
@@ -40,14 +37,11 @@ const Categories = styled.div`
 
 const ContentsWrapper = styled.div`
 	width: 94%;
-	// display: flex;
-	// justify-content: space-between;
 	margin: 0 auto;
 `;
 
 const Main = () => {
 	const { myInfo } = useSelector(state => state.user);
-	// const { id } = useSelector(state => state.user.myInfo && state.user.myInfo.id);
 	const { displayedPosts, hasMorePost, randomPosts } = useSelector(state => state.post);
 	const { providedCategories, colors } = useSelector(state => state.categories);
 	const categoryKeys = Object.keys(providedCategories);
@@ -105,10 +99,6 @@ const Main = () => {
 					});
 					countRef.current.push(lastId);
 				}
-				// dispatch({
-				//   type: LOAD_MAIN_POSTS_REQUEST,
-				//   lastId
-				// });
 			}
 		}
 	}, [hasMorePost, dispatch, displayedPosts]);
@@ -144,7 +134,7 @@ const Main = () => {
 									colors={colors}
 									myInfo={myInfo}
 									onRemovePost={onRemovePost}
-                  onToggleLike={onToggleLike}
+									onToggleLike={onToggleLike}
 								/>
 							);
 						})}

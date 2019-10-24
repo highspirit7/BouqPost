@@ -1,6 +1,4 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-// import Link from "next/link";
 import { Card } from "antd";
 import styled from "styled-components";
 

@@ -93,9 +93,10 @@ const User = ({ user_id }) => {
 	const onScroll = useCallback(() => {
 		//scrollY : 스크롤 내린 거리, clientHeight: 화면 높이, scrollHeight: 전체 화면 높이
 		if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
-			console.log("displayedPosts length : " + displayedPosts.length);
-			console.log(hasMorePost);
+      console.log("displayedPosts length : " + displayedPosts.length);
+      console.log(hasMorePost);
 			if (hasMorePost) {
+			
 				const lastId = displayedPosts.length > 0 ? displayedPosts[displayedPosts.length - 1].id : 0; //제일 하단 게시물의 id
 				console.log("lastId " + lastId);
 				//프론트단에서 불필요하게 액션이 디스패치되는 것을 막기 위해

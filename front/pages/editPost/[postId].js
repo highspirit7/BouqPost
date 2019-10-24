@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Card, Input, Row, Col, Form, Select, Button, message } from "antd";
 import { useRouter } from "next/router";
 
-import { UPDATE_POST_REQUEST, SCRAPING_REQUEST, LOAD_POST_REQUEST } from "../../../redux/modules/post";
+import { UPDATE_POST_REQUEST, SCRAPING_REQUEST, LOAD_POST_REQUEST } from "../../redux/modules/post";
 
 const NewPostFormWrapper = styled(Card)`
 	width: 88%;
@@ -45,7 +45,6 @@ const EditPost = () => {
 
 	const dispatch = useDispatch();
 
-	const { myInfo } = useSelector(state => state.user);
 	const { providedCategories } = useSelector(state => state.categories);
 	const { isScraping, scrapedTitle, scrapedImg, loadedPost } = useSelector(state => state.post);
 

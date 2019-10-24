@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import propTypes from "prop-types";
 import { Divider } from "antd";
-import styled from "styled-components";
 
+import { NoResultMsg } from "../styledcomponents/etc";
+import { StyledPostbox } from "../styledcomponents/post";
 import {
 	REMOVE_POST_REQUEST,
 	LIKE_POST_REQUEST,
@@ -11,31 +12,6 @@ import {
 	LOAD_USER_LIKES_REQUEST
 } from "../redux/modules/post";
 import PostForOthers from "../components/PostForOthers";
-
-
-const StyledPostbox = styled.div`
-	width: 82%;
-	border: 1px solid rgb(147, 149, 153, 0.6);
-	border-radius: 5px;
-	background: white;
-	padding: 22px;
-	// height: 240px;
-	// display: flex;
-	// align-items: center;
-	margin: 0 auto;
-	margin-bottom: 16px;
-
-	h1 {
-		font-size: 24px;
-	}
-`;
-
-const NoResultMsg = styled.div`
-	text-align: center;
-	font-size: 30px;
-	margin-top: 70px;
-	color: #939599;
-`;
 
 const Likes = () => {
 	const { displayedPosts, hasMorePost } = useSelector(state => state.post);
@@ -46,21 +22,6 @@ const Likes = () => {
 	const categoryValues = Object.values(providedCategories);
 
 	const dispatch = useDispatch();
-
-	// 아래 함수를 직접 Search 컴포넌트의 onSearch에 넣어줬었는데 동작하질 않았다.
-	// 아마 useCallback 때문인 것인지 원인은 모르지만 그래서 함수 안 쓰고 직접 onSearch에 라우팅 코드를 삽입했다.
-	// const searchRequest = useCallback(
-	// 	keyword => () => {
-	// 		console.log(keyword);
-	// 		Router.push({
-	// 			pathname: "/search",
-	// 			query: {
-	// 				q: encodeURIComponent(keyword)
-	// 			}
-	// 		});
-	// 	},
-	// 	[]
-	// );
 
 	const countRef = useRef([]);
 
@@ -129,7 +90,7 @@ const Likes = () => {
 		<>
 			{displayedPosts.length !== 0 && (
 				<StyledPostbox>
-          	<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+					<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
 						<h1 style={{ fontSize: 28 }}>내가 좋아하는 포스트</h1>
 						<h1>{`${myInfo.Liked.length}개의 포스트`}</h1>
 						<Divider style={{ marginTop: "6px", marginBottom: "20px" }} dashed />

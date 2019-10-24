@@ -1,36 +1,13 @@
 import React from "react";
-import styled from "styled-components";
 import propTypes from "prop-types";
 import Link from "next/link";
 import { Tag, Icon, Popconfirm } from "antd";
 import TimeAgo from "react-timeago";
 import koreanStrings from "react-timeago/lib/language-strings/ko";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
+import { OtherPostbox, Poster, DeleteBtn, UserName, EditBtn } from "../styledcomponents/post";
 
 
-const OtherPostbox = styled.div`
-	img {
-		width: 186px;
-		height: 112px;
-		margin-right: 16px;
-	}
-
-	.contents {
-		display: inline-block;
-	}
-
-	.likeBtn {
-		border: 1px solid rgb(147, 149, 153, 0.6);
-		border-radius: 20px;
-	}
-`;
-
-const Poster = styled.div`
-	margin: 0 10px;
-	padding: 0 10px;
-	border-right: 1px solid rgba(0, 0, 0, 0.1);
-	border-left: 1px solid rgba(0, 0, 0, 0.1);
-`;
 
 const PostForOthers = ({ post, categoryKeys, categoryValues, colors, myInfo, onRemovePost, onToggleLike }) => {
 	const formatter = buildFormatter(koreanStrings);
@@ -67,7 +44,7 @@ const PostForOthers = ({ post, categoryKeys, categoryValues, colors, myInfo, onR
 							return (
 								<Link key={category.name} href={`/category/${categoryKeys[indexInCategories]}`}>
 									<a>
-										<Tag color={colors[indexInCategories]} style={{ curosr: "pointer" }}>
+										<Tag color={colors[indexInCategories]} style={{ cursor: "pointer" }}>
 											{category.name}
 										</Tag>
 									</a>
@@ -92,7 +69,12 @@ const PostForOthers = ({ post, categoryKeys, categoryValues, colors, myInfo, onR
 							{post.Likers.length !== 0 && <span style={{ marginLeft: 6 }}>{post.Likers.length}</span>}
 						</button>
 
-						<Poster>Posted by {post.User.nickname}</Poster>
+						<Poster>
+							Posted by{" "}
+							<Link href={`/user/${post.UserId}`}>
+								<UserName>{post.User.nickname}</UserName>
+							</Link>
+						</Poster>
 
 						<div>
 							<TimeAgo date={post.created_at} formatter={formatter}></TimeAgo>
@@ -101,17 +83,7 @@ const PostForOthers = ({ post, categoryKeys, categoryValues, colors, myInfo, onR
 							<>
 								<Link href={`/editPost/${post.id}`}>
 									<a>
-										<div
-											style={{
-												marginLeft: 14,
-												paddingRight: 10,
-												paddingLeft: 10,
-												borderRight: "1px solid rgba(0, 0, 0, 0.1)",
-												borderLeft: "1px solid rgba(0, 0, 0, 0.1)",
-												color: "rgba(0, 0, 0, 0.65)"
-											}}>
-											수정
-										</div>
+										<EditBtn>수정</EditBtn>
 									</a>
 								</Link>
 
@@ -120,7 +92,7 @@ const PostForOthers = ({ post, categoryKeys, categoryValues, colors, myInfo, onR
 									okText="Yes"
 									cancelText="No"
 									onConfirm={onRemovePost(post.id)}>
-									<div style={{ marginLeft: 10, cursor: "pointer" }}>삭제</div>
+									<DeleteBtn>삭제</DeleteBtn>
 								</Popconfirm>
 							</>
 						)}

@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import propTypes from "prop-types";
 // import Router from "next/router";
 import { Divider } from "antd";
-import styled from "styled-components";
 
+import { StyledPostbox } from "../../styledcomponents/post";
 import {
 	LOAD_CATEGORY_POSTS_REQUEST,
 	REMOVE_POST_REQUEST,
@@ -13,30 +13,7 @@ import {
 	UNLIKE_POST_REQUEST
 } from "../../redux/modules/post";
 import PostForOthers from "../../components/PostForOthers";
-
-const StyledPostbox = styled.div`
-	width: 82%;
-	border: 1px solid rgb(147, 149, 153, 0.6);
-	border-radius: 5px;
-	background: white;
-	padding: 22px;
-	// height: 240px;
-	// display: flex;
-	// align-items: center;
-	margin: 0 auto;
-	margin-bottom: 16px;
-
-	h1 {
-		font-size: 24px;
-	}
-`;
-
-const NoResultMsg = styled.div`
-	text-align: center;
-	font-size: 30px;
-	margin-top: 70px;
-	color: #939599;
-`;
+import { NoResultMsg } from "../../styledcomponents/etc";
 
 const Category = ({ category_name }) => {
 	const dispatch = useDispatch();
@@ -47,16 +24,6 @@ const Category = ({ category_name }) => {
 	const categoryValues = Object.values(providedCategories);
 
 	const countRef = useRef([]);
-
-	// const router = useRouter();
-	// const { category_name } = router.query;
-
-	// useEffect(() => {
-	// 	dispatch({
-	// 		type: LOAD_CATEGORY_POSTS_REQUEST,
-	// 		category: category_name
-	// 	});
-	// }, [dispatch, category_name]);
 
 	const onRemovePost = useCallback(
 		postId => () => {

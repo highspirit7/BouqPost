@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import propTypes from "prop-types";
-import { Input, Divider } from "antd";
-import styled from "styled-components";
+import { Divider } from "antd";
 import Router from "next/router";
 
 import {
@@ -13,49 +12,9 @@ import {
 	UNLIKE_POST_REQUEST
 } from "../redux/modules/post";
 import PostForOthers from "../components/PostForOthers";
+import { NoResultMsg, StyledSearch } from "../styledcomponents/etc";
+import { StyledPostbox } from "../styledcomponents/post";
 
-const { Search } = Input;
-
-const StyledSearch = styled(Search)`
-	width: 82%;
-	display: block;
-	margin: 0 auto;
-	margin-bottom: 30px;
-
-	input {
-		height: 40px;
-		font-size: 18px;
-	}
-
-	svg {
-		width: 1.3em;
-		height: 1.3em;
-	}
-`;
-
-const StyledPostbox = styled.div`
-	width: 82%;
-	border: 1px solid rgb(147, 149, 153, 0.6);
-	border-radius: 5px;
-	background: white;
-	padding: 22px;
-	// height: 240px;
-	// display: flex;
-	// align-items: center;
-	margin: 0 auto;
-	margin-bottom: 16px;
-
-	h1 {
-		font-size: 24px;
-	}
-`;
-
-const NoResultMsg = styled.div`
-	text-align: center;
-	font-size: 30px;
-	margin-top: 70px;
-	color: #939599;
-`;
 
 const SearchPage = ({ keyword }) => {
 	const { displayedPosts, hasMorePost } = useSelector(state => state.post);

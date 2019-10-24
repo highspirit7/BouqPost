@@ -1,85 +1,12 @@
 import React from "react";
-import styled from "styled-components";
+// import styled from "styled-components";
 import propTypes from "prop-types";
 import Link from "next/link";
 import { Tag, Icon, Popconfirm } from "antd";
 import TimeAgo from "react-timeago";
 import koreanStrings from "react-timeago/lib/language-strings/ko";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
-
-const MainPostbox = styled.div`
-	border: 1px solid rgb(147, 149, 153, 0.6);
-	border-radius: 5px;
-	background: white;
-	padding: 22px;
-	margin-bottom: 16px;
-
-	img {
-		width: 186px;
-		height: 112px;
-		margin-right: 16px;
-	}
-
-	.contents {
-		display: inline-block;
-	}
-
-	.likeBtn {
-		border: 1px solid rgb(147, 149, 153, 0.6);
-		border-radius: 20px;
-	}
-
-	h1 {
-		font-size: 24px;
-	}
-
-	p {
-		color: #939599;
-		cursor: pointer;
-	}
-
-	p:hover {
-		color: #2b2a28;
-	}
-`;
-
-const Poster = styled.div`
-	margin: 0 10px;
-	padding: 0 10px;
-	border-right: 1px solid rgba(0, 0, 0, 0.1);
-	border-left: 1px solid rgba(0, 0, 0, 0.1);
-`;
-
-const UserName = styled.a`
-	color: rgba(0, 0, 0, 0.65);
-	font-weight: 500;
-	:hover {
-		color: #5cd12a;
-	}
-`;
-
-const EditBtn = styled.a`
-	margin-left: 14px;
-	padding-right: 10px;
-	padding-left: 10px;
-	border-right: 1px solid rgba(0, 0, 0, 0.1);
-	border-left: 1px solid rgba(0, 0, 0, 0.1);
-	color: rgba(0, 0, 0, 0.65);
-
-	:hover {
-		color: #326ada;
-	}
-`;
-
-const DeleteBtn = styled.div`
-	margin-left: 10px;
-	cursor: pointer;
-
-	color: rgba(0, 0, 0, 0.65);
-	:hover {
-		color: #fc3468;
-	}
-`;
+import { MainPostbox, Poster, DeleteBtn, UserName, EditBtn } from "../../styledcomponents/post";
 
 const PostForMain = ({ post, categoryKeys, categoryValues, colors, myInfo, onRemovePost, onToggleLike }) => {
 	const formatter = buildFormatter(koreanStrings);
@@ -158,7 +85,7 @@ const PostForMain = ({ post, categoryKeys, categoryValues, colors, myInfo, onRem
 						<Poster>
 							Posted by{" "}
 							<Link href={`/user/${post.UserId}`}>
-								<UserName style={{}}>{post.User.nickname}</UserName>
+								<UserName>{post.User.nickname}</UserName>
 							</Link>
 						</Poster>
 
