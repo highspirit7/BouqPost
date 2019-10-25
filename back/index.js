@@ -9,6 +9,7 @@ const passportConfig = require("./passport");
 const hpp = require("hpp");
 const helmet = require("helmet");
 const db = require("./models"); //index.js파일은 명시 안해줘도 된다.
+const logger = require("./logger");
 const userAPIRouter = require("./routes/user");
 const postAPIRouter = require("./routes/post");
 const postsAPIRouter = require("./routes/posts");
@@ -45,6 +46,15 @@ if (prod) {
 		})
 	);
 }
+
+
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
+  err.status = 404;
+  logger.info('hello');
+  logger.error(err.message);
+  next(err);
+});
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
