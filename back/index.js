@@ -6,8 +6,8 @@ const expressSession = require("express-session");
 const dotenv = require("dotenv");
 const passport = require("passport");
 const passportConfig = require("./passport");
-const hpp = require('hpp');
-const helmet = require('helmet');
+const hpp = require("hpp");
+const helmet = require("helmet");
 const db = require("./models"); //index.js파일은 명시 안해줘도 된다.
 const userAPIRouter = require("./routes/user");
 const postAPIRouter = require("./routes/post");
@@ -18,7 +18,7 @@ const categoryAPIRouter = require("./routes/category");
 
 const app = express();
 
-const prod = process.env.NODE_ENV === 'production';
+const prod = process.env.NODE_ENV === "production";
 //시퀄라이즈를 DB(이 프로젝트에서는 MySQL)와 연동
 db.sequelize.sync();
 
@@ -27,19 +27,23 @@ dotenv.config();
 passportConfig();
 
 if (prod) {
-  app.use(hpp());
-  app.use(helmet());
-  app.use(morgan('combined'));
-  app.use(cors({
-    // origin: /nodebird\.com$/,
-    credentials: true,
-  }));
+	app.use(hpp());
+	app.use(helmet());
+	app.use(morgan("combined"));
+	app.use(
+		cors({
+			// origin: /nodebird\.com$/,
+			credentials: true
+		})
+	);
 } else {
-  app.use(morgan('dev'));
-  app.use(cors({
-    origin: true,
-    credentials: true,
-  }));
+	app.use(morgan("dev"));
+	app.use(
+		cors({
+			origin: true,
+			credentials: true
+		})
+	);
 }
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -70,7 +74,6 @@ app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 // API는 다른 서비스가 내 서비스의 기능을 실행할 수 있게 열어둔 창구
 app.use("/api/user", userAPIRouter);
 app.use("/api/post", postAPIRouter);
@@ -79,10 +82,10 @@ app.use("/api/oauth", oauthAPIRouter);
 app.use("/api/search", searchAPIRouter);
 app.use("/api/category", categoryAPIRouter);
 
-app.get('/', (req, res) => {
-  res.send('react nodebird 백엔드 정상 동작!');
+app.get("/", (req, res) => {
+	res.send("react nodebird 백엔드 정상 동작!");
 });
 
 app.listen(prod ? process.env.PORT : 2019, () => {
-  console.log(`server is running on ${process.env.PORT}`);
+	console.log(`server is running on ${prod ? process.env.PORT : "2019"}`);
 });
