@@ -5,7 +5,7 @@ const { isLoggedIn } = require("./middleware");
 
 const router = express.Router();
 
-router.post("/", isLoggedIn, async (req, res, next) => {
+router.post("/", async (req, res, next) => {
 
 	try {
 		//액션에 들어가는 data객체를 그대로 req.body로 받을 수 있는 것으로 보인다.

@@ -33,19 +33,20 @@ if (prod) {
 	app.use(morgan("combined"));
 	app.use(
 		cors({
-			// origin: /nodebird\.com$/,
+			origin: /bouqpost\.xyz$/,
 			credentials: true
 		})
 	);
 } else {
-	app.use(morgan("dev"));
-	app.use(
-		cors({
-			origin: true,
-			credentials: true
-		})
-	);
+  app.use(morgan("dev"));
+  app.use(
+    cors({
+      origin: true,
+      credentials: true
+    })
+  );
 }
+
 
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -61,8 +62,8 @@ app.use(
 		secret: process.env.COOKIE_SECRET,
 		cookie: {
 			httpOnly: true,
-      secure: false, //https를 쓸 때 true로
-      domain: prod && '.bouqpost.xyz'
+			secure: false, //https를 쓸 때 true로
+			domain: prod && ".bouqpost.xyz"
 		},
 		name: "a604m"
 	})

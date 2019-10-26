@@ -2,11 +2,11 @@ import { all, fork, put, takeLatest, takeEvery, call } from "redux-saga/effects"
 import axios from "axios";
 import {
 	LOAD_USER_FAILURE,
-  LOAD_USER_REQUEST,
-  LOAD_USER_SUCCESS,
+	LOAD_USER_REQUEST,
+	LOAD_USER_SUCCESS,
 	LOG_OUT_FAILURE,
 	LOG_OUT_REQUEST,
-	LOG_OUT_SUCCESS,
+	LOG_OUT_SUCCESS
 	// LOG_IN_FAILURE,
 	// LOG_IN_REQUEST,
 	// LOG_IN_SUCCESS

@@ -222,7 +222,7 @@ function searchPostsAPI(keyword, lastId = 0) {
 function* searchPosts(action) {
 	try {
 		const result = yield call(searchPostsAPI, action.keyword, action.lastId);
-    // yield delay(1500);
+		// yield delay(1500);
 		yield put({
 			type: SEARCH_POSTS_SUCCESS,
 			payload: result.data
