@@ -86,7 +86,7 @@ app.use("/api/search", searchAPIRouter);
 app.use("/api/category", categoryAPIRouter);
 
 app.get("/", (req, res) => {
-	res.send("react nodebird 백엔드 정상 동작!");
+	res.send("북포스트 정상 동작!");
 });
 
 app.listen(prod ? process.env.PORT : 2019, () => {
