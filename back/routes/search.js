@@ -7,7 +7,7 @@ const router = express.Router();
 
 //키워드로 포스트 검색
 router.get("/:keyword", async (req, res, next) => {
-	// GET /api/search
+
 	const include = [
 		{
 			model: db.User,
