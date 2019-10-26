@@ -7,7 +7,7 @@
 		"dev": "next",
 		"build": "ANALYZE=true next build",
 		"prestart": "npm run build",
-		"start": "NODE_ENV=production next start"
+		"start": "NODE_ENV=production PORT=80 next start"
 	},
 	"keywords": [
 		"[\"서평\"",
