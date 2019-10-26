@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 const router = express.Router();
 
 router.get("/:category", async (req, res, next) => {
-	// GET /api/category
+
 	try {
 		let where = {};
 		if (parseInt(req.query.lastId, 10)) {
