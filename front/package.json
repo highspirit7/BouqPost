@@ -7,7 +7,7 @@
 		"dev": "nodemon",
 		"build": "ANALYZE=true next build",
 		"prestart": "npm run build",
-		"start": "pm2 start ecosystem.config.js --env production"
+		"start": "pm2 start ./config/ecosystem.config.js --env production"
 	},
 	"keywords": [
 		"[\"서평\"",

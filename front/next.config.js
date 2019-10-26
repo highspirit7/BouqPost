@@ -1,5 +1,5 @@
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
-	enabled: process.env.ANALYZE === "true"
+	enabled: process.env.ANALYZE === "false"
 });
 const webpack = require("webpack");
 const CompressionPlugin = require("compression-webpack-plugin");
