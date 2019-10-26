@@ -78,12 +78,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // API는 다른 서비스가 내 서비스의 기능을 실행할 수 있게 열어둔 창구
-app.use("/api/user", userAPIRouter);
-app.use("/api/post", postAPIRouter);
-app.use("/api/posts", postsAPIRouter);
-app.use("/api/oauth", oauthAPIRouter);
-app.use("/api/search", searchAPIRouter);
-app.use("/api/category", categoryAPIRouter);
+app.use("/user", userAPIRouter);
+app.use("/post", postAPIRouter);
+app.use("/posts", postsAPIRouter);
+app.use("/oauth", oauthAPIRouter);
+app.use("/search", searchAPIRouter);
+app.use("/category", categoryAPIRouter);
 
 app.get("/", (req, res) => {
 	res.send("북포스트 정상 동작!");
