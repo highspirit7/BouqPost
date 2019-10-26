@@ -94,14 +94,21 @@ const configureStore = (initialState, options) => {
 
 	//실제 배포말고 개발환경에서만 리덕스 devtool 사용가능하도록 설정
 	const enhancer =
-		process.env.NODE_ENV === "production"
-			? compose(applyMiddleware(...middlewares))
-			: compose(
-					applyMiddleware(...middlewares),
-					!options.isServer && typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== "undefined"
-						? window.__REDUX_DEVTOOLS_EXTENSION__()
-						: f => f
-			  );
+		// process.env.NODE_ENV === "production"
+		// 	? compose(applyMiddleware(...middlewares))
+		// 	: compose(
+		// 			applyMiddleware(...middlewares),
+		// 			!options.isServer && typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== "undefined"
+		// 				? window.__REDUX_DEVTOOLS_EXTENSION__()
+		// 				: f => f
+		//     );
+
+		compose(
+			applyMiddleware(...middlewares),
+			!options.isServer && typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== "undefined"
+				? window.__REDUX_DEVTOOLS_EXTENSION__()
+				: f => f
+		);
 	const store = createStore(reducer, initialState, enhancer);
 
 	/**

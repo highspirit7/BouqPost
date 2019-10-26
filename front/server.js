@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
 const dotenv = require('dotenv');
-// const path = require('path');
+const path = require('path');
 
 const dev = process.env.NODE_ENV !== 'production';
 const prod = process.env.NODE_ENV === 'production';
@@ -17,6 +17,7 @@ app.prepare().then(() => {
   const server = express();
 
   server.use(morgan('dev'));
+  // server.use('/', express.static(path.join(__dirname, 'public')));
   server.use(express.json());
   server.use(express.urlencoded({ extended: true }));
   server.use(cookieParser(process.env.COOKIE_SECRET));
@@ -34,7 +35,7 @@ app.prepare().then(() => {
     return handle(req, res);
   });
 
-  //EC2(우분투) 인스턴스에서 3000번 포트를 80으로 받아버리는 설정을 해버려서 어떻게 되돌리는지 아직 모르는 상황이라 항상 3000으로 우선 설정 해놓음.
+  //EC2 인스턴스에서 3000번 포트를 80으로 받아버리는 설정을 해버려서 어떻게 되돌리는지 아직 모르는 상황이라 항상 3000으로 
   server.listen(3000, () => {
     console.log(`next+express running on port ${process.env.PORT}`);
   });
