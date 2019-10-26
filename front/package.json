@@ -7,7 +7,7 @@
 		"dev": "nodemon",
 		"build": "ANALYZE=true next build",
 		"prestart": "npm run build",
-		"start": "NODE_ENV=production PORT=80 next start"
+		"start": "NODE_ENV=production PORT=80 pm2 start"
 	},
 	"keywords": [
 		"[\"서평\"",
