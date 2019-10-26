@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"dev": "nodemon",
-		"build": "ANALYZE=true next build",
+		"build": "next build",
 		"prestart": "npm run build",
 		"start": "pm2 start ./config/ecosystem.config.js --env production"
 	},
