@@ -60,7 +60,7 @@ const Login = () => {
 			<h1>로그인</h1>
 			<p style={{ fontSize: 18 }}>좋아요 및 포스트 작성을 위해서는 로그인이 필요합니다.</p>
 
-			<a href={`${backUrl}/api/oauth/kakao`}>
+			<a href={`${backUrl}/oauth/kakao`}>
 				<KakaoLoginBtn>
 					<img src="/kakaolink_btn_small.png" alt="kakaolink_btn"></img>
 					<div>카카오 로그인</div>
