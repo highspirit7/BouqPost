@@ -7,7 +7,7 @@
 		"dev": "nodemon",
 		"build": "ANALYZE=true next build",
 		"prestart": "npm run build",
-		"start": "NODE_ENV=production PORT=80 pm2 start"
+		"start": "pm2 start ecosystem.config.js --env production"
 	},
 	"keywords": [
 		"[\"서평\"",
@@ -28,6 +28,7 @@
 		"next": "^9.1.1",
 		"next-redux-saga": "^4.0.2",
 		"next-redux-wrapper": "^4.0.1",
+		"pm2": "^4.1.2",
 		"prop-types": "^15.7.2",
 		"react": "^16.10.2",
 		"react-dom": "^16.10.2",
