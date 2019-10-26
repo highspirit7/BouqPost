@@ -62,7 +62,7 @@ app.use(
 		cookie: {
 			httpOnly: true,
       secure: false, //https를 쓸 때 true로
-      // domain: prod && '.bouqpost.xyz'
+      domain: prod && '.bouqpost.xyz'
 		},
 		name: "a604m"
 	})
