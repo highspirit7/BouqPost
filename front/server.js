@@ -35,7 +35,8 @@ app.prepare().then(() => {
     return handle(req, res);
   });
 
-  server.listen(prod ? process.env.PORT : 3000, () => {
-    console.log(`next+express running on port ${prod ? process.env.PORT : 3000}`);
+  //EC2(우분투) 인스턴스에서 3000번 포트를 80으로 받아버리는 설정을 해버려서 어떻게 되돌리는지 아직 모르는 상황이라 항상 3000으로 우선 설정 해놓음.
+  server.listen(3000, () => {
+    console.log(`next+express running on port ${process.env.PORT}`);
   });
 });

@@ -1,6 +1,7 @@
 import React from "react";
 import { Card } from "antd";
 import styled from "styled-components";
+import { backUrl } from "../config/config";
 
 const LoginFormWrapper = styled(Card)`
 	width: 90%;
@@ -16,26 +17,26 @@ const KakaoLoginBtn = styled.div`
 	width: 200px;
 	height: 50px;
 	margin-bottom: 2em;
-  cursor: pointer;
-  border-radius: 6px;
+	cursor: pointer;
+	border-radius: 6px;
 	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
 	background-color: #fff;
-  color: #757575;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  img {
-    margin-left: 12px;
-    // width: 32px;
-    // height: 32px;
-  }
+	color: #757575;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	img {
+		margin-left: 12px;
+		// width: 32px;
+		// height: 32px;
+	}
 
-  div {
-    width: 100%;
-    text-align: center;
-    font-size: 18px;
-    font-weight: 500;
-  }
+	div {
+		width: 100%;
+		text-align: center;
+		font-size: 18px;
+		font-weight: 500;
+	}
 `;
 
 const Login = () => {
@@ -59,9 +60,9 @@ const Login = () => {
 			<h1>로그인</h1>
 			<p style={{ fontSize: 18 }}>좋아요 및 포스트 작성을 위해서는 로그인이 필요합니다.</p>
 
-			<a href="http://localhost:2019/api/oauth/kakao">
+			<a href={`${backUrl}/api/oauth/kakao`}>
 				<KakaoLoginBtn>
-          <img src="/kakaolink_btn_small.png" alt="kakaolink_btn"></img>
+					<img src="/kakaolink_btn_small.png" alt="kakaolink_btn"></img>
 					<div>카카오 로그인</div>
 				</KakaoLoginBtn>
 			</a>
