@@ -48,14 +48,6 @@ if (prod) {
 }
 
 
-app.use((req, res, next) => {
-  const err = new Error('Not Found');
-  err.status = 404;
-  logger.info('hello');
-  logger.error(err.message);
-  next(err);
-});
-
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 //secret – 쿠키를 임의로 변조하는것을 방지하기 위한 값 입니다. 이 값을 통하여 세션을 암호화 하여 저장합니다.
@@ -69,7 +61,8 @@ app.use(
 		secret: process.env.COOKIE_SECRET,
 		cookie: {
 			httpOnly: true,
-			secure: false //https를 쓸 때 true로
+      secure: false, //https를 쓸 때 true로
+      // domain: prod && '.bouqpost.xyz'
 		},
 		name: "a604m"
 	})

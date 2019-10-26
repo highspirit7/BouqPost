@@ -4,7 +4,7 @@
 	"description": "서평 및 독서 관련 글 공유 플랫폼",
 	"main": "index.js",
 	"scripts": {
-		"dev": "next",
+		"dev": "nodemon",
 		"build": "ANALYZE=true next build",
 		"prestart": "npm run build",
 		"start": "NODE_ENV=production PORT=80 next start"
