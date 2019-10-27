@@ -28,3 +28,6 @@
 
 # AWS EC2 키 페어
 */.pem
+
+# log 폴더 
+/log/
