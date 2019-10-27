@@ -4,11 +4,14 @@ const db = require("../models");
 const { isLoggedIn } = require("./middleware");
 
 const router = express.Router();
+const logger = require("../logger");
 
 router.post("/", async (req, res, next) => {
-
 	try {
 		//액션에 들어가는 data객체를 그대로 req.body로 받을 수 있는 것으로 보인다.
+		logger.info("새 포스트 객체 from 프론트", () => {
+			console.log(req.body);
+		});
 
 		const newPost = await db.Post.create({
 			title: req.body.title,
@@ -25,30 +28,9 @@ router.post("/", async (req, res, next) => {
 		);
 		await newPost.addCategories(categories);
 
-		// 이래 방식 및 include 방식 2가지 다 가능
-		// const User = await newPost.getUser();
-		// newPost.User = User;
-		// res.json(newPost);
+    logger.error()  
 
-		// const fullPost = await db.Post.findOne({
-		// 	where: { id: newPost.id },
-		// 	include: [
-		// 		{
-		// 			model: db.User,
-		// 			attributes: ["id", "nickname"]
-		// 		},
-		// 		{
-		// 			model: db.Category
-		// 		},
-		// 		{
-		// 			model: db.User,
-		// 			as: "Likers",
-		// 			attributes: ["id"]
-		// 		}
-		// 	]
-		// });
-
-		res.send("새 포스트가 추가되었습니다.");
+    res.send("새 포스트가 추가되었습니다.");
 	} catch (e) {
 		console.error(e);
 		next(e);
@@ -114,7 +96,6 @@ router.get("/:postId", isLoggedIn, async (req, res, next) => {
 
 //게시물 수정
 router.put("/:postId", isLoggedIn, async (req, res, next) => {
-
 	try {
 		const post = await db.Post.findOne({
 			where: { id: req.params.postId },
@@ -181,8 +162,8 @@ router.post("/:postId/like", isLoggedIn, async (req, res, next) => {
 		if (!post) {
 			return res.status(404).send("포스트가 존재하지 않습니다.");
 		}
-    await post.addLiker(req.user.id);
-    console.log(req.user)
+		await post.addLiker(req.user.id);
+		console.log(req.user);
 		res.json({ userId: req.user.id });
 	} catch (e) {
 		console.error(e);
