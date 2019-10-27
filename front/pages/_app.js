@@ -65,7 +65,7 @@ BouqPost.getInitialProps = async context => {
 	const cookie = ctx.isServer ? ctx.req.headers.cookie : "";
 
 	if (ctx.isServer && cookie) {
-		axios.defaults.headers.Cookie = "";
+		// axios.defaults.headers.Cookie = "";
 		axios.defaults.headers.Cookie = cookie;
 	}
 

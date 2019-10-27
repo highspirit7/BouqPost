@@ -39,6 +39,16 @@
             "date": 1572093436968,
             "name": "log/combined.log.2019-10-26-21",
             "hash": "8097fd6b9b168939fcdf2d9570992947"
+        },
+        {
+            "date": 1572172604672,
+            "name": "log/combined.log.2019-10-27-19",
+            "hash": "1f41e36d4015e2cdf448009d23714a6d"
+        },
+        {
+            "date": 1572174674387,
+            "name": "log/combined.log.2019-10-27-20",
+            "hash": "fbb8e5f32f3f863549c8d8da779d2c9d"
         }
     ]
 }

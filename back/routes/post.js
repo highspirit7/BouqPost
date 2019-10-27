@@ -9,9 +9,7 @@ const logger = require("../logger");
 router.post("/", async (req, res, next) => {
 	try {
 		//액션에 들어가는 data객체를 그대로 req.body로 받을 수 있는 것으로 보인다.
-		logger.info("새 포스트 객체 from 프론트", () => {
-			console.log(req.body);
-		});
+		logger.info(req.user);
 
 		const newPost = await db.Post.create({
 			title: req.body.title,
@@ -28,9 +26,9 @@ router.post("/", async (req, res, next) => {
 		);
 		await newPost.addCategories(categories);
 
-    logger.error()  
+		logger.error();
 
-    res.send("새 포스트가 추가되었습니다.");
+		res.send("새 포스트가 추가되었습니다.");
 	} catch (e) {
 		console.error(e);
 		next(e);

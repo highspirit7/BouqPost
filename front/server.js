@@ -4,10 +4,10 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
 const dotenv = require('dotenv');
-const path = require('path');
+// const path = require('path');
 
 const dev = process.env.NODE_ENV !== 'production';
-const prod = process.env.NODE_ENV === 'production';
+// const prod = process.env.NODE_ENV === 'production';
 
 const app = next({ dev });
 const handle = app.getRequestHandler();
