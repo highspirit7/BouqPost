@@ -7,6 +7,8 @@ const dotenv = require("dotenv");
 const passport = require("passport");
 const passportConfig = require("./passport");
 const hpp = require("hpp");
+const redis = require("redis");
+const RedisStore = require("connect-redis")(expressSession);
 const helmet = require("helmet");
 const db = require("./models"); //index.js파일은 명시 안해줘도 된다.
 const logger = require("./logger");
@@ -38,18 +40,27 @@ if (prod) {
 		})
 	);
 } else {
-  app.use(morgan("dev"));
-  app.use(
-    cors({
-      origin: true,
-      credentials: true
-    })
-  );
+	app.use(morgan("dev"));
+	app.use(
+		cors({
+			origin: true,
+			credentials: true
+		})
+	);
 }
 
-
-
 app.use(cookieParser(process.env.COOKIE_SECRET));
+
+const host = process.env.REDIS_HOST;
+const port = process.env.REDIS_PORT;
+
+const redisClient = redis.createClient(port, host);
+
+redisClient.auth(function (err) {
+
+  if (err) throw err;
+
+});
 
 //secret – 쿠키를 임의로 변조하는것을 방지하기 위한 값 입니다. 이 값을 통하여 세션을 암호화 하여 저장합니다.
 //resave – 세션을 언제나 저장할 지 (변경되지 않아도) 정하는 값입니다. express-session documentation에서는 이 값을 false 로 하는것을 권장하고 필요에 따라 true로 설정합니다.
@@ -57,7 +68,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
 	expressSession({
 		resave: false,
-		saveUninitialized: true,
+		saveUninitialized: false,
 		maxAge: 604800000, //일주일
 		secret: process.env.COOKIE_SECRET,
 		cookie: {
@@ -65,7 +76,14 @@ app.use(
 			secure: false, //https를 쓸 때 true로
 			domain: prod && ".bouqpost.xyz"
 		},
-		name: "a604m"
+		name: "a604m",
+		store: new RedisStore({
+      client: redisClient,
+			host: process.env.REDIS_HOST,
+			port: process.env.REDIS_PORT,
+			pass: process.env.REDIS_PASSWORD,
+			logErrors: true
+		})
 	})
 );
 
