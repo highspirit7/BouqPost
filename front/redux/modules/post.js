@@ -253,7 +253,7 @@ export default handleActions(
 				payload.data.posts.forEach(post => {
 					draft.displayedPosts.push(post);
 				});
-				draft.countPosts = payload.data.count;
+				draft.countPosts = payload.data.lastId ? draft.countPosts : payload.data.count;
 				//로딩한 포스트 개수가 5개가 아니라는 것은 실질적으로는 5개보다 작았다는 것이고, 그러면 남아있는 포스트를 모두 이미 로딩했다는 뜻이 된다.
 				draft.hasMorePost = payload.data.posts.length === 5;
 			}),

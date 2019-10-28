@@ -51,6 +51,7 @@ router.get("/:userId", async (req, res, next) => {
 					attributes: ["id"]
         }
       ],
+      distinct: true,
 			order: [["id", "DESC"]],
 			limit: parseInt(req.query.limit, 10)
 		});

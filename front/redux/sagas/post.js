@@ -278,7 +278,8 @@ function* loadUserPosts(payload) {
 			type: LOAD_USER_POSTS_SUCCESS,
 			data: {
 				posts: result.data.rows,
-				count: result.data.count
+        count: result.data.count,
+        lastId: payload.lastId
 			}
 		});
 	} catch (e) {
