@@ -11,8 +11,9 @@ const ThumbnailCmp = ({ post }) => {
 		cursor: pointer;
 		box-shadow: #939599 2px 2px 6px -2px;
 		background-image: url(${post.thumbnail
-			? `https://images.weserv.nl/?url=ssl:${post.thumbnail.slice(8)}&w=300&h=180`
-			: "/bbakdok.png"});
+				? `https://images.weserv.nl/?url=ssl:${post.thumbnail.slice(8)}&w=300&h=180`
+				: "/bbakdok.png"}),
+			url("/bbakdok.png");
 		// background-repeat: no-repeat;
 		background-size: cover;
 		display: flex;
