@@ -53,10 +53,11 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 
 const host = process.env.REDIS_HOST;
 const port = process.env.REDIS_PORT;
+const password = process.env.REDIS_PASSWORD;
 
 const redisClient = redis.createClient(port, host);
 
-redisClient.auth(function (err) {
+redisClient.auth(password, function (err) {
 
   if (err) throw err;
 
@@ -79,13 +80,14 @@ app.use(
 		name: "a604m",
 		store: new RedisStore({
       client: redisClient,
-			host: process.env.REDIS_HOST,
-			port: process.env.REDIS_PORT,
-			pass: process.env.REDIS_PASSWORD,
+			host,
+			port,
+			password,
 			logErrors: true
 		})
 	})
 );
+
 
 //passport가 내부적으로 express-session을 사용하기 때문에 express-session을 use한 후에 사용해야 한다.
 app.use(passport.initialize());
