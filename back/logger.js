@@ -12,7 +12,7 @@ const logger = winston.createLogger({
 			filename: "log/combined.log",
 			level: "info",
 			zippedArchive: true,
-			datePattern: "YYYY-MM-DD-HH",
+			datePattern: "YYYY-MM-DD",
 			maxFiles: "30d",
 			level: "info"
 		})
