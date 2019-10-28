@@ -35,6 +35,7 @@ class BouqPost extends App {
 					<meta name="author" content="Jiyeol Lee" />
 					<title>BouqPost - 졸꾸러기를 위한 콘텐츠 공유 서비스</title>
 					<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.23.6/antd.css" />
+					<link rel="shortcut icon" href="/favicon.ico" />
 				</Head>
 				<style jsx global>{`
 					body {

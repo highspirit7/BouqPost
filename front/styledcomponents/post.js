@@ -53,7 +53,8 @@ export const MainPostbox = styled.div`
 
 	.likeBtn {
 		border: 1px solid rgb(147, 149, 153, 0.6);
-		border-radius: 20px;
+    border-radius: 20px;
+    background-color: transparent;
 	}
 
 	h1 {
