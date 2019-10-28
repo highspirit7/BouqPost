@@ -144,7 +144,7 @@ const Main = () => {
 							<h2>카테고리 별로 보기</h2>
 							{categoryKeys.map((params, i) => {
 								return (
-									<Link key={params} href={`/category/${params}`}>
+									<Link key={params} href="/category/[category_name]" as={`/category/${params}`}>
 										<a>
 											<Tag color={colors[i]} style={{ cursor: "pointer" }}>
 												{/* 객체 내부에 params라는 키값은 없고 params라는 변수가 담고 있는 스트링이 키값이 된다 이러한 경우에는 []를 써서 객체의 value에 접근해야 한다. */}

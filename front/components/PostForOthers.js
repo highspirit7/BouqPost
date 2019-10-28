@@ -7,8 +7,6 @@ import koreanStrings from "react-timeago/lib/language-strings/ko";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
 import { OtherPostbox, Poster, DeleteBtn, UserName, EditBtn } from "../styledcomponents/post";
 
-
-
 const PostForOthers = ({ post, categoryKeys, categoryValues, colors, myInfo, onRemovePost, onToggleLike }) => {
 	const formatter = buildFormatter(koreanStrings);
 
@@ -42,7 +40,10 @@ const PostForOthers = ({ post, categoryKeys, categoryValues, colors, myInfo, onR
 							const indexInCategories = categoryValues.indexOf(category.name);
 
 							return (
-								<Link key={category.name} href={`/category/${categoryKeys[indexInCategories]}`}>
+								<Link
+									key={category.name}
+									href="/category/[category_name]"
+									as={`/category/${categoryKeys[indexInCategories]}`}>
 									<a>
 										<Tag color={colors[indexInCategories]} style={{ cursor: "pointer" }}>
 											{category.name}
@@ -71,7 +72,7 @@ const PostForOthers = ({ post, categoryKeys, categoryValues, colors, myInfo, onR
 
 						<Poster>
 							Posted by{" "}
-							<Link href={`/user/${post.UserId}`}>
+							<Link href="/user/[user_id]" as={`/user/${post.UserId}`}>
 								<UserName>{post.User.nickname}</UserName>
 							</Link>
 						</Poster>
@@ -81,7 +82,7 @@ const PostForOthers = ({ post, categoryKeys, categoryValues, colors, myInfo, onR
 						</div>
 						{myInfo && myInfo.id === post.UserId && (
 							<>
-								<Link href={`/editPost/${post.id}`}>
+								<Link href="/editPost/[postId]" as={`/editPost/${post.id}`}>
 									<a>
 										<EditBtn>수정</EditBtn>
 									</a>

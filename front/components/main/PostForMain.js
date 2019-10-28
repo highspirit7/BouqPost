@@ -41,7 +41,10 @@ const PostForMain = ({ post, categoryKeys, categoryValues, colors, myInfo, onRem
 							const indexInCategories = categoryValues.indexOf(category.name);
 
 							return (
-								<Link key={category.name} href={`/category/${categoryKeys[indexInCategories]}`}>
+								<Link
+									key={category.name}
+									href="/category/[category_name]"
+									as={`/category/${categoryKeys[indexInCategories]}`}>
 									<a>
 										<Tag color={colors[indexInCategories]} style={{ curosr: "pointer" }}>
 											{category.name}
@@ -84,7 +87,7 @@ const PostForMain = ({ post, categoryKeys, categoryValues, colors, myInfo, onRem
 
 						<Poster>
 							Posted by{" "}
-							<Link href={`/user/${post.UserId}`}>
+							<Link href="/user/[user_id]" as={`/user/${post.UserId}`}>
 								<UserName>{post.User.nickname}</UserName>
 							</Link>
 						</Poster>
@@ -94,7 +97,7 @@ const PostForMain = ({ post, categoryKeys, categoryValues, colors, myInfo, onRem
 						</div>
 						{myInfo && myInfo.id === post.UserId && (
 							<>
-								<Link href={`/editPost/${post.id}`}>
+								<Link href="/editPost/[postId]" as={`/editPost/${post.id}`}>
 									<EditBtn>수정</EditBtn>
 								</Link>
 
