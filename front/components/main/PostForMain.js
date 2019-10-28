@@ -74,7 +74,7 @@ const PostForMain = ({ post, categoryKeys, categoryValues, colors, myInfo, onRem
 					)}
 
 					<div style={{ display: "flex", alignItems: "center" }}>
-						<button className="likeBtn">
+						<button className="likeBtn" style={{ backgroundColor: "transparent" }}>
 							{" "}
 							<Icon
 								type="heart"
