@@ -30,4 +30,4 @@
 */.pem
 
 # log 폴더 
-/log/
+.back/log/

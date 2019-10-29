@@ -21,7 +21,7 @@ const logger = winston.createLogger({
 		new winston.transports.DailyRotateFile({
 			filename: "log/exceptions.log",
 			zippedArchive: true,
-			datePattern: "YYYY-MM-DD-HH"
+			datePattern: "YYYY-MM-DD"
 		})
 	]
 });

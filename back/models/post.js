@@ -1,21 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-	// const profile = {
-	// 	provider: "kakao",
-	// 	id: 1190349298,
-	// 	username: "이지열(Jake)",
-	// 	displayName: "이지열(Jake)",
-	// 	_raw:
-	// 		'{"id":1190349298,"properties":{"nickname":"이지열(Jake)","profile_image":"http://k.kakaocdn.net/dn/iQJhU/btqy0Fi67ka/Yit1fiUy3l15RJRReJ2Wd1/profile_640x640s.jpg","thumbnail_image":"http://k.kakaocdn.net/dn/iQJhU/btqy0Fi67ka/Yit1fiUy3l15RJRReJ2Wd1/profile_110x110c.jpg"},"kakao_account":{"profile_needs_agreement":false,"profile":{"nickname":"이지열(Jake)","thumbnail_image_url":"http://k.kakaocdn.net/dn/bnPqHr/btqyHLDfmWJ/beYLEKO3E7yIxMzS5gtc3K/img_110x110.jpg","profile_image_url":"http://k.kakaocdn.net/dn/bnPqHr/btqyHLDfmWJ/beYLEKO3E7yIxMzS5gtc3K/img_640x640.jpg"}}}',
-	// 	_json: {
-	// 		id: 1190349298,
-	// 		properties: {
-	// 			nickname: "이지열(Jake)",
-	// 			profile_image: "http://k.kakaocdn.net/dn/iQJhU/btqy0Fi67ka/Yit1fiUy3l15RJRReJ2Wd1/profile_640x640s.jpg",
-	// 			thumbnail_image: "http://k.kakaocdn.net/dn/iQJhU/btqy0Fi67ka/Yit1fiUy3l15RJRReJ2Wd1/profile_110x110c.jpg"
-	// 		},
-	// 		kakao_account: { profile_needs_agreement: false, profile: [Object] }
-	// 	}
-	// };
+
 
 	const Post = sequelize.define(
 		"Post",
