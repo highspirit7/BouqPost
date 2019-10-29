@@ -12,6 +12,7 @@ import {
 	LOAD_USER_LIKES_REQUEST
 } from "../redux/modules/post";
 import PostForOthers from "../components/PostForOthers";
+import { LOAD_USER_REQUEST } from "../redux/modules/user";
 
 const Likes = () => {
 	const { displayedPosts, hasMorePost } = useSelector(state => state.post);
@@ -123,6 +124,10 @@ const Likes = () => {
 Likes.getInitialProps = async context => {
 	context.store.dispatch({
 		type: LOAD_USER_LIKES_REQUEST
+	});
+
+	context.store.dispatch({
+		type: LOAD_USER_REQUEST
 	});
 };
 
