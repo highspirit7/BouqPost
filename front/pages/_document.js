@@ -35,7 +35,7 @@ class MyDocument extends Document {
 }
 
 MyDocument.propTypes = {
-	styleTags: PropTypes.object
+	styleTags: PropTypes.array
 };
 
 export default MyDocument;

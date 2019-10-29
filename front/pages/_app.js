@@ -65,7 +65,7 @@ BouqPost.getInitialProps = async context => {
 	//프론트 서버에서 백엔드 서버로 요청시 브라우저(알아서 쿠키 넣어줌)가 개입하는 것이 아니기 때문에 직접 쿠키를 axios로 요청 시 넣어서 보내준다.
 	const cookie = ctx.isServer ? ctx.req.headers.cookie : "";
 	
-	if (ctx.isServer) {
+	if (ctx.isServer && cookie) {
     // axios.defaults.headers.Cookie = "";
 		axios.defaults.headers.Cookie = cookie;
 	}
