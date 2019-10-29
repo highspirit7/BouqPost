@@ -1,5 +1,6 @@
 import { all, fork, put, takeLatest, takeEvery, call } from "redux-saga/effects";
 import axios from "axios";
+import Router from "next/router";
 import {
 	LOAD_USER_FAILURE,
 	LOAD_USER_REQUEST,
@@ -60,7 +61,8 @@ function* logOut() {
 		yield put({
 			// put은 dispatch 동일
 			type: LOG_OUT_SUCCESS
-		});
+    });
+    yield Router.push("/");
 	} catch (e) {
 		// loginAPI 실패
 		console.error(e);

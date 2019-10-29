@@ -1,4 +1,4 @@
-import { delay, all, fork, put, takeLatest, throttle, call } from "redux-saga/effects";
+import { all, fork, put, takeLatest, throttle, call } from "redux-saga/effects";
 import axios from "axios";
 import Router from "next/router";
 

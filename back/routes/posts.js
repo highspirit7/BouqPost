@@ -61,11 +61,12 @@ router.get("/random", async (req, res, next) => {
 	}
 });
 
+//유저가 좋아하는 게시물 조회
 router.get("/likes", async (req, res, next) => {
 	// GET /api/posts
 	try {
 		const user = await db.User.findOne({
-			where: { id: 1 },
+			where: { id: req.user.id },
 			include: [
 				{
 					model: db.Post,
