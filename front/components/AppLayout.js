@@ -3,13 +3,13 @@ import Link from "next/link";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { Avatar, Icon, Button, Layout, Menu, Dropdown, Spin } from "antd";
+import styled from "styled-components";
 import { LOG_OUT_REQUEST } from "../redux/modules/user";
 import { Logo, StyledFooter, RightHeaderItems } from "../styledcomponents/appLayout";
 
 const { Header, Content } = Layout;
 
 const AppLayout = ({ children }) => {
-
 	const { myInfo } = useSelector(state => state.user);
 	const { isAddingPost } = useSelector(state => state.post);
 
@@ -56,7 +56,9 @@ const AppLayout = ({ children }) => {
 
 	const myMenu = (
 		<Menu>
-			<Menu.Item key="user_name" disabled>{myInfo && myInfo.nickname}</Menu.Item>
+			<Menu.Item key="user_name" disabled>
+				{myInfo && myInfo.nickname}
+			</Menu.Item>
 			<Menu.Divider />
 			<Menu.Item key="myPage">
 				<Link href={`/user/${myInfo && myInfo.id}`}>
@@ -78,10 +80,58 @@ const AppLayout = ({ children }) => {
 
 	const loadingIcon = <Icon type="loading" style={{ fontSize: 48, color: "#939599" }} spin />;
 
+	const ResponsiveHeader = styled(Header)`
+		@media (max-width: 1024px) {
+			padding: 0 30px;
+		}
+
+		@media (max-width: 414px) {
+			padding: 0px;
+		}
+	`;
+
+	const ResponsiveContent = styled(Content)`
+		padding: 0 50px;
+		margin-top: 63px;
+
+		@media (max-width: 414px) {
+			padding: 0px;
+		}
+	`;
+
+	const ResponsiveWrapper = styled.div`
+		background: #f0f2f5;
+		padding: 24px;
+		min-height: 600;
+
+		@media (max-width: 414px) {
+			padding: 10px 4px;
+		}
+	`;
+
+	const SearchIcon = styled(Icon)`
+		font-size: 24px;
+		vertical-align: -0.2em;
+		color: #5cd12a;
+
+		@media (max-width: 414px) {
+			vertical-align: -0.32em;
+		}
+	`;
+
+	const DropdownLink = styled.a`
+		margin-left: 10px;
+		color: #2b2a28;
+
+		@media (max-width: 414px) {
+			vertical-align: -0.32em;
+		}
+	`;
+
 	return (
 		<Spin spinning={isAddingPost} indicator={loadingIcon}>
 			<Layout className="layout">
-				<Header
+				<ResponsiveHeader
 					style={{
 						background: "white",
 						borderBottom: "1px solid #d9d9d9",
@@ -98,7 +148,7 @@ const AppLayout = ({ children }) => {
 					<RightHeaderItems>
 						<Link href="/search">
 							<a>
-								<Icon type="search" style={{ fontSize: 24, verticalAlign: "-0.2em", color: "#5cd12a" }} />
+								<SearchIcon type="search" />
 							</a>
 						</Link>
 						<Link href="/newPost">
@@ -129,15 +179,15 @@ const AppLayout = ({ children }) => {
 							overlayStyle={{ border: "1px solid rgb(147, 149, 153, 0.6)", borderRadius: 5 }}
 							overlay={collapsedMenu}
 							trigger={["click"]}>
-							<a className="ant-dropdown-link" href="#" style={{ marginLeft: 10, color: "#2b2a28" }}>
+							<DropdownLink className="ant-dropdown-link" href="#">
 								<Icon type="menu" className="burger-menu" style={{ fontSize: 22 }} />
-							</a>
+							</DropdownLink>
 						</Dropdown>
 					</RightHeaderItems>
-				</Header>
-				<Content style={{ padding: "0 50px", marginTop: 63 }}>
-					<div style={{ background: "#f0f2f5", padding: 24, minHeight: 600 }}>{children}</div>
-				</Content>
+				</ResponsiveHeader>
+				<ResponsiveContent>
+					<ResponsiveWrapper>{children}</ResponsiveWrapper>
+				</ResponsiveContent>
 				<StyledFooter style={{ textAlign: "center" }}>- BouqPost -</StyledFooter>
 			</Layout>
 		</Spin>

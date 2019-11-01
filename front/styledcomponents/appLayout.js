@@ -14,6 +14,11 @@ export const Logo = styled.div`
 	a {
 		color: #5cd12a;
 	}
+
+	@media (max-width: 414px) {
+		font-size: 24px;
+		margin: 0 24px 0 10px;
+	}
 `;
 
 export const StyledFooter = styled(Footer)`
@@ -32,18 +37,22 @@ export const RightHeaderItems = styled.div`
 	}
 
 	.collapsingMenu {
-		@media screen and (max-width: 991px) {
+		@media screen and (max-width: 1024px) {
 			display: none;
 		}
 	}
 
 	.burger-menu {
-		@media screen and (min-width: 991px) {
+		@media screen and (min-width: 1024px) {
 			display: none;
 		}
 	}
 
 	.ant-avatar {
 		vertical-align: -0.65rem;
+  }
+  
+  @media (max-width: 414px) {
+		margin-right: 10px;
 	}
 `;

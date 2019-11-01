@@ -6,7 +6,7 @@ import { Tag, Icon, Popconfirm } from "antd";
 import TimeAgo from "react-timeago";
 import koreanStrings from "react-timeago/lib/language-strings/ko";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
-import { MainPostbox, Poster, DeleteBtn, UserName, EditBtn } from "../../styledcomponents/post";
+import { MainPostbox, Poster, DeleteBtn, UserName, EditBtn, Title } from "../../styledcomponents/post";
 
 const PostForMain = ({ post, categoryKeys, categoryValues, colors, myInfo, onRemovePost, onToggleLike }) => {
 	const formatter = buildFormatter(koreanStrings);
@@ -54,17 +54,12 @@ const PostForMain = ({ post, categoryKeys, categoryValues, colors, myInfo, onRem
 							);
 						})}
 					</div>
-					<a
+					<Title
 						href={post.link}
 						target="blank"
-						rel="noopener noreferrer"
-						style={{
-							color: "#2b2a28",
-							fontSize: 20,
-							fontWeight: 500
-						}}>
+						rel="noopener noreferrer">
 						{post.title}
-					</a>
+					</Title>
 					{post.description ? (
 						<a href={post.link} target="blank" rel="noopener noreferrer">
 							<p style={{ marginTop: 2, fontSize: 16 }}>{post.description}</p>
@@ -72,7 +67,12 @@ const PostForMain = ({ post, categoryKeys, categoryValues, colors, myInfo, onRem
 					) : (
 						<p style={{ marginTop: 6 }}></p>
 					)}
-
+					<Poster className="tablet">
+						Posted by{" "}
+						<Link href="/user/[user_id]" as={`/user/${post.UserId}`}>
+							<UserName>{post.User.nickname}</UserName>
+						</Link>
+					</Poster>
 					<div style={{ display: "flex", alignItems: "center" }}>
 						<button className="likeBtn" style={{ backgroundColor: "transparent" }}>
 							{" "}
@@ -85,7 +85,7 @@ const PostForMain = ({ post, categoryKeys, categoryValues, colors, myInfo, onRem
 							{post.Likers.length !== 0 && <span style={{ marginLeft: 6 }}>{post.Likers.length}</span>}
 						</button>
 
-						<Poster>
+						<Poster className="desktop">
 							Posted by{" "}
 							<Link href="/user/[user_id]" as={`/user/${post.UserId}`}>
 								<UserName>{post.User.nickname}</UserName>

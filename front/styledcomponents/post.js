@@ -45,25 +45,52 @@ export const MainPostbox = styled.div`
 		width: 186px;
 		height: 112px;
 		margin-right: 16px;
+		border-radius: 4px;
+
+		@media (max-width: 1024px) {
+			width: 140px;
+			height: 116px;
+		}
+
+		@media (max-width: 414px) {
+			width: 88px;
+			height: 68px;
+		}
 	}
 
 	.contents {
 		display: inline-block;
+
+		.desktop {
+			@media (max-width: 1024px) {
+				display: none;
+			}
+		}
+
+		.tablet {
+			@media (min-width: 1024px) {
+				display: none;
+			}
+		}
 	}
 
 	.likeBtn {
 		border: 1px solid rgb(147, 149, 153, 0.6);
-    border-radius: 20px;
-    background-color: transparent;
-	}
+		border-radius: 20px;
+		background-color: transparent;
 
-	h1 {
-		font-size: 24px;
+		@media (max-width: 1024px) {
+			margin-right: 1rem;
+		}
 	}
 
 	p {
 		color: #939599;
 		cursor: pointer;
+
+		@media (max-width: 1024px) {
+			margin-bottom: 0.5em;
+		}
 	}
 
 	p:hover {
@@ -76,6 +103,13 @@ export const Poster = styled.div`
 	padding: 0 10px;
 	border-right: 1px solid rgba(0, 0, 0, 0.1);
 	border-left: 1px solid rgba(0, 0, 0, 0.1);
+
+	@media (max-width: 1024px) {
+		border: 0;
+		margin: 0;
+		padding: 0;
+		margin-bottom: 0.4rem;
+	}
 `;
 
 export const UserName = styled.a`
@@ -106,5 +140,15 @@ export const DeleteBtn = styled.div`
 	color: rgba(0, 0, 0, 0.65);
 	:hover {
 		color: #fc3468;
+	}
+`;
+
+export const Title = styled.a`
+	color: #2b2a28;
+	font-size: 20px;
+	font-weight: 500;
+
+	@media (max-width: 1024px) {
+		font-size: 18px;
 	}
 `;

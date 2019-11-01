@@ -15,9 +15,40 @@ import {
 import PostForMain from "../components/main/PostForMain";
 
 const ThumbnailWrapper = styled.div`
-	width: 94%;
 	margin: 0 auto;
 	margin-bottom: 2em;
+	display: flex;
+	justify-content: center;
+
+	@media (max-width: 1024px) {
+		margin-bottom: 1.4em;
+	}
+
+	.desktop {
+		width: 96%;
+
+		@media (max-width: 1024px) {
+			display: none;
+		}
+	}
+
+	.tablet {
+		width: 100%;
+
+		@media (max-width: 414px) {
+			display: none;
+		}
+		@media (min-width: 1024px) {
+			display: none;
+		}
+	}
+
+	.mobile {
+		width: 100%;
+		@media (min-width: 414px) {
+			display: none;
+		}
+	}
 `;
 
 const Categories = styled.div`
@@ -35,9 +66,44 @@ const Categories = styled.div`
 	}
 `;
 
+const ResponsiveCategories = styled.div`
+	border: 1px solid rgb(147, 149, 153, 0.6);
+	border-radius: 5px;
+	background: white;
+	padding: 20px;
+	margin-bottom: 1.4em;
+
+	span {
+		width: fit-content;
+		font-size: 1rem;
+		padding: 2px 10px;
+		margin: 5px 3px;
+	}
+
+	@media (min-width: 1024px) {
+		display: none;
+	}
+`;
+
 const ContentsWrapper = styled.div`
 	width: 94%;
 	margin: 0 auto;
+
+	@media (max-width: 1024px) {
+		width: 100%;
+	}
+
+	.desktop {
+		@media (max-width: 1024px) {
+			display: none;
+		}
+	}
+
+	.tablet {
+		@media (min-width: 1024px) {
+			display: none;
+		}
+	}
 `;
 
 const Main = () => {
@@ -49,6 +115,19 @@ const Main = () => {
 
 	const dispatch = useDispatch();
 	const countRef = useRef([]);
+
+	const categoryItems = categoryKeys.map((params, i) => {
+		return (
+			<Link key={params} href="/category/[category_name]" as={`/category/${params}`}>
+				<a>
+					<Tag color={colors[i]} style={{ cursor: "pointer" }}>
+						{/* 객체 내부에 params라는 키값은 없고 params라는 변수가 담고 있는 스트링이 키값이 된다 이러한 경우에는 []를 써서 객체의 value에 접근해야 한다. */}
+						{providedCategories[params]}
+					</Tag>
+				</a>
+			</Link>
+		);
+	});
 
 	//포스트 하나 제거
 	const onRemovePost = useCallback(
@@ -113,17 +192,29 @@ const Main = () => {
 	return (
 		<div>
 			<ThumbnailWrapper>
-				<Row gutter={20}>
+				<Row gutter={20} className="desktop" style={{ marginRight: 0, marginLeft: 0 }}>
 					{randomPosts.map(post => (
 						<Col className="gutter-row" span={6} key={post.id}>
 							<ThumbnailCmp post={post} />
 						</Col>
 					))}
 				</Row>
+				<Row className="tablet" style={{ marginRight: 0, marginLeft: 0 }}>
+					<Col span={11} key={randomPosts[0].id} style={{ float: "left" }}>
+						<ThumbnailCmp post={randomPosts[0]} />
+					</Col>
+					<Col span={11} key={randomPosts[1].id} style={{ float: "right" }}>
+						<ThumbnailCmp post={randomPosts[1]} />
+					</Col>
+				</Row>
+				<Row className="mobile">
+					<ThumbnailCmp post={randomPosts[0]} />
+				</Row>
 			</ThumbnailWrapper>
 			<ContentsWrapper>
+				<ResponsiveCategories>{categoryItems}</ResponsiveCategories>
 				<Row gutter={20}>
-					<Col className="gutter-row" span={18}>
+					<Col className="gutter-row desktop" span={18}>
 						{displayedPosts.map((post, index) => {
 							return (
 								<PostForMain
@@ -139,21 +230,26 @@ const Main = () => {
 							);
 						})}
 					</Col>
-					<Col className="gutter-row" span={6}>
+					<Col className="gutter-row tablet" span={24}>
+						{displayedPosts.map((post, index) => {
+							return (
+								<PostForMain
+									post={post}
+									key={index}
+									categoryKeys={categoryKeys}
+									categoryValues={categoryValues}
+									colors={colors}
+									myInfo={myInfo}
+									onRemovePost={onRemovePost}
+									onToggleLike={onToggleLike}
+								/>
+							);
+						})}
+					</Col>
+					<Col className="gutter-row desktop" span={6}>
 						<Categories>
 							<h2>카테고리 별로 보기</h2>
-							{categoryKeys.map((params, i) => {
-								return (
-									<Link key={params} href="/category/[category_name]" as={`/category/${params}`}>
-										<a>
-											<Tag color={colors[i]} style={{ cursor: "pointer" }}>
-												{/* 객체 내부에 params라는 키값은 없고 params라는 변수가 담고 있는 스트링이 키값이 된다 이러한 경우에는 []를 써서 객체의 value에 접근해야 한다. */}
-												{providedCategories[params]}
-											</Tag>
-										</a>
-									</Link>
-								);
-							})}
+							{categoryItems}
 						</Categories>
 					</Col>
 				</Row>
