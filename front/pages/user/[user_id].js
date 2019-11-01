@@ -3,7 +3,7 @@ import React, { useEffect, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import propTypes from "prop-types";
 // import Router from "next/router";
-import { Divider } from "antd";
+import { Divider, Spin, Icon } from "antd";
 import styled from "styled-components";
 
 import {
@@ -40,7 +40,7 @@ const NoResultMsg = styled.div`
 
 const User = ({ user_id }) => {
 	const dispatch = useDispatch();
-	const { displayedPosts, hasMorePost, countPosts } = useSelector(state => state.post);
+	const { displayedPosts, hasMorePost, countPosts, isSearchingPosts } = useSelector(state => state.post);
 	const { providedCategories, colors } = useSelector(state => state.categories);
 	const { myInfo } = useSelector(state => state.user);
 	const categoryKeys = Object.keys(providedCategories);
@@ -93,10 +93,9 @@ const User = ({ user_id }) => {
 	const onScroll = useCallback(() => {
 		//scrollY : 스크롤 내린 거리, clientHeight: 화면 높이, scrollHeight: 전체 화면 높이
 		if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
-      console.log("displayedPosts length : " + displayedPosts.length);
-      console.log(hasMorePost);
+			console.log("displayedPosts length : " + displayedPosts.length);
+			console.log(hasMorePost);
 			if (hasMorePost) {
-			
 				const lastId = displayedPosts.length > 0 ? displayedPosts[displayedPosts.length - 1].id : 0; //제일 하단 게시물의 id
 				console.log("lastId " + lastId);
 				//프론트단에서 불필요하게 액션이 디스패치되는 것을 막기 위해
@@ -123,16 +122,10 @@ const User = ({ user_id }) => {
 		};
 	}, [displayedPosts.length, onScroll]);
 
-	// console.log("카테고리 : " + category_name);
-	// useEffect(() => {
-	// 	dispatch({
-	// 		type: LOAD_CATEGORY_POSTS_REQUEST,
-	// 		category: category_name
-	// 	});
-	// }, []);
+	const loadingIcon = <Icon type="loading" style={{ fontSize: 48, color: "#939599" }} spin />;
 
 	return (
-		<>
+		<Spin spinning={isSearchingPosts} indicator={loadingIcon}>
 			{displayedPosts.length !== 0 ? (
 				<StyledPostbox>
 					<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -160,9 +153,11 @@ const User = ({ user_id }) => {
 					})}
 				</StyledPostbox>
 			) : (
-				<NoResultMsg>{displayedPosts.length === 0 && `- 해당 사용자의 포스트가 존재하지 않습니다 -`}</NoResultMsg>
+				<NoResultMsg>
+					{!isSearchingPosts && displayedPosts.length === 0 && `- 해당 사용자의 포스트가 존재하지 않습니다 -`}
+				</NoResultMsg>
 			)}
-		</>
+		</Spin>
 	);
 };
 

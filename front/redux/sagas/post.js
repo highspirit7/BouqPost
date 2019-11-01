@@ -1,4 +1,4 @@
-import { all, fork, put, takeLatest, throttle, call } from "redux-saga/effects";
+import { delay, all, fork, put, takeLatest, throttle, call } from "redux-saga/effects";
 import axios from "axios";
 import Router from "next/router";
 
@@ -278,8 +278,8 @@ function* loadUserPosts(payload) {
 			type: LOAD_USER_POSTS_SUCCESS,
 			data: {
 				posts: result.data.rows,
-        count: result.data.count,
-        lastId: payload.lastId
+				count: result.data.count,
+				lastId: payload.lastId
 			}
 		});
 	} catch (e) {

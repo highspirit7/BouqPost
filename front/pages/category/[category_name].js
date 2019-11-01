@@ -3,7 +3,7 @@ import React, { useEffect, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import propTypes from "prop-types";
 // import Router from "next/router";
-import { Divider } from "antd";
+import { Divider, Spin, Icon } from "antd";
 
 import { StyledPostbox } from "../../styledcomponents/post";
 import {
@@ -17,7 +17,7 @@ import { NoResultMsg } from "../../styledcomponents/etc";
 
 const Category = ({ category_name }) => {
 	const dispatch = useDispatch();
-	const { displayedPosts, hasMorePost } = useSelector(state => state.post);
+	const { displayedPosts, hasMorePost, isSearchingPosts } = useSelector(state => state.post);
 	const { providedCategories, colors } = useSelector(state => state.categories);
 	const { myInfo } = useSelector(state => state.user);
 	const categoryKeys = Object.keys(providedCategories);
@@ -87,22 +87,16 @@ const Category = ({ category_name }) => {
 		};
 	}, [displayedPosts.length, onScroll]);
 
-	// console.log("카테고리 : " + category_name);
-	// useEffect(() => {
-	// 	dispatch({
-	// 		type: LOAD_CATEGORY_POSTS_REQUEST,
-	// 		category: category_name
-	// 	});
-	// }, []);
+	const loadingIcon = <Icon type="loading" style={{ fontSize: 48, color: "#939599" }} spin />;
 
 	return (
-		<>
+		<Spin spinning={isSearchingPosts} indicator={loadingIcon}>
 			{displayedPosts.length !== 0 ? (
 				<StyledPostbox>
 					<h1 style={{ fontSize: 28 }}>{`'${providedCategories[category_name]}' 카테고리의 포스트`}</h1>
 					{displayedPosts.map((post, index) => {
 						return (
-							<>
+							<div key={index}>
 								<PostForOthers
 									post={post}
 									key={index}
@@ -114,14 +108,16 @@ const Category = ({ category_name }) => {
 									onToggleLike={onToggleLike}
 								/>
 								{index !== displayedPosts.length - 1 && <Divider />}
-							</>
+							</div>
 						);
 					})}
 				</StyledPostbox>
 			) : (
-				<NoResultMsg>{displayedPosts.length === 0 && "- 현재 카테고리에 포스트가 존재하지 않습니다 -"}</NoResultMsg>
+				<NoResultMsg>
+					{!isSearchingPosts && displayedPosts.length === 0 && "- 현재 카테고리에 포스트가 존재하지 않습니다 -"}
+				</NoResultMsg>
 			)}
-		</>
+		</Spin>
 	);
 };
 
