@@ -43,7 +43,8 @@ const ThumbnailCmp = ({ post }) => {
 
 		.title {
 			color: white;
-			font-size: 1rem;
+      font-size: 1.05rem;
+      font-family: "Do Hyeon", sans-serif;
 		}
 		.description {
 			font-size: 0.88rem;

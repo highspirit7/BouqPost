@@ -35,6 +35,10 @@ class BouqPost extends App {
 					<meta name="author" content="Jiyeol Lee" />
 					<title>BouqPost - 졸꾸러기를 위한 콘텐츠 공유 서비스</title>
 					<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.23.6/antd.css" />
+					<link
+						href="https://fonts.googleapis.com/css?family=Do+Hyeon|Oleo+Script+Swash+Caps&display=swap"
+						rel="stylesheet"
+					/>
 					<link rel="shortcut icon" href="/favicon.ico" />
 				</Head>
 				<style jsx global>{`
@@ -64,9 +68,9 @@ BouqPost.getInitialProps = async context => {
 
 	//프론트 서버에서 백엔드 서버로 요청시 브라우저(알아서 쿠키 넣어줌)가 개입하는 것이 아니기 때문에 직접 쿠키를 axios로 요청 시 넣어서 보내준다.
 	const cookie = ctx.isServer ? ctx.req.headers.cookie : "";
-	
+
 	if (ctx.isServer && cookie) {
-    // axios.defaults.headers.Cookie = "";
+		// axios.defaults.headers.Cookie = "";
 		axios.defaults.headers.Cookie = cookie;
 	}
 

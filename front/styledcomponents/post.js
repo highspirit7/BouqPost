@@ -18,13 +18,13 @@ export const StyledPostbox = styled.div`
 		@media (max-width: 414px) {
 			font-size: 20px;
 		}
-  }
-  
-  h2 {
-    @media (max-width: 414px) {
+	}
+
+	h2 {
+		@media (max-width: 414px) {
 			font-size: 18px;
 		}
-  }
+	}
 
 	@media (max-width: 1024px) {
 		width: 100%;
@@ -82,7 +82,7 @@ export const OtherPostbox = styled.div`
 	p {
 		color: #939599;
 		cursor: pointer;
-
+   
 		@media (max-width: 1024px) {
 			margin-bottom: 0.5em;
 		}
@@ -228,6 +228,7 @@ export const DeleteBtn = styled.div`
 `;
 
 export const Title = styled.a`
+	font-family: "Do Hyeon", sans-serif;
 	color: #2b2a28;
 	font-size: 20px;
 	font-weight: 500;
