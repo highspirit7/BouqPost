@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import propTypes from "prop-types";
-import { Divider } from "antd";
+import { Divider, Spin, Icon } from "antd";
 
 import { NoResultMsg } from "../styledcomponents/etc";
 import { StyledPostbox } from "../styledcomponents/post";
@@ -15,7 +15,7 @@ import PostForOthers from "../components/PostForOthers";
 import { LOAD_USER_REQUEST } from "../redux/modules/user";
 
 const Likes = () => {
-	const { displayedPosts, hasMorePost } = useSelector(state => state.post);
+	const { displayedPosts, hasMorePost, isSearchingPosts } = useSelector(state => state.post);
 
 	const { providedCategories, colors } = useSelector(state => state.categories);
 	const { myInfo } = useSelector(state => state.user);
@@ -87,8 +87,10 @@ const Likes = () => {
 		};
 	}, [displayedPosts.length, onScroll]);
 
+  const loadingIcon = <Icon type="loading" style={{ fontSize: 48, color: "#939599" }} spin />;
+
 	return (
-		<>
+		<Spin spinning={isSearchingPosts} indicator={loadingIcon}>
 			{displayedPosts.length !== 0 && (
 				<StyledPostbox>
 					<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -116,8 +118,10 @@ const Likes = () => {
 					})}
 				</StyledPostbox>
 			)}
-			<NoResultMsg>{displayedPosts.length === 0 && "- 내가 좋아하는 포스트가 없습니다 -"}</NoResultMsg>
-		</>
+			<NoResultMsg>
+				{!isSearchingPosts && displayedPosts.length === 0 && "- 내가 좋아하는 포스트가 없습니다 -"}
+			</NoResultMsg>
+		</Spin>
 	);
 };
 

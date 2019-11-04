@@ -296,7 +296,8 @@ export default handleActions(
 		[LOAD_USER_LIKES_REQUEST]: (state, payload) =>
 			produce(state, draft => {
 				draft.displayedPosts = !payload.lastId ? [] : draft.displayedPosts;
-				draft.hasMorePost = payload.lastId ? draft.hasMorePost : true;
+        draft.hasMorePost = payload.lastId ? draft.hasMorePost : true;
+        draft.isSearchingPosts = !payload.lastId ? true : false;
 			}),
 		[LOAD_USER_LIKES_SUCCESS]: (state, payload) =>
 			produce(state, draft => {
@@ -304,11 +305,13 @@ export default handleActions(
 					draft.displayedPosts.push(post);
 				});
 				//로딩한 포스트 개수가 5개가 아니라는 것은 실질적으로는 5개보다 작았다는 것이고, 그러면 남아있는 포스트를 모두 이미 로딩했다는 뜻이 된다.
-				draft.hasMorePost = payload.data.length === 5;
+        draft.hasMorePost = payload.data.length === 5;
+        draft.isSearchingPosts = false;
 			}),
 		[LOAD_USER_LIKES_FAILURE]: (state, { payload }) =>
 			produce(state, draft => {
-				draft.errors.loadPostsError = payload;
+        draft.errors.loadPostsError = payload;
+        draft.isSearchingPosts = false;
 			})
 	},
 	initialState
