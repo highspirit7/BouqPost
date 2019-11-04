@@ -10,6 +10,22 @@ const LoginFormWrapper = styled(Card)`
 
 	h1 {
 		font-size: 30px;
+		@media (max-width: 414px) {
+			font-size: 24px;
+		}
+	}
+
+	.guide_1 {
+		font-size: 18px;
+
+		@media (max-width: 414px) {
+			font-size: 16px;
+		}
+	}
+
+	.guide_2 {
+		fontsize: 15px;
+		color: #939599;
 	}
 `;
 
@@ -36,29 +52,18 @@ const KakaoLoginBtn = styled.div`
 		text-align: center;
 		font-size: 18px;
 		font-weight: 500;
+
+		@media (max-width: 414px) {
+			font-size: 17px;
+		}
 	}
 `;
 
 const Login = () => {
-	// const dispatch = useDispatch();
-
-	// useEffect(() => {
-	// 	if (myInfo) {
-	// 		alert("로그인했으니 메인페이지로 이동합니다.");
-	// 		Router.push("/");
-	// 	}
-	// }, [myInfo]);
-
-	// const requestLogin = useCallback(() => {
-	// 	return dispatch({
-	// 		type: LOG_IN_REQUEST
-	// 	});
-	// },[]);
-
 	return (
 		<LoginFormWrapper>
 			<h1>로그인</h1>
-			<p style={{ fontSize: 18 }}>좋아요 및 포스트 작성을 위해서는 로그인이 필요합니다.</p>
+			<p className="guide_1">좋아요 및 포스트 작성을 위해서는 로그인이 필요합니다.</p>
 
 			<a href={`${backUrl}/oauth/kakao`}>
 				<KakaoLoginBtn>
@@ -67,7 +72,7 @@ const Login = () => {
 				</KakaoLoginBtn>
 			</a>
 
-			<p style={{ fontSize: 15, color: "#939599" }}>카카오 계정으로 로그인 시 카카오톡 닉네임만 외부에 공개됩니다.</p>
+			<p className="guide_2">카카오 계정으로 로그인 시 카카오톡 닉네임만 외부에 공개됩니다.</p>
 		</LoginFormWrapper>
 	);
 };
