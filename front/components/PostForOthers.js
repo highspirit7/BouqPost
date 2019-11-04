@@ -5,7 +5,7 @@ import { Tag, Icon, Popconfirm } from "antd";
 import TimeAgo from "react-timeago";
 import koreanStrings from "react-timeago/lib/language-strings/ko";
 import buildFormatter from "react-timeago/lib/formatters/buildFormatter";
-import { OtherPostbox, Poster, DeleteBtn, UserName, EditBtn } from "../styledcomponents/post";
+import { OtherPostbox, Poster, DeleteBtn, UserName, EditBtn, Title, StyledTimeAgo } from "../styledcomponents/post";
 
 const PostForOthers = ({ post, categoryKeys, categoryValues, colors, myInfo, onRemovePost, onToggleLike }) => {
 	const formatter = buildFormatter(koreanStrings);
@@ -53,11 +53,22 @@ const PostForOthers = ({ post, categoryKeys, categoryValues, colors, myInfo, onR
 							);
 						})}
 					</div>
-					<a href={post.link} target="blank" rel="noopener noreferrer">
-						<h2>{post.title}</h2>
-					</a>
-					{post.description ? <p>{post.description}</p> : <br />}
-
+					<Title href={post.link} target="blank" rel="noopener noreferrer">
+						{post.title}
+					</Title>
+					{post.description ? (
+						<a href={post.link} target="blank" rel="noopener noreferrer">
+							<p style={{ marginTop: 2 }}>{post.description}</p>
+						</a>
+					) : (
+						<p style={{ marginTop: 6 }}></p>
+					)}
+					<Poster className="tablet">
+						Posted by{" "}
+						<Link href="/user/[user_id]" as={`/user/${post.UserId}`}>
+							<UserName>{post.User.nickname}</UserName>
+						</Link>
+					</Poster>
 					<div style={{ display: "flex", alignItems: "center" }}>
 						<button className="likeBtn">
 							{" "}
@@ -70,22 +81,20 @@ const PostForOthers = ({ post, categoryKeys, categoryValues, colors, myInfo, onR
 							{post.Likers.length !== 0 && <span style={{ marginLeft: 6 }}>{post.Likers.length}</span>}
 						</button>
 
-						<Poster>
+						<Poster className="desktop">
 							Posted by{" "}
 							<Link href="/user/[user_id]" as={`/user/${post.UserId}`}>
 								<UserName>{post.User.nickname}</UserName>
 							</Link>
 						</Poster>
 
-						<div>
+						<StyledTimeAgo>
 							<TimeAgo date={post.created_at} formatter={formatter}></TimeAgo>
-						</div>
+						</StyledTimeAgo>
 						{myInfo && myInfo.id === post.UserId && (
 							<>
 								<Link href="/editPost/[postId]" as={`/editPost/${post.id}`}>
-									<a>
-										<EditBtn>수정</EditBtn>
-									</a>
+									<EditBtn>수정</EditBtn>
 								</Link>
 
 								<Popconfirm

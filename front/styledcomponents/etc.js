@@ -14,7 +14,11 @@ export const StyledSearch = styled(Search)`
 	width: 82%;
 	display: block;
 	margin: 0 auto;
-	margin-bottom: 30px;
+  margin-bottom: 30px;
+  
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
 
 	input {
 		height: 40px;

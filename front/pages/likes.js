@@ -92,8 +92,8 @@ const Likes = () => {
 			{displayedPosts.length !== 0 && (
 				<StyledPostbox>
 					<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-						<h1 style={{ fontSize: 28 }}>내가 좋아하는 포스트</h1>
-						<h1>{`${myInfo.Liked.length}개의 포스트`}</h1>
+						<h1>내가 좋아하는 포스트</h1>
+						<h2>{`${myInfo.Liked.length}개의 포스트`}</h2>
 						<Divider style={{ marginTop: "6px", marginBottom: "20px" }} dashed />
 					</div>
 					{/* <h1>내가 좋아하는 포스트</h1> */}

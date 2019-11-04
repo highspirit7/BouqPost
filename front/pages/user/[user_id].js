@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import propTypes from "prop-types";
 // import Router from "next/router";
 import { Divider, Spin, Icon } from "antd";
-import styled from "styled-components";
-
+import { StyledPostbox } from "../../styledcomponents/post";
+import { NoResultMsg } from "../../styledcomponents/etc";
 import {
 	LOAD_USER_POSTS_REQUEST,
 	REMOVE_POST_REQUEST,
@@ -13,30 +13,6 @@ import {
 	UNLIKE_POST_REQUEST
 } from "../../redux/modules/post";
 import PostForOthers from "../../components/PostForOthers";
-
-const StyledPostbox = styled.div`
-	width: 82%;
-	border: 1px solid rgb(147, 149, 153, 0.6);
-	border-radius: 5px;
-	background: white;
-	padding: 22px;
-	// height: 240px;
-	// display: flex;
-	// align-items: center;
-	margin: 0 auto;
-	margin-bottom: 16px;
-
-	h1 {
-		font-size: 24px;
-	}
-`;
-
-const NoResultMsg = styled.div`
-	text-align: center;
-	font-size: 30px;
-	margin-top: 70px;
-	color: #939599;
-`;
 
 const User = ({ user_id }) => {
 	const dispatch = useDispatch();
@@ -129,8 +105,8 @@ const User = ({ user_id }) => {
 			{displayedPosts.length !== 0 ? (
 				<StyledPostbox>
 					<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-						<h1 style={{ fontSize: 28 }}>{displayedPosts[0].User.nickname}</h1>
-						<h1>{`${countPosts}개의 포스트`}</h1>
+						<h1>{displayedPosts[0].User.nickname}</h1>
+						<h2>{`${countPosts}개의 포스트`}</h2>
 						<Divider style={{ marginTop: "6px", marginBottom: "20px" }} dashed />
 					</div>
 

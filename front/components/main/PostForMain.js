@@ -54,15 +54,12 @@ const PostForMain = ({ post, categoryKeys, categoryValues, colors, myInfo, onRem
 							);
 						})}
 					</div>
-					<Title
-						href={post.link}
-						target="blank"
-						rel="noopener noreferrer">
+					<Title href={post.link} target="blank" rel="noopener noreferrer">
 						{post.title}
 					</Title>
 					{post.description ? (
 						<a href={post.link} target="blank" rel="noopener noreferrer">
-							<p style={{ marginTop: 2, fontSize: 16 }}>{post.description}</p>
+							<p style={{ marginTop: 2 }}>{post.description}</p>
 						</a>
 					) : (
 						<p style={{ marginTop: 6 }}></p>

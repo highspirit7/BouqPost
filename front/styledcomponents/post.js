@@ -14,33 +14,24 @@ export const StyledPostbox = styled.div`
 
 	h1 {
 		font-size: 24px;
+
+		@media (max-width: 414px) {
+			font-size: 20px;
+		}
+  }
+  
+  h2 {
+    @media (max-width: 414px) {
+			font-size: 18px;
+		}
+  }
+
+	@media (max-width: 1024px) {
+		width: 100%;
 	}
 `;
 
 export const OtherPostbox = styled.div`
-	img {
-		width: 186px;
-		height: 112px;
-		margin-right: 16px;
-	}
-
-	.contents {
-		display: inline-block;
-	}
-
-	.likeBtn {
-		border: 1px solid rgb(147, 149, 153, 0.6);
-		border-radius: 20px;
-	}
-`;
-
-export const MainPostbox = styled.div`
-	border: 1px solid rgb(147, 149, 153, 0.6);
-	border-radius: 5px;
-	background: white;
-	padding: 22px;
-	margin-bottom: 16px;
-
 	img {
 		width: 186px;
 		height: 112px;
@@ -54,7 +45,7 @@ export const MainPostbox = styled.div`
 
 		@media (max-width: 414px) {
 			width: 88px;
-			height: 68px;
+			height: 80px;
 		}
 	}
 
@@ -82,6 +73,10 @@ export const MainPostbox = styled.div`
 		@media (max-width: 1024px) {
 			margin-right: 1rem;
 		}
+
+		@media (max-width: 414px) {
+			font-size: 13px;
+		}
 	}
 
 	p {
@@ -90,6 +85,84 @@ export const MainPostbox = styled.div`
 
 		@media (max-width: 1024px) {
 			margin-bottom: 0.5em;
+		}
+
+		@media (max-width: 414px) {
+			font-size: 13.5px;
+			color: rgb(147, 149, 153);
+		}
+	}
+
+	p:hover {
+		color: #2b2a28;
+	}
+`;
+
+export const MainPostbox = styled.div`
+	border: 1px solid rgb(147, 149, 153, 0.6);
+	border-radius: 5px;
+	background: white;
+	padding: 22px;
+	margin-bottom: 16px;
+
+	img {
+		width: 186px;
+		height: 112px;
+		margin-right: 16px;
+		border-radius: 4px;
+
+		@media (max-width: 1024px) {
+			width: 140px;
+			height: 116px;
+		}
+
+		@media (max-width: 414px) {
+			width: 88px;
+			height: 80px;
+		}
+	}
+
+	.contents {
+		display: inline-block;
+
+		.desktop {
+			@media (max-width: 1024px) {
+				display: none;
+			}
+		}
+
+		.tablet {
+			@media (min-width: 1024px) {
+				display: none;
+			}
+		}
+	}
+
+	.likeBtn {
+		border: 1px solid rgb(147, 149, 153, 0.6);
+		border-radius: 20px;
+		background-color: transparent;
+
+		@media (max-width: 1024px) {
+			margin-right: 1rem;
+		}
+
+		@media (max-width: 414px) {
+			font-size: 13px;
+		}
+	}
+
+	p {
+		color: #939599;
+		cursor: pointer;
+
+		@media (max-width: 1024px) {
+			margin-bottom: 0.5em;
+		}
+
+		@media (max-width: 414px) {
+			font-size: 13.5px;
+			color: rgb(147, 149, 153);
 		}
 	}
 
@@ -109,6 +182,10 @@ export const Poster = styled.div`
 		margin: 0;
 		padding: 0;
 		margin-bottom: 0.4rem;
+	}
+
+	@media (max-width: 414px) {
+		font-size: 13px;
 	}
 `;
 
@@ -131,6 +208,10 @@ export const EditBtn = styled.a`
 	:hover {
 		color: #326ada;
 	}
+
+	@media (max-width: 414px) {
+		font-size: 13px;
+	}
 `;
 
 export const DeleteBtn = styled.div`
@@ -141,6 +222,9 @@ export const DeleteBtn = styled.div`
 	:hover {
 		color: #fc3468;
 	}
+	@media (max-width: 414px) {
+		font-size: 13px;
+	}
 `;
 
 export const Title = styled.a`
@@ -150,5 +234,15 @@ export const Title = styled.a`
 
 	@media (max-width: 1024px) {
 		font-size: 18px;
+	}
+
+	@media (max-width: 414px) {
+		font-size: 15px;
+	}
+`;
+
+export const StyledTimeAgo = styled.div`
+	@media (max-width: 414px) {
+		font-size: 13px;
 	}
 `;

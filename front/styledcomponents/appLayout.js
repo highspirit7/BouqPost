@@ -33,8 +33,14 @@ export const RightHeaderItems = styled.div`
 	& > a,
 	& > span,
 	& > i {
-		margin-left: 20px;
+    margin-left: 20px;
+    
+    @media(max-width: 1024px) {
+      margin-left: 8px;
+    }
 	}
+
+
 
 	.collapsingMenu {
 		@media screen and (max-width: 1024px) {

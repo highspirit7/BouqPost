@@ -93,7 +93,7 @@ const Category = ({ category_name }) => {
 		<Spin spinning={isSearchingPosts} indicator={loadingIcon}>
 			{displayedPosts.length !== 0 ? (
 				<StyledPostbox>
-					<h1 style={{ fontSize: 28 }}>{`'${providedCategories[category_name]}' 카테고리의 포스트`}</h1>
+					<h1>{`'${providedCategories[category_name]}' 카테고리의 포스트`}</h1>
 					{displayedPosts.map((post, index) => {
 						return (
 							<div key={index}>
