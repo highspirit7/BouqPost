@@ -8,6 +8,53 @@ import { LOG_OUT_REQUEST } from "../redux/modules/user";
 import { Logo, StyledFooter, RightHeaderItems } from "../styledcomponents/appLayout";
 
 const { Header, Content } = Layout;
+const ResponsiveHeader = styled(Header)`
+	@media (max-width: 1024px) {
+		padding: 0 30px;
+	}
+
+	@media (max-width: 414px) {
+		padding: 0px;
+	}
+`;
+
+const ResponsiveContent = styled(Content)`
+	padding: 0 50px;
+	margin-top: 63px;
+
+	@media (max-width: 414px) {
+		padding: 0px;
+	}
+`;
+
+const ResponsiveWrapper = styled.div`
+	background: #f0f2f5;
+	padding: 24px;
+	min-height: 600;
+
+	@media (max-width: 414px) {
+		padding: 10px 4px;
+	}
+`;
+
+const SearchIcon = styled(Icon)`
+	font-size: 24px;
+	vertical-align: -0.2em;
+	color: #5cd12a;
+
+	@media (max-width: 414px) {
+		vertical-align: -0.32em;
+	}
+`;
+
+const DropdownLink = styled.a`
+	margin-left: 10px;
+	color: #2b2a28;
+
+	@media (max-width: 414px) {
+		vertical-align: -0.32em;
+	}
+`;
 
 const AppLayout = ({ children }) => {
 	const { myInfo } = useSelector(state => state.user);
@@ -79,54 +126,6 @@ const AppLayout = ({ children }) => {
 	);
 
 	const loadingIcon = <Icon type="loading" style={{ fontSize: 48, color: "#939599" }} spin />;
-
-	const ResponsiveHeader = styled(Header)`
-		@media (max-width: 1024px) {
-			padding: 0 30px;
-		}
-
-		@media (max-width: 414px) {
-			padding: 0px;
-		}
-	`;
-
-	const ResponsiveContent = styled(Content)`
-		padding: 0 50px;
-		margin-top: 63px;
-
-		@media (max-width: 414px) {
-			padding: 0px;
-		}
-	`;
-
-	const ResponsiveWrapper = styled.div`
-		background: #f0f2f5;
-		padding: 24px;
-		min-height: 600;
-
-		@media (max-width: 414px) {
-			padding: 10px 4px;
-		}
-	`;
-
-	const SearchIcon = styled(Icon)`
-		font-size: 24px;
-		vertical-align: -0.2em;
-		color: #5cd12a;
-
-		@media (max-width: 414px) {
-			vertical-align: -0.32em;
-		}
-	`;
-
-	const DropdownLink = styled.a`
-		margin-left: 10px;
-		color: #2b2a28;
-
-		@media (max-width: 414px) {
-			vertical-align: -0.32em;
-		}
-	`;
 
 	return (
 		<Spin spinning={isAddingPost} indicator={loadingIcon}>

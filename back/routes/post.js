@@ -38,29 +38,33 @@ router.post("/", async (req, res, next) => {
 //링크 입력 시 크롤링으로 제목 및 썸네일 이미지 추출
 router.post("/scraping", async (req, response, next) => {
 	client.fetch(req.body.url, (err, $, res, body) => {
-		const title1 = $("meta[property='og:title']").attr("content");
-		const title2 = $("title").text();
+		// if (err) {
+		// 	console.error(err);
+		// 	return next(err);
+		// }
+		try {
+			const title1 = $("meta[property='og:title']").attr("content");
+			const title2 = $("title").text();
 
-		const image_og = $("meta[property='og:image']").attr("content");
+			const image_og = $("meta[property='og:image']").attr("content");
 
-		const scrapedData = {};
+			const scrapedData = {};
 
-		if (!title1) {
-			scrapedData.title = title2;
-		} else {
-			scrapedData.title = title1;
-		}
+			if (!title1) {
+				scrapedData.title = title2;
+			} else {
+				scrapedData.title = title1;
+			}
 
-		if (image_og) {
-			scrapedData.image = image_og;
-		}
+			if (image_og) {
+				scrapedData.image = image_og;
+			}
 
-		if (err) {
+			return response.json(scrapedData);
+		} catch (err) {
 			console.error(err);
-			return next(error);
+			return next(err);
 		}
-
-		return response.json(scrapedData);
 	});
 });
 
