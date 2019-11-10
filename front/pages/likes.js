@@ -61,11 +61,11 @@ const Likes = () => {
 	const onScroll = useCallback(() => {
 		//scrollY : 스크롤 내린 거리, clientHeight: 화면 높이, scrollHeight: 전체 화면 높이
 		if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
-			console.log("displayedPosts length : " + displayedPosts.length);
-			console.log(hasMorePost);
+			// console.log("displayedPosts length : " + displayedPosts.length);
+			// console.log(hasMorePost);
 			if (hasMorePost) {
 				const lastId = displayedPosts.length > 0 ? displayedPosts[displayedPosts.length - 1].id : 0; //제일 하단 게시물의 id
-				console.log("lastId " + lastId);
+				// console.log("lastId " + lastId);
 				//프론트단에서 불필요하게 액션이 디스패치되는 것을 막기 위해
 				//사가상으로는 상관없지만(쓰로틀링으로인해 사가에서는 인식하고 처리하는 액션은 1.5초에 하나) 리덕스 상에서 액션이 중복실행되는 현상 방지용
 				//lastId가 countRef에 담겨 있으면(이미 해당 액션이 한 번은 디스패치되었다는 의미), 더 이상 포스트 로드 요청하는 액션 디스패치하지 않도록 해준다.

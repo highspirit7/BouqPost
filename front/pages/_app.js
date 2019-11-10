@@ -14,6 +14,7 @@ import reducer from "../redux/modules";
 import rootSaga from "../redux/sagas";
 import { LOAD_USER_REQUEST } from "../redux/modules/user";
 import { LOAD_CATEGORIES } from "../redux/modules/categories";
+// import { LOAD_POSTS_REQUEST, LOAD_RANDOM_POSTS_REQUEST } from "../redux/modules/post";
 
 class BouqPost extends App {
 	render() {
@@ -84,6 +85,12 @@ BouqPost.getInitialProps = async context => {
 	ctx.store.dispatch({
 		type: LOAD_CATEGORIES
 	});
+	// ctx.store.dispatch({
+	// 	type: LOAD_POSTS_REQUEST
+	// });
+	// ctx.store.dispatch({
+	// 	type: LOAD_RANDOM_POSTS_REQUEST
+	// });
 
 	if (Component.getInitialProps) {
 		//최상위 부모 컴포넌트가 자신의 컨텍스트(ctx)를 자식 컴포넌트에게 넘겨주는 코드로 보인다..

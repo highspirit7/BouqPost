@@ -77,7 +77,7 @@ router.get("/likes", async (req, res, next) => {
 		});
 
 		const postIdLike = user.Liked.map(post => post.id).reverse();
-		console.log(postIdLike);
+
 		if (!parseInt(req.query.lastId)) {
 			const neededPostIdLike = postIdLike.slice(0, parseInt(req.query.limit, 10));
 
@@ -108,10 +108,9 @@ router.get("/likes", async (req, res, next) => {
 			return res.json(fullPosts);
 		} else {
 			const index = postIdLike.findIndex(id => id === parseInt(req.query.lastId, 10));
-			console.log("index : " + index);
+
 			const neededPostIdLike = postIdLike.slice(index + 1, index + 6);
 
-			console.log("neededPostIdLike : " + postIdLike);
 			const fullPosts = await Promise.all(
 				neededPostIdLike.map(id =>
 					db.Post.findOne({

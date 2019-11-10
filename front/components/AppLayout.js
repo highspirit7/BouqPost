@@ -142,6 +142,7 @@ const AppLayout = ({ children }) => {
 						<Link href="/">
 							<a>BouqPost</a>
 						</Link>
+						{/* <a href="http://localhost:3000">BouqPost</a> */}
 					</Logo>
 
 					<RightHeaderItems>
