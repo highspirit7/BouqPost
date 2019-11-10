@@ -165,7 +165,7 @@ router.post("/:postId/like", isLoggedIn, async (req, res, next) => {
 			return res.status(404).send("포스트가 존재하지 않습니다.");
 		}
 		await post.addLiker(req.user.id);
-		console.log(req.user);
+
 		res.json({ userId: req.user.id });
 	} catch (e) {
 		console.error(e);

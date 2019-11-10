@@ -14,8 +14,6 @@ module.exports = () => {
 				try {
 					const exUser = await db.User.findOne({ where: { user_id: profile.id } });
 
-					console.log("프로필 id " + profile.id);
-					console.log(typeof profile.id);
 					logger.info("카카오 profile.id");
 					logger.info(profile.id);
 
