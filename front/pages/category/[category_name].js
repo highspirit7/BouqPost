@@ -135,7 +135,6 @@ Category.getInitialProps = async context => {
 		});
 	}
 
-	//리턴값은 지금 이 컴포넌트에 props로 전달된다.
 	return { category_name };
 };
 

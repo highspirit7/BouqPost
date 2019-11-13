@@ -199,17 +199,22 @@ const Main = () => {
 						</Col>
 					))}
 				</Row>
-				<Row className="tablet" style={{ marginRight: 0, marginLeft: 0 }}>
-					<Col span={11} key={randomPosts[0].id} style={{ float: "left" }}>
-						<ThumbnailCmp post={randomPosts[0]} />
-					</Col>
-					<Col span={11} key={randomPosts[1].id} style={{ float: "right" }}>
-						<ThumbnailCmp post={randomPosts[1]} />
-					</Col>
-				</Row>
-				<Row className="mobile">
-					<ThumbnailCmp post={randomPosts[0]} />
-				</Row>
+
+				{randomPosts.length > 0 && (
+					<>
+						<Row className="tablet" style={{ marginRight: 0, marginLeft: 0 }}>
+							<Col span={11} key={randomPosts[0].id} style={{ float: "left" }}>
+								<ThumbnailCmp post={randomPosts[0]} />
+							</Col>
+							<Col span={11} key={randomPosts[1].id} style={{ float: "right" }}>
+								<ThumbnailCmp post={randomPosts[1]} />
+							</Col>
+						</Row>
+						<Row className="mobile">
+							<ThumbnailCmp post={randomPosts[0]} />
+						</Row>
+					</>
+				)}
 			</ThumbnailWrapper>
 			<ContentsWrapper>
 				<ResponsiveCategories>{categoryItems}</ResponsiveCategories>
@@ -260,11 +265,11 @@ const Main = () => {
 
 Main.propTypes = {};
 
-Main.getInitialProps = async context => {
-	context.store.dispatch({
+Main.getInitialProps = async ({ store }) => {
+	await store.dispatch({
 		type: LOAD_POSTS_REQUEST
 	});
-	context.store.dispatch({
+	await store.dispatch({
 		type: LOAD_RANDOM_POSTS_REQUEST
 	});
 };

@@ -142,6 +142,7 @@ const AppLayout = ({ children }) => {
 						<Link href="/" prefetch>
 							<a>BouqPost</a>
 						</Link>
+						{/* <a href="http://localhost:3000">BouqPost</a> */}
 					</Logo>
 
 					<RightHeaderItems>
