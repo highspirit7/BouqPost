@@ -139,10 +139,9 @@ const AppLayout = ({ children }) => {
 						zIndex: 999
 					}}>
 					<Logo>
-						<Link href="/" prefetch>
+						<Link href="/">
 							<a>BouqPost</a>
 						</Link>
-						{/* <a href="http://localhost:3000">BouqPost</a> */}
 					</Logo>
 
 					<RightHeaderItems>
