@@ -36,7 +36,8 @@ app.prepare().then(() => {
   });
 
   //EC2 인스턴스에서 3000번 포트를 80으로 받아버리는 설정을 해버려서 어떻게 되돌리는지 아직 모르는 상황이라 항상 3000으로 
-  server.listen(3000, () => {
-    console.log(`next+express running on port ${process.env.PORT}`);
+  const port = process.env.PORT || 3000;
+  server.listen(port, () => {
+    console.log(`next+express running on port ${port}`);
   });
 });
