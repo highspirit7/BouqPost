@@ -74,12 +74,12 @@ BouqPost.getInitialProps = async context => {
   //이전에는 쿠키가 없이 접속하는 경우, 접속하는 시점 직전에 로그인했던 사용자의 쿠키가 세팅되도록 되어 있었다. 
   //접속마다 axios를 각각 가지도록 해야한다. 
 
-  const instance = axios.create({
-    baseURL: backUrl
-  });
+  // const instance = axios.create({
+  //   baseURL: backUrl
+  // });
 
-	if (ctx.isServer && cookie) {
-    instance.defaults.headers.Cookie = cookie;
+	if (ctx.isServer) {
+    axios.defaults.headers.Cookie = cookie || "";
 	}
 
 	//유저 정보 로드하는 액션 먼저 취하고 그 다음 자식 컴포넌트들의 getInitialProps가 실행된다. 원하는 동작 의도대로 순서 잘 맞추어야 한다.
