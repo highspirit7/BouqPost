@@ -14,6 +14,7 @@ import reducer from "../redux/modules";
 import rootSaga from "../redux/sagas";
 import { LOAD_USER_REQUEST } from "../redux/modules/user";
 import { LOAD_CATEGORIES } from "../redux/modules/categories";
+import { backUrl } from "../config/config";
 // import { LOAD_POSTS_REQUEST, LOAD_RANDOM_POSTS_REQUEST } from "../redux/modules/post";
 
 class BouqPost extends App {
@@ -70,8 +71,15 @@ BouqPost.getInitialProps = async context => {
 	//프론트 서버에서 백엔드 서버로 요청시 브라우저(알아서 쿠키 넣어줌)가 개입하는 것이 아니기 때문에 직접 쿠키를 axios로 요청 시 넣어서 보내준다.
 	const cookie = ctx.isServer ? ctx.req.headers.cookie : "";
 
-	if (ctx.isServer) {
-		axios.defaults.headers.Cookie = cookie;
+  //이전에는 쿠키가 없이 접속하는 경우, 접속하는 시점 직전에 로그인했던 사용자의 쿠키가 세팅되도록 되어 있었다. 
+  //접속마다 axios를 각각 가지도록 해야한다. 
+
+  const instance = axios.create({
+    baseURL: backUrl
+  });
+
+	if (ctx.isServer && cookie) {
+    instance.defaults.headers.Cookie = cookie;
 	}
 
 	//유저 정보 로드하는 액션 먼저 취하고 그 다음 자식 컴포넌트들의 getInitialProps가 실행된다. 원하는 동작 의도대로 순서 잘 맞추어야 한다.
@@ -84,19 +92,12 @@ BouqPost.getInitialProps = async context => {
 	ctx.store.dispatch({
 		type: LOAD_CATEGORIES
 	});
-	// ctx.store.dispatch({
-	// 	type: LOAD_POSTS_REQUEST
-	// });
-	// ctx.store.dispatch({
-	// 	type: LOAD_RANDOM_POSTS_REQUEST
-	// });
 
 	if (Component.getInitialProps) {
 		//최상위 부모 컴포넌트가 자신의 컨텍스트(ctx)를 자식 컴포넌트에게 넘겨주는 코드로 보인다..
 		//pageProps 인자를 isRequired로 해놓았기때문에 존재하지 않을 때 빈 객체라도 세팅.
 		pageProps = (await Component.getInitialProps(ctx)) || {};
 	}
-	// console.log(pageProps);
 	return { pageProps };
 };
 
